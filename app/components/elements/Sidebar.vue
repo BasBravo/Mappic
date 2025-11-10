@@ -119,13 +119,13 @@ onUnmounted(() => {
                 <NuxtLink class="w-10 h-10 flex items-center justify-center" to="/">
                     <Logo />
                 </NuxtLink>
-                <NuxtLink to="/" class="text-xl font-bold">Mappic</NuxtLink>
+                <span class="text-4xl font-medium font-outline-bg text-[#FF6B5C] -translate-x-2.5 translate-y-[9px]">appic</span>
             </div>
 
             <!-- Mobile Primary Items -->
             <div class="flex flex-col">
                 <template v-for="item in primaryMenuItems" :key="item.id">
-                    <NuxtLink v-if="item.route" :to="item.route" @click="closeMobileMenu" class="flex gap-4 items-center px-4 py-2">
+                    <NuxtLink v-if="item.route" :to="item.route" @click="closeMobileMenu" class="flex items-center px-4 py-2">
                         <div class="h-12 w-12 rounded-full flex items-center justify-center">
                             <UIcon :name="item.icon" class="text-xl text-gray-700" />
                         </div>
@@ -143,7 +143,7 @@ onUnmounted(() => {
             @mouseleave="handleMouseLeave"
             class="relative z-10 flex transition-all duration-300 ease-in-out overflow-hidden"
             :class="isOpen ? 'w-[230px]' : 'w-12'">
-            <div class="w-full flex flex-col py-4 space-y-4 flex-shrink-0">
+            <div class="w-full flex flex-col pt-2 pb-4 space-y-4 flex-shrink-0">
                 <!-- LOGO -->
                 <div class="flex flex-col space-y-3 px-3">
                     <div class="w-10 h-10 flex items-center justify-center">

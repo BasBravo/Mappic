@@ -195,12 +195,12 @@ if (locale?.value == 'zh') {
                         </div>
                         <p class=" ">
                             {{
-                                locale == 'en'
+                                locale.value == 'en'
                                     ? 'Adjust the frame and modify the zoom level to focus on the most prominent and interesting areas of the city or those that have special meaning for you.'
                                     : ''
                             }}
                             {{
-                                locale == 'es'
+                                locale.value == 'es'
                                     ? 'Ajusta el encuadre y modifica el nivel de zoom para centrar la atención en las zonas más destacadas e interesantes de la ciudad o las que tienen un significado especial para ti.'
                                     : ''
                             }}
@@ -221,12 +221,12 @@ if (locale?.value == 'zh') {
                         </div>
                         <p class=" ">
                             {{
-                                locale == 'en'
+                                locale.value == 'en'
                                     ? 'Customize the design of your map by selecting colors, styles, and sizes. You can choose from different map styles and colors to create a unique and personalized design.'
                                     : ''
                             }}
                             {{
-                                locale == 'es'
+                                locale.value == 'es'
                                     ? 'Personaliza el diseño de tu mapa seleccionando colores, estilos y tamaños. Puedes elegir entre diferentes estilos de mapa y colores para crear un diseño único y personalizado.'
                                     : ''
                             }}
@@ -242,18 +242,18 @@ if (locale?.value == 'zh') {
                         <div class="flex items-center gap-2">
                             <span class="bg-black text-white w-7 h-7 rounded-full flex items-center justify-center -mt-2">4</span>
                             <h3 class="mb-2 text-lg md:text-xl font-bold">
-                                {{ locale == 'en' ? 'Customize the Composition' : '' }}
-                                {{ locale == 'es' ? 'Personaliza la composición' : '' }}
+                                {{ locale.value == 'en' ? 'Customize the Composition' : '' }}
+                                {{ locale.value == 'es' ? 'Personaliza la composición' : '' }}
                             </h3>
                         </div>
                         <p class=" ">
                             {{
-                                locale == 'en'
+                                locale.value == 'en'
                                     ? 'Customize the composition of your map to make it unique and special. You can add a meaningful title, a motto that captures the essence of the place, and other decorative elements that reflect your personal style. Make every detail tell a story.'
                                     : ''
                             }}
                             {{
-                                locale == 'es'
+                                locale.value == 'es'
                                     ? 'Personaliza la composición de tu mapa para que sea único y especial. Puedes añadir un título significativo, un lema que capture la esencia del lugar y otros elementos decorativos que reflejen tu estilo personal. Haz que cada detalle cuente una historia.'
                                     : ''
                             }}
@@ -269,18 +269,18 @@ if (locale?.value == 'zh') {
                         <div class="flex items-center gap-2">
                             <span class="bg-black text-white w-7 h-7 rounded-full flex items-center justify-center -mt-2">5</span>
                             <h3 class="mb-2 text-lg md:text-xl font-bold">
-                                {{ locale == 'en' ? 'Generate the poster of your city' : '' }}
-                                {{ locale == 'es' ? 'Genera el poster de tu ciudad' : '' }}
+                                {{ locale.value == 'en' ? 'Generate the poster of your city' : '' }}
+                                {{ locale.value == 'es' ? 'Genera el poster de tu ciudad' : '' }}
                             </h3>
                         </div>
                         <p class=" ">
                             {{
-                                locale == 'en'
+                                locale.value == 'en'
                                     ? 'Create a map in minutes from your personalized composition. The system will start generating your map in high quality and you will receive it in your email in a matter of minutes.'
                                     : ''
                             }}
                             {{
-                                locale == 'es'
+                                locale.value == 'es'
                                     ? 'Crear en minutos un mapa a partir de tu composición personalizada. El sistema se pondrá a generar tu mapa en alta calidad y lo recibirás en tu correo en cuestión de minutos.'
                                     : ''
                             }}
@@ -296,18 +296,18 @@ if (locale?.value == 'zh') {
                         <div class="flex items-center gap-2">
                             <span class="bg-black text-white w-7 h-7 rounded-full flex items-center justify-center -mt-2">6</span>
                             <h3 class="mb-2 text-lg md:text-xl font-bold">
-                                {{ locale == 'en' ? 'Access your maps' : '' }}
-                                {{ locale == 'es' ? 'Accede a tus mapas' : '' }}
+                                {{ locale.value == 'en' ? 'Access your maps' : '' }}
+                                {{ locale.value == 'es' ? 'Accede a tus mapas' : '' }}
                             </h3>
                         </div>
                         <p class=" ">
                             {{
-                                locale == 'es'
+                                locale.value == 'es'
                                     ? 'Recibirás tu mapa por correo y podrás acceder a él en tu cuenta de usuario. Descárgalo cuando quieras desde cualquier dispositivo. Solo necesitas registrarte con el mismo correo del pedido.'
                                     : ''
                             }}
                             {{
-                                locale == 'en'
+                                locale.value == 'en'
                                     ? 'You will receive your map by email and you can access it in your user account. Download it whenever you want from any device. You just need to register with the same email as the order.'
                                     : ''
                             }}
@@ -325,12 +325,12 @@ if (locale?.value == 'zh') {
                     </h2>
                     <p class="text-lg md:text-xl">
                         {{
-                            locale == 'en'
+                            locale.value == 'en'
                                 ? 'Buy credits once and use them to generate maps of any size. Our flexible credit system lets you choose exactly what you need without monthly subscriptions.'
                                 : ''
                         }}
                         {{
-                            locale == 'es'
+                            locale.value == 'es'
                                 ? 'Compra créditos una vez y úsalos para generar mapas de cualquier tamaño. Nuestro sistema flexible de créditos te permite elegir exactamente lo que necesitas sin suscripciones mensuales.'
                                 : ''
                         }}
@@ -370,14 +370,14 @@ if (locale?.value == 'zh') {
                                             </td>
                                             <td class="px-4 py-3">
                                                 <div class="text-sm text-gray-900 font-mono">
-                                                    {{ locale == 'en' ? `Max ${sizeData.maxPxSize}px` : `Máx ${sizeData.maxPxSize}px` }}
+                                                    {{ locale.value == 'en' ? `Max ${sizeData.maxPxSize}px` : `Máx ${sizeData.maxPxSize}px` }}
                                                 </div>
                                                 <div class="text-xs text-gray-500">
                                                     {{
                                                         (() => {
                                                             const cm = (sizeData.maxPxSize / 300) * 2.54;
                                                             const inch = sizeData.maxPxSize / 300;
-                                                            return locale == 'en'
+                                                            return locale.value == 'en'
                                                                 ? `${cm.toFixed(1)} cm / ${inch.toFixed(1)} in`
                                                                 : `${cm.toFixed(1)} cm / ${inch.toFixed(1)} pulgadas`;
                                                         })()
@@ -388,7 +388,7 @@ if (locale?.value == 'zh') {
                                                 <div class="flex items-center justify-center">
                                                     <span class="text-lg font-bold text-gray-900">{{ sizeData.cost }}</span>
                                                     <span class="ml-1 text-sm text-gray-600">
-                                                        {{ locale == 'en' ? 'credits' : 'créditos' }}
+                                                        {{ locale.value == 'en' ? 'credits' : 'créditos' }}
                                                     </span>
                                                 </div>
                                             </td>
@@ -401,7 +401,7 @@ if (locale?.value == 'zh') {
                         <!-- Tabla de paquetes de créditos -->
                         <div>
                             <h3 class="text-xl font-bold text-center mb-6">
-                                {{ locale == 'en' ? 'Credit Purchase Packs' : 'Paquetes de Compra de Créditos' }}
+                                {{ locale.value == 'en' ? 'Credit Purchase Packs' : 'Paquetes de Compra de Créditos' }}
                             </h3>
 
                             <div class="overflow-x-auto border border-gray-300 rounded-lg">
@@ -409,13 +409,13 @@ if (locale?.value == 'zh') {
                                     <thead class="border-b border-gray-300">
                                         <tr>
                                             <th class="px-4 py-3 text-sm font-semibold text-gray-900">
-                                                {{ locale == 'en' ? 'Pack' : 'Paquete' }}
+                                                {{ locale.value == 'en' ? 'Pack' : 'Paquete' }}
                                             </th>
                                             <th class="px-4 py-3 text-sm font-semibold text-gray-900 text-center">
-                                                {{ locale == 'en' ? 'Credits' : 'Créditos' }}
+                                                {{ locale.value == 'en' ? 'Credits' : 'Créditos' }}
                                             </th>
                                             <th class="px-4 py-3 text-sm font-semibold text-gray-900 text-center">
-                                                {{ locale == 'en' ? 'Price' : 'Precio' }}
+                                                {{ locale.value == 'en' ? 'Price' : 'Precio' }}
                                             </th>
                                         </tr>
                                     </thead>
@@ -434,8 +434,8 @@ if (locale?.value == 'zh') {
                                             </td>
                                             <td class="px-4 py-3 text-center">
                                                 <span class="text-lg font-bold">
-                                                    {{ locale == 'en' ? useFormatPrice(pack.price, true, locale, 'USD') : '' }}
-                                                    {{ locale == 'es' ? useFormatPrice(pack.price, true, locale, 'EUR') : '' }}
+                                                    {{ locale.value == 'en' ? useFormatPrice(pack.price, true, locale.value, 'USD') : '' }}
+                                                    {{ locale.value == 'es' ? useFormatPrice(pack.price, true, locale.value, 'EUR') : '' }}
                                                 </span>
                                             </td>
                                         </tr>
@@ -449,10 +449,10 @@ if (locale?.value == 'zh') {
                     <div class="mt-8 rounded-lg">
                         <p class="text-sm text-center">
                             <span class="font-semibold">
-                                {{ locale == 'en' ? 'Note:' : 'Nota:' }}
+                                {{ locale.value == 'en' ? 'Note:' : 'Nota:' }}
                             </span>
                             {{
-                                locale == 'en'
+                                locale.value == 'en'
                                     ? 'Credits are consumed only when generating maps. No monthly fees or subscriptions.'
                                     : 'Los créditos se consumen solo al generar mapas. Sin cuotas mensuales ni suscripciones.'
                             }}
@@ -481,19 +481,19 @@ if (locale?.value == 'zh') {
                     </h2>
                     <p class="mb-6 font-light text-base md:text-lg">
                         {{
-                            locale == 'en'
+                            locale.value == 'en'
                                 ? 'Create custom maps of any city in the world in a few minutes. Choose the style, size, and design that best suits your needs and preferences.'
                                 : ''
                         }}
                         {{
-                            locale == 'es'
+                            locale.value == 'es'
                                 ? 'Crea mapas personalizados de cualquier ciudad del mundo en pocos minutos. Elige el estilo, tamaño y diseño que mejor se adapte a tus necesidades y preferencias.'
                                 : ''
                         }}
                     </p>
-                    <NuxtLink :to="`/${locale}`">
-                        <!-- <ZButton :label="capitalize($t(locale == 'en' ? 'create map' : 'crea mapa'))" /> -->
-                        <UButton size="2xl" :label="capitalize(t(locale == 'en' ? 'create map' : 'crea mapa'))" />
+                    <NuxtLink :to="`/${locale.value}`">
+                        <!-- <ZButton :label="capitalize($t(locale.value == 'en' ? 'create map' : 'crea mapa'))" /> -->
+                        <UButton size="2xl" :label="capitalize(t(locale.value == 'en' ? 'create map' : 'crea mapa'))" />
                     </NuxtLink>
                 </div>
             </div>
