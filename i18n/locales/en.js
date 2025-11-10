@@ -2,7 +2,12 @@ export default {
     home: {
         title: "Create awesome maps in seconds",
         slogan: "<p>High-resolution maps of your city for less<br>than a Caramel Macchiato at Starbucks</p>",
-        slogan_mobile: "<p>At this time, high-resolution map generation of your city is not available in the mobile version. Log in with a higher-resolution device to create your maps.</p>"
+        slogan_mobile: "<p>At this time, high-resolution map generation of your city is not available in the mobile version. Log in with a higher-resolution device to create your maps.</p>",
+        seo: {
+            title: "Custom Map Poster Designer | Mappic.app",
+            description: "Create stunning, fully customizable map-based poster designs. Choose any city, personalize the style, and export your design instantly.",
+            keywords: "custom map poster, map poster designer, map poster generator, city map design, personalized map poster, map design app, create map poster online, modern map prints"
+        }
     },
     nav: {
         home: "Home",
