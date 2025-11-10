@@ -64,50 +64,25 @@ export const useAuthStore = defineStore('auth', {
             return this.auth?.token || null;
         },
 
-        async checkAuth() {
-            this.loading = true;
-
-            try {
-                if (typeof window !== 'undefined') {
-                    const token = localStorage.getItem('auth_token');
-                    if (token && this.auth?.token === token) {
-                        // Token exists and matches stored auth
-                        this.isAuthenticated = true;
-                        return;
-                    }
-
-                    if (token) {
-                        // TODO: Validate token with backend
-                        // For now, assume valid if token exists
-                        this.auth = {
-                            token,
-                            uid: 'mock-uid',
-                            email: 'user@example.com',
-                        };
-                        this.user = {
-                            uid: 'mock-uid',
-                            email: 'user@example.com',
-                            name: 'User',
-                        };
-                        this.isAuthenticated = true;
-                    }
-                }
-            } catch (error) {
-                console.error('Auth check failed:', error);
-                this.clear();
-            } finally {
-                this.loading = false;
-            }
-        },
 
         async logout() {
             this.loading = true;
 
             try {
-                // TODO: Implement actual logout logic with backend
+                // Sign out from Firebase
+                const authService = (await import('~~/shared/services/auth')).createAuth();
+                await authService._init();
+                
+                if (authService._firebaseAuth?.signOut) {
+                    await authService._firebaseAuth.signOut();
+                }
+                
+                // Clear local state
                 this.clear();
             } catch (error) {
                 console.error('Logout failed:', error);
+                // Always clear local state on error
+                this.clear();
             } finally {
                 this.loading = false;
             }

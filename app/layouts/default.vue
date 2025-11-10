@@ -8,4 +8,8 @@
         </div>
         <slot />
     </main>
+    
+    <!-- Cookie Banner and Modal -->
+    <CookiesCookieBanner />
+    <CookiesCookieModal />
 </template>

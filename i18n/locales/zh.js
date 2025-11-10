@@ -440,8 +440,8 @@ export default {
     'landing.faq.q2.answer': '是的！您可以使用不同的设置、颜色和样式重新生成地图，次数不限。',
     'landing.faq.q3.question': '您提供什么分辨率？',
     'landing.faq.q3.answer': '我们提供多种分辨率选项，从标准到超高分辨率（最高300 DPI），完美适合专业打印。',
-    'landing.faq.q4.question': '有免费试用吗？',
-    'landing.faq.q4.answer': '是的！您可以使用我们的免费层级免费创建地图。升级以解锁更多功能和更高分辨率。',
+    'landing.faq.q4.question': '积分系统如何运作？',
+    'landing.faq.q4.answer': 'Mappic使用基于积分的系统。每次地图生成的成本取决于您选择的大小和分辨率。从我们的免费层级开始探索，然后根据需要购买积分。无月度订阅—仅为您生成的内容付费。',
     'landing.faq.q5.question': '生成地图需要多长时间？',
     'landing.faq.q5.answer': '大多数地图在几分钟内生成。时间取决于您选择的大小和分辨率。',
     'landing.faq.q6.question': '我可以商业使用我的地图吗？',
@@ -464,6 +464,24 @@ export default {
     'landing.cta.subtext': '免费试用 • 无需信用卡',
     'landing.cta.feature1': '即时预览',
     'landing.cta.feature2': '高分辨率导出',
-    'landing.cta.feature3': '打印就绪'
+    'landing.cta.feature3': '打印就绪',
+
+    // Cookies
+    'cookies.banner.title': '我们使用 Cookie',
+    'cookies.banner.description': '我们使用 Cookie 来增强您的体验、分析流量和个性化内容。您可以选择接受哪些类型的 Cookie。',
+    'cookies.banner.acceptAll': '全部接受',
+    'cookies.banner.rejectAll': '全部拒绝',
+    'cookies.banner.customize': '自定义',
+    
+    'cookies.modal.title': 'Cookie 偏好设置',
+    'cookies.modal.save': '保存偏好设置',
+    'cookies.modal.necessary': '必需',
+    'cookies.modal.analytics': '分析',
+    'cookies.modal.marketing': '营销',
+    'cookies.modal.preferences': '偏好设置',
+    'cookies.modal.descriptions.necessary': '对于安全性、身份验证和基本网站功能至关重要。这些 Cookie 无法禁用。',
+    'cookies.modal.descriptions.analytics': '帮助我们了解您如何使用我们的网站，以改进您的体验。包括 Google Analytics。',
+    'cookies.modal.descriptions.marketing': '用于个性化广告和再营销。允许我们向您展示相关内容。',
+    'cookies.modal.descriptions.preferences': '记住您的选择，如语言、主题和其他偏好设置，以供将来访问。'
 
 }

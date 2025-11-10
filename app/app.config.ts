@@ -2,9 +2,13 @@ export default defineAppConfig({
     ui: {
         input: {
             slots: {
-                base: 'rounded-full ',
+                base: 'rounded-full  ',
             },
             variants: {
+                variant: {
+                    outline:
+                        'bg-white ring-black/20 dark:bg-black/20  dark:ring-black/40 focus-visible:ring-black/40 focus-visible:ring-1 dark:focus-visible:ring-1 dark:focus-visible:ring-primary shadow-none',
+                },
                 size: {
                     '2xl': {
                         base: 'px-4 py-3 text-lg gap-2.5',
@@ -148,7 +152,7 @@ export default defineAppConfig({
         },
         modal: {
             slots: {
-                content: 'divide-none p-2',
+                content: 'divide-none p-2 bg-muted/70 backdrop-blur-lg',
                 close: 'absolute top-6 end-6',
             },
             variants: {

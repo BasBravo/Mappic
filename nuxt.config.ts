@@ -1,6 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { fileURLToPath } from 'node:url';
 
+const isDev = process.env.NODE_ENV === 'development';
+const functionName = isDev ? 'server_dev' : 'server';
+
 export default defineNuxtConfig({
     compatibilityDate: '2025-05-15',
     devtools: { enabled: true },
@@ -86,7 +89,6 @@ export default defineNuxtConfig({
         public: {
             storageUrl: process.env.NUXT_STORAGE_URL,
             functionsUrl: process.env.NUXT_FUNCTIONS_URL,
-            authUrl: process.env.NUXT_AUTH_URL,
             hostUrl: process.env.NUXT_APP_URL,
             connectProvider: process.env.NUXT_PROVIDER_DATA,
             connectConfig: {
@@ -109,6 +111,10 @@ export default defineNuxtConfig({
             },
             gtagId: process.env.NUXT_GOOGLE_GTAG_ID,
             cryptoKey: process.env.NUXT_CRYPTO_KEY,
+            cookies: {
+                expirationDays: 365,
+                storageKey: 'mappic_cookies_consent',
+            },
         },
     },
     vite: {
@@ -134,8 +140,9 @@ export default defineNuxtConfig({
             },
         },
         replace: {
-            [`as server } from './chunks/`]: `as server_mappic } from './chunks/`,
+            [`as server } from './chunks/`]: `as server } from './chunks/`,
             [`functions.https.onRequest`]: `functions.region('europe-west3').https.onRequest`,
+            [`export { ${functionName}`]: `export { ${functionName}`,
         },
     },
 });

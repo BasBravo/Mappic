@@ -8,9 +8,34 @@
 }
 
 :root {
+    /* Colores */
     --ui-primary: #000000;
     --ui-secondary: #e0e0e0;
     --bg-color: #f7f7f7;
+
+    /* Texto */
+    /* --ui-text: #0b0b0b;
+    --ui-text-dimmed: #6c757d;
+    --ui-text-muted: #9aa0a6;
+    --ui-text-toned: #555555;
+    --ui-text-highlighted: #0d0d0d;
+    --ui-text-inverted: #ffffff; */
+
+    /* Fondos */
+    --ui-bg: #f7f7f7;
+    /* --ui-bg-muted: #f8f9fa;
+    --ui-bg-elevated: #ffffff;
+    --ui-bg-accented: #00ff9c;
+    --ui-bg-inverted: #0d0d0d; */
+
+    /* Bordes */
+    /* --ui-border: #dcdfe3;
+    --ui-border-muted: #d6d6d6;
+    --ui-border-accented: #b8b8b8;
+    --ui-border-inverted: #0d0d0d; */
+
+    /* Estados */
+    /* --ui-error: #ff2e63; */
 }
 
 @layer base {

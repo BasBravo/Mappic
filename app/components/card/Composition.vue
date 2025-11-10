@@ -7,7 +7,7 @@ defineProps({
 </script>
 
 <template>
-    <div class="flex flex-col w-sm bg-white rounded-4xl border-2 border-black/10 p-6 items-center justify-center">
+    <div class="flex flex-col w-sm p-6 items-center justify-center">
         <img v-if="imageSrc" :src="imageSrc" class="h-48 w-auto my-4" />
         <h2 class="mt-4 text-2xl font-semibold text-gray-900">{{ title }}</h2>
         <p v-if="description" class="mt-2 text-gray-600 text-center text-balance">{{ description }}</p>

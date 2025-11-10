@@ -590,9 +590,10 @@ defineExpose({
             <Loader color="#374151" />
         </div>
     </div>
+
     <div
         ref="frameArea"
-        class="mappic-render min-h-[calc(100dvh-4rem)] w-full relative flex justify-center items-center gap-4"
+        class="mappic-render min-h-[calc(100dvh-4rem)] w-full relative flex justify-center items-center gap-4 pb-20"
         :class="[`theme_base theme_${mapStyle.key}`]">
         <div class="flex flex-col gap-3">
             <div class="gap-2 flex md:justify-center text-xs text-black/40 w-80 truncate md:w-full">
