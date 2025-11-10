@@ -2,6 +2,7 @@
 //
 // IMPORTS
 //
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { capitalize } from '~~/app/utils';
 import { aboutPages } from '~~/data/nav';
@@ -24,25 +25,17 @@ const myPages = aboutPages.map(page => ({
 
 const selectedPage = ref(myPages.find(p => p.active)?.value || '');
 
+//
+// FUNCTIONS
+//
 function onPageChange(value) {
     navigateTo(value);
 }
 </script>
 
 <template>
-    <!-- Desktop: Links normales -->
-    <div class="hidden lg:flex flex-wrap gap-6">
-        <router-link
-            v-for="page in myPages"
-            :key="page.label"
-            :to="page.value"
-            :class="['text-sm font-semibold text-center font-outline-bg', page.active ? 'text-black' : 'text-black/50 hover:text-black']">
-            {{ page.label }}
-        </router-link>
-    </div>
-
     <!-- Tablet: Selector dropdown -->
-    <div class="lg:hidden">
+    <div>
         <USelect
             v-model="selectedPage"
             :ui="{
