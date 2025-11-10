@@ -25,6 +25,9 @@ useHead({
 
 <template>
     <div>
+        <!-- Gradient effect -->
+        <div class="z-10 w-full h-20 fixed -bottom-5 left-0 right-0 bg-gradient-to-t from-default to-transparent"></div>
+
         <div class="hidden md:flex fixed left-0 right-0 justify-center bottom-6 z-10">
             <MapSettigns :map-base-ref="mapBaseRef"></MapSettigns>
         </div>

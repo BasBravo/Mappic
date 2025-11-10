@@ -1,35 +1,19 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useAppStore = defineStore('app', {
-  state: () => ({
-    styleBgColor: '#2f3542' as string,
-    sidebarOpen: false as boolean,
-  }),
+    state: () => ({
+        styleBgColor: '#2f3542' as string,
+        sidebarOpen: false as boolean,
+    }),
 
-  actions: {
-    setStyleBgColor(color: string) {
-      this.styleBgColor = color
-      
-      // Actualizar CSS custom property para el layout
-      if (typeof document !== 'undefined') {
-        document.documentElement.style.setProperty('--bg-color', color)
-      }
+    actions: {
+        setSidebarOpen(open: boolean) {
+            this.sidebarOpen = open;
+        },
     },
 
-    initializeStyleBgColor() {
-      // Aplicar el color persistido al layout al inicializar
-      if (typeof document !== 'undefined') {
-        document.documentElement.style.setProperty('--bg-color', this.styleBgColor)
-      }
+    persist: {
+        key: 'letters-app-store',
+        paths: ['styleBgColor', 'sidebarOpen'],
     },
-
-    setSidebarOpen(open: boolean) {
-      this.sidebarOpen = open
-    }
-  },
-
-  persist: {
-    key: 'letters-app-store',
-    paths: ['styleBgColor', 'sidebarOpen']
-  }
-})
+});

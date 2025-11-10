@@ -83,9 +83,8 @@ function login() {
     navigateTo('/auth/login');
 }
 
-// Initialize auth check and credits on mount
+// Initialize credits on mount (auth check is done in auth.client.ts plugin)
 onMounted(async () => {
-    await authStore.checkAuth();
     const uid = user.value?.uid || undefined;
     await updateCredits(uid);
 });
@@ -123,7 +122,9 @@ onMounted(async () => {
         <!-- Login button for non-authenticated users -->
         <template v-else>
             <EffectGlass class="flex items-center rounded-full gap-1 p-1" :displace="2">
-                <UButton icon="i-tabler-user" rounded size="lg" @click="login" :label="t('Login')" />
+                <UButton rounded size="lg" @click="login">
+                    <span class="text-md font-semibold capitalize whitespace-nowrap truncate">{{ t('Login') }}</span>
+                </UButton>
                 <UButton
                     class="hidden md:block"
                     rounded

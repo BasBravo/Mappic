@@ -54,7 +54,7 @@ useHead({
             name: 'theme-color',
             content: '#1E3A5F',
         },
-        
+
         // Open Graph Tags (Social Media)
         {
             property: 'og:type',
@@ -80,7 +80,7 @@ useHead({
             property: 'og:site_name',
             content: 'Mappic.app',
         },
-        
+
         // Twitter Card Tags
         {
             name: 'twitter:card',
@@ -102,7 +102,7 @@ useHead({
             name: 'twitter:site',
             content: '@mappic_app',
         },
-        
+
         // Additional SEO
         {
             name: 'author',
@@ -129,23 +129,23 @@ useHead({
             innerHTML: JSON.stringify({
                 '@context': 'https://schema.org',
                 '@type': 'SoftwareApplication',
-                'name': 'Mappic',
-                'description': seoDescription,
-                'url': hostUrl,
-                'applicationCategory': 'DesignApplication',
-                'offers': {
+                name: 'Mappic',
+                description: seoDescription,
+                url: hostUrl,
+                applicationCategory: 'DesignApplication',
+                offers: {
                     '@type': 'Offer',
-                    'price': '0',
-                    'priceCurrency': 'USD',
+                    price: '0',
+                    priceCurrency: 'USD',
                 },
-                'operatingSystem': 'Web',
-                'inLanguage': ['en', 'es', 'zh'],
-                'author': {
+                operatingSystem: 'Web',
+                inLanguage: ['en', 'es', 'zh'],
+                author: {
                     '@type': 'Organization',
-                    'name': 'Mappic.app',
-                    'url': hostUrl,
+                    name: 'Mappic.app',
+                    url: hostUrl,
                 },
-                'image': ogImage,
+                image: ogImage,
             }),
         },
     ],
@@ -190,14 +190,14 @@ useHead({
             </div>
         </div>
         <!-- GRID DE MAPAS  -->
-        <div class="w-full py-10">
+        <div class="w-full py-10 min-h-[calc(100vh-20rem)]">
             <MapsGrid />
         </div>
 
         <!-- LANDING SECTIONS -->
         <LandingFeatures />
         <LandingHowItWorks />
-        <LandingSocialProof />
+        <!-- <LandingSocialProof /> -->
         <LandingFAQ />
         <LandingCTA />
     </div>

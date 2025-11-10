@@ -350,16 +350,16 @@ export default {
     'Continue editing': 'Continue editing',
 
     // Landing Page
-    'landing.features.title': 'Powerful Features',
-    'landing.features.subtitle': 'Everything you need to create beautiful map designs',
-    'landing.features.customizable.title': 'Fully Customizable',
-    'landing.features.customizable.description': 'Adjust colors, styles, and layouts to match your vision perfectly',
-    'landing.features.resolution.title': 'High Resolution',
-    'landing.features.resolution.description': 'Export your maps in stunning high-resolution quality, ready to print',
-    'landing.features.easy.title': 'Easy to Use',
-    'landing.features.easy.description': 'Intuitive interface makes creating beautiful maps simple and fast',
-    'landing.features.print.title': 'Print Ready',
-    'landing.features.print.description': 'Download in multiple formats optimized for printing and sharing',
+    'landing.features.title': 'Why You\'ll Love Mappic',
+    'landing.features.subtitle': 'Check out what makes us awesome',
+    'landing.features.customizable.title': 'Make It Yours',
+    'landing.features.customizable.description': 'Tweak colors, styles, and layouts however you want',
+    'landing.features.resolution.title': 'Crystal Clear',
+    'landing.features.resolution.description': 'Get maps so sharp they\'ll look amazing on your wall',
+    'landing.features.easy.title': 'Super Simple',
+    'landing.features.easy.description': 'No design skills needed—just a few clicks and you\'re done',
+    'landing.features.print.title': 'Ready to Print',
+    'landing.features.print.description': 'Download in any format and share with your friends',
 
     'landing.howitworks.title': 'How It Works',
     'landing.howitworks.subtitle': 'Create your perfect map in just 4 simple steps',
@@ -380,8 +380,8 @@ export default {
     'landing.faq.q2.answer': 'Yes! You can regenerate your map with different settings, colors, and styles as many times as you want.',
     'landing.faq.q3.question': 'What resolution do you offer?',
     'landing.faq.q3.answer': 'We offer multiple resolution options from standard to ultra-high resolution (up to 300 DPI), perfect for professional printing.',
-    'landing.faq.q4.question': 'Is there a free trial?',
-    'landing.faq.q4.answer': 'Yes! You can create maps for free with our free tier. Upgrade to unlock more features and higher resolutions.',
+    'landing.faq.q4.question': 'How does the credit system work?',
+    'landing.faq.q4.answer': 'Mappic uses a credit-based system. Each map generation costs credits depending on the size and resolution you choose. Start with our free tier to explore, then purchase credits as needed. No monthly subscriptions—pay only for what you generate.',
     'landing.faq.q5.question': 'How long does it take to generate a map?',
     'landing.faq.q5.answer': 'Most maps are generated within a few minutes. The time depends on the size and resolution you choose.',
     'landing.faq.q6.question': 'Can I use my maps commercially?',
@@ -404,5 +404,23 @@ export default {
     'landing.cta.subtext': 'Free to try • No credit card required',
     'landing.cta.feature1': 'Instant Preview',
     'landing.cta.feature2': 'High Resolution Export',
-    'landing.cta.feature3': 'Print Ready'
+    'landing.cta.feature3': 'Print Ready',
+
+    // Cookies
+    'cookies.banner.title': 'We use cookies',
+    'cookies.banner.description': 'We use cookies to enhance your experience, analyze traffic, and personalize content. You can choose what types of cookies to accept.',
+    'cookies.banner.acceptAll': 'Accept All',
+    'cookies.banner.rejectAll': 'Reject All',
+    'cookies.banner.customize': 'Customize',
+    
+    'cookies.modal.title': 'Cookie Preferences',
+    'cookies.modal.save': 'Save Preferences',
+    'cookies.modal.necessary': 'Necessary',
+    'cookies.modal.analytics': 'Analytics',
+    'cookies.modal.marketing': 'Marketing',
+    'cookies.modal.preferences': 'Preferences',
+    'cookies.modal.descriptions.necessary': 'Essential for security, authentication, and basic website functionality. These cookies cannot be disabled.',
+    'cookies.modal.descriptions.analytics': 'Help us understand how you use our website so we can improve your experience. Includes Google Analytics.',
+    'cookies.modal.descriptions.marketing': 'Used for personalized advertising and retargeting. Allows us to show you relevant content.',
+    'cookies.modal.descriptions.preferences': 'Remember your choices like language, theme, and other preferences for future visits.'
 }

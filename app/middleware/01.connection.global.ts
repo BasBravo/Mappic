@@ -32,6 +32,8 @@ async function initializeConnection(): Promise<void> {
         console.log('Firebase connection initialized successfully');
     } catch (error) {
         console.error('Failed to initialize Firebase connection:', error);
+        // Mark as initialized even on error to prevent infinite retries
+        isInitialized = true;
         throw error;
     }
 }

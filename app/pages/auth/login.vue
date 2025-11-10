@@ -169,14 +169,15 @@ const registerUrl = computed(() => {
     return url;
 });
 
-// Check if already authenticated
-onMounted(async () => {
-    await authStore.checkAuth();
-
-    if (authStore.isAuthenticated) {
-        await navigateTo('/');
+// Check if already authenticated (auth check is done in auth.client.ts plugin)
+watch(
+    () => authStore.isAuthenticated,
+    async (isAuthenticated) => {
+        if (isAuthenticated) {
+            await navigateTo('/');
+        }
     }
-});
+);
 </script>
 
 <template>

@@ -116,18 +116,19 @@ const loginUrl = computed(() => {
     return url;
 });
 
-// Check if already authenticated
-onMounted(async () => {
-    await authStore.checkAuth();
-
-    if (authStore.isAuthenticated) {
-        if (redirect) {
-            await navigateTo(redirect, { external: true });
-        } else {
-            await navigateTo('/');
+// Check if already authenticated (auth check is done in auth.client.ts plugin)
+watch(
+    () => authStore.isAuthenticated,
+    async (isAuthenticated) => {
+        if (isAuthenticated) {
+            if (redirect) {
+                await navigateTo(redirect, { external: true });
+            } else {
+                await navigateTo('/');
+            }
         }
     }
-});
+);
 </script>
 
 <template>

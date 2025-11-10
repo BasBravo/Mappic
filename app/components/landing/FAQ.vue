@@ -1,8 +1,6 @@
 <script setup>
 // IMPORTS //////////////////////
 
-import { ref } from 'vue';
-
 // COMPOSABLES //////////////////////
 
 const { t } = useI18n();
@@ -11,91 +9,78 @@ const { t } = useI18n();
 
 const faqs = [
     {
+        icon: 'i-tabler-help',
         question: 'landing.faq.q1.question',
-        answer: 'landing.faq.q1.answer'
+        answer: 'landing.faq.q1.answer',
     },
     {
+        icon: 'i-tabler-help',
         question: 'landing.faq.q2.question',
-        answer: 'landing.faq.q2.answer'
+        answer: 'landing.faq.q2.answer',
     },
     {
+        icon: 'i-tabler-help',
         question: 'landing.faq.q3.question',
-        answer: 'landing.faq.q3.answer'
+        answer: 'landing.faq.q3.answer',
     },
     {
+        icon: 'i-tabler-help',
         question: 'landing.faq.q4.question',
-        answer: 'landing.faq.q4.answer'
+        answer: 'landing.faq.q4.answer',
     },
     {
+        icon: 'i-tabler-help',
         question: 'landing.faq.q5.question',
-        answer: 'landing.faq.q5.answer'
+        answer: 'landing.faq.q5.answer',
     },
     {
+        icon: 'i-tabler-help',
         question: 'landing.faq.q6.question',
-        answer: 'landing.faq.q6.answer'
-    }
+        answer: 'landing.faq.q6.answer',
+    },
 ];
-
-// OPENS //////////////////////
-
-const openItems = ref(new Set([0]));
-
-// FUNCTIONS //////////////////////
-
-function toggleItem(index) {
-    if (openItems.value.has(index)) {
-        openItems.value.delete(index);
-    } else {
-        openItems.value.add(index);
-    }
-}
 </script>
 
 <template>
-    <section class="w-full py-20 px-4 md:px-8 lg:px-20 bg-white">
-        <div class="max-w-3xl mx-auto">
+    <section class="w-full py-20 md:px-8 lg:px-20">
+        <div class="max-w-6xl mx-auto">
             <!-- Section Title -->
             <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold text-black mb-4">
+                <h2 class="text-4xl md:text-6xl font-bold text-black mb-4">
                     {{ t('landing.faq.title') }}
                 </h2>
-                <p class="text-lg text-gray-600">
+                <p class="text-xl text-black max-w-2xl mx-auto">
                     {{ t('landing.faq.subtitle') }}
                 </p>
             </div>
 
-            <!-- FAQ Items -->
-            <div class="space-y-4">
-                <div v-for="(faq, index) in faqs" :key="index" class="border border-gray-200 rounded-lg overflow-hidden hover:border-blue-300 transition-colors">
-                    <!-- Question Button -->
-                    <button
-                        @click="toggleItem(index)"
-                        class="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors"
-                    >
-                        <h3 class="text-left font-semibold text-black">
-                            {{ t(faq.question) }}
-                        </h3>
-                        <i :class="[
-                            'i-tabler-chevron-down transition-transform',
-                            openItems.has(index) ? 'rotate-180' : ''
-                        ]" />
-                    </button>
+            <!-- FAQ Items Grid -->
+            <div class="grid grid-cols-1 max-w-2xl mx-auto gap-4">
+                <div v-for="(faq, index) in faqs" :key="index">
+                    <UCollapsible :default-open="index === 0" class="flex flex-col gap-0 p-2 bg-white border border-black/10 rounded-2xl">
+                        <!-- Question Trigger -->
+                        <template #default="{ open }">
+                            <div class="flex items-start gap-4 p-4 transition-colors cursor-pointer">
+                                <!-- Question and Chevron -->
+                                <div class="flex-1 flex items-start justify-between gap-4">
+                                    <h3 class="text-lg font-semibold text-black text-left">
+                                        {{ t(faq.question) }}
+                                    </h3>
+                                    <UIcon v-if="!open" name="i-tabler-plus" class="text-2xl" />
+                                    <UIcon v-else name="i-tabler-minus" class="text-2xl" />
+                                </div>
+                            </div>
+                        </template>
 
-                    <!-- Answer -->
-                    <transition
-                        enter-active-class="transition-all duration-300"
-                        leave-active-class="transition-all duration-300"
-                        enter-from-class="max-h-0 opacity-0"
-                        enter-to-class="max-h-96 opacity-100"
-                        leave-from-class="max-h-96 opacity-100"
-                        leave-to-class="max-h-0 opacity-0"
-                    >
-                        <div v-if="openItems.has(index)" class="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                            <p class="text-gray-600 leading-relaxed">
-                                {{ t(faq.answer) }}
-                            </p>
-                        </div>
-                    </transition>
+                        <!-- Answer Content -->
+                        <template #content>
+                            <div class="p-4 pt-0 pb-6">
+                                <p class="text-black text-lg leading-relaxed">
+                                    {{ t(faq.answer) }}
+                                </p>
+                            </div>
+                        </template>
+                    </UCollapsible>
                 </div>
             </div>
         </div>
