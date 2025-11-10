@@ -1,29 +1,155 @@
 <script setup>
-// Composables para sanitización segura
-const { sanitizeI18nContent } = useSanitizer();
-import { useMapStore } from '~~/stores/mapStore';
+// IMPORTS //////////////////////
 
-// Store para manejar la localización seleccionada
+import { useMapStore } from '~~/stores/mapStore';
+import { useRoute } from 'vue-router';
+
+// COMPOSABLES //////////////////////
+
+const { sanitizeI18nContent } = useSanitizer();
+const { t } = useI18n();
+const route = useRoute();
+
+// STORES //////////////////////
+
 const mapStore = useMapStore();
 
+// DATA //////////////////////
+
+const config = useRuntimeConfig();
+const hostUrl = config.public.hostUrl || 'https://mappic.app';
+
+// FUNCTIONS //////////////////////
+
+const handleLocationSelected = location => {
+    mapStore.setSelectedLocation(location);
+    navigateTo('/maps/editor');
+};
+
+// SEO & HEAD //////////////////////
+
+const seoTitle = t('home.seo.title');
+const seoDescription = t('home.seo.description');
+const seoKeywords = t('home.seo.keywords');
+const canonicalUrl = `${hostUrl}${route.path}`;
+const ogImage = `${hostUrl}/ogImage.png`;
+
 useHead({
-    title: 'Mappic - Create Beautiful Maps',
+    title: seoTitle,
     meta: [
+        // Standard Meta Tags
         {
             name: 'description',
-            content: 'Create high-resolution maps of your favorite cities with beautiful, minimalist design.',
+            content: seoDescription,
+        },
+        {
+            name: 'keywords',
+            content: seoKeywords,
+        },
+        {
+            name: 'viewport',
+            content: 'width=device-width, initial-scale=1.0',
+        },
+        {
+            name: 'theme-color',
+            content: '#1E3A5F',
+        },
+        
+        // Open Graph Tags (Social Media)
+        {
+            property: 'og:type',
+            content: 'website',
+        },
+        {
+            property: 'og:title',
+            content: seoTitle,
+        },
+        {
+            property: 'og:description',
+            content: seoDescription,
+        },
+        {
+            property: 'og:image',
+            content: ogImage,
+        },
+        {
+            property: 'og:url',
+            content: canonicalUrl,
+        },
+        {
+            property: 'og:site_name',
+            content: 'Mappic.app',
+        },
+        
+        // Twitter Card Tags
+        {
+            name: 'twitter:card',
+            content: 'summary_large_image',
+        },
+        {
+            name: 'twitter:title',
+            content: seoTitle,
+        },
+        {
+            name: 'twitter:description',
+            content: seoDescription,
+        },
+        {
+            name: 'twitter:image',
+            content: ogImage,
+        },
+        {
+            name: 'twitter:site',
+            content: '@mappic_app',
+        },
+        
+        // Additional SEO
+        {
+            name: 'author',
+            content: 'Mappic.app',
+        },
+        {
+            name: 'robots',
+            content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+        },
+        {
+            httpEquiv: 'x-ua-compatible',
+            content: 'IE=edge',
+        },
+    ],
+    link: [
+        {
+            rel: 'canonical',
+            href: canonicalUrl,
+        },
+    ],
+    script: [
+        {
+            type: 'application/ld+json',
+            innerHTML: JSON.stringify({
+                '@context': 'https://schema.org',
+                '@type': 'SoftwareApplication',
+                'name': 'Mappic',
+                'description': seoDescription,
+                'url': hostUrl,
+                'applicationCategory': 'DesignApplication',
+                'offers': {
+                    '@type': 'Offer',
+                    'price': '0',
+                    'priceCurrency': 'USD',
+                },
+                'operatingSystem': 'Web',
+                'inLanguage': ['en', 'es', 'zh'],
+                'author': {
+                    '@type': 'Organization',
+                    'name': 'Mappic.app',
+                    'url': hostUrl,
+                },
+                'image': ogImage,
+            }),
         },
     ],
 });
-
-// Función para manejar la selección de localización
-const handleLocationSelected = location => {
-    // Guardar la localización en el store
-    mapStore.setSelectedLocation(location);
-
-    // Navegar a la página del editor
-    navigateTo('/maps/editor');
-};
 </script>
 
 <template>
@@ -44,12 +170,12 @@ const handleLocationSelected = location => {
         <!-- Espacio inicial -->
         <div class="h-46" />
 
-        <div class="pb-20 xl:px-20 max-w-6xl">
-            <h1 class="text-5xl md:text-7xl max-w-2xl font-medium tracking-tight text-pretty text-gray-900">
+        <div class="pb-20 xl:px-20 text-black">
+            <h1 class="text-5xl md:text-7xl 2xl:text-8xl md:max-w-2xl 2xl:max-w-5xl font-medium tracking-tight text-balance">
                 {{ $t('home.title') }}
             </h1>
-            <p class="hidden md:flex mt-8 text-2xl text-pretty" v-html="sanitizeI18nContent($t('home.slogan'))"></p>
-            <p class="flex md:hidden mt-8 text-lg text-pretty" v-html="sanitizeI18nContent($t('home.slogan_mobile'))"></p>
+            <p class="hidden md:flex mt-8 text-2xl text-balance" v-html="sanitizeI18nContent($t('home.slogan'))"></p>
+            <p class="flex md:hidden mt-8 text-lg text-balance" v-html="sanitizeI18nContent($t('home.slogan_mobile'))"></p>
             <div class="mt-10 w-full flex flex-col gap-4">
                 <!-- Buscador de ubicaciones -->
                 <div class="hidden md:flex justify-start max-w-3xl">
@@ -69,3 +195,5 @@ const handleLocationSelected = location => {
         </div>
     </div>
 </template>
+
+<style scoped></style>

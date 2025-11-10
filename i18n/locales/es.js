@@ -1,8 +1,13 @@
 export default {
     home: {
         title: "Crea mapas geniales en segundos",
-        slogan: "<p>Mapas en alta resolución de tu ciudad por menos<br>de lo que cuesta un Caramel Macchiato en Starbucks</p>",
-        slogan_mobile: "<p>En este momento, la generación de mapas en alta resolución de tu ciudad no está disponible en la versión móvil. Inicia sesión con un dispositivo de mayor resolución para crear tus mapas.</p>"
+        slogan: "<p>Mapas en alta resolución de tu ciudad por menos de lo que cuesta un Caramel Macchiato en Starbucks</p>",
+        slogan_mobile: "<p>En este momento, la generación de mapas en alta resolución de tu ciudad no está disponible en la versión móvil. Inicia sesión con un dispositivo de mayor resolución para crear tus mapas.</p>",
+        seo: {
+            title: "Diseñador de Pósters de Mapas Personalizados | Mappic.app",
+            description: "Crea impresionantes diseños de pósters basados en mapas totalmente personalizables. Elige cualquier ciudad, personaliza el estilo y exporta tu diseño al instante.",
+            keywords: "póster de mapa personalizado, diseñador de pósters de mapas, generador de pósters de mapas, diseño de mapa de ciudad, póster de mapa personalizado, aplicación de diseño de mapas, crear póster de mapa en línea, impresiones de mapas modernos"
+        }
     },
     nav: {
         home: "Inicio",
