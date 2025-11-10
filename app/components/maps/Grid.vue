@@ -9,8 +9,9 @@ const data = reactive({
     maps: [],
 });
 
-const mapsLength = 40;
-const mapsPack = 100;
+const TOTAL_COLUMNS = 8;
+const mapsFetchBuffer = 300; // Fetch more to ensure we have enough after filtering
+let MAPS_PER_COLUMN = 10; // Will be adjusted based on available items
 
 // Animation constants
 const ANIMATION_DELAY_INCREMENT = 50; // Delay between each item animation (ms)
@@ -28,35 +29,34 @@ function shuffle(array) {
 
 // Get maps from service
 async function getMaps() {
-    console.log('[getMaps] Starting...');
-    
+    console.log('[Grid] getMaps() called');
+
     // Check if maps are cached in localStorage for one week
-    if (localStorage.getItem('landing_maps_date_v4') && localStorage.getItem('landing_maps')) {
-        const lastDate = new Date(localStorage.getItem('landing_maps_date_v4'));
+    if (localStorage.getItem('landing_maps') && localStorage.getItem('landing_maps_date')) {
+        const lastDate = new Date(localStorage.getItem('landing_maps_date'));
         const now = new Date();
         const diff = now.getTime() - lastDate.getTime();
         const oneWeek = 1000 * 60 * 60 * 24 * 7;
 
-        console.log('[getMaps] Cache found. Age:', diff / 1000 / 60, 'minutes');
-
         if (diff < oneWeek) {
             const cachedMaps = JSON.parse(localStorage.getItem('landing_maps'));
-            console.log('[getMaps] Cached maps:', cachedMaps);
-            // Check if cache has valid data (not empty arrays)
-            const hasValidData = cachedMaps && Array.isArray(cachedMaps) && cachedMaps.length > 0 && cachedMaps.some(col => col.length > 0);
+            // Check if cache has valid data with correct structure (TOTAL_COLUMNS columns with MAPS_PER_COLUMN items each)
+            const hasValidData =
+                cachedMaps &&
+                Array.isArray(cachedMaps) &&
+                cachedMaps.length === TOTAL_COLUMNS &&
+                cachedMaps.every(col => Array.isArray(col) && col.length === MAPS_PER_COLUMN);
+
             if (hasValidData) {
                 data.maps = cachedMaps;
-                console.log('[getMaps] Using cached maps. Total columns:', data.maps.length);
                 return;
             } else {
-                console.log('[getMaps] Cache has empty arrays, clearing and fetching fresh data');
                 localStorage.removeItem('landing_maps');
-                localStorage.removeItem('landing_maps_date_v4');
+                localStorage.removeItem('landing_maps_date');
             }
         }
     }
 
-    console.log('[getMaps] Fetching from service...');
     const filters = [
         { key: 'file_map', operator: '!=', value: null },
         { key: 'quality', operator: '==', value: 'high' },
@@ -64,40 +64,52 @@ async function getMaps() {
     ];
     const pagination = {
         page: 0,
-        rowsPerPage: mapsPack,
+        rowsPerPage: mapsFetchBuffer,
         sortBy: 'created_at',
         sortType: 'desc',
     };
 
-    console.log('[getMaps] Sending to service:', { pagination, filters });
     const result = await mapService.getMaps({ pagination, filters });
-    console.log('[getMaps] Service result:', result);
-    console.log('[getMaps] Result success:', result.success);
-    console.log('[getMaps] Result items:', result.items);
-    console.log('[getMaps] Result total:', result.total);
 
     if (result.success) {
-        console.log('[getMaps] Items count:', result.items?.length);
-        // Parse items to get only UIDs
-        const parseItems = result.items.map(item => item.uid);
-        console.log('[getMaps] Parsed UIDs:', parseItems.length);
-        
-        const finalItems = shuffle(parseItems).slice(0, mapsLength);
-        console.log('[getMaps] Final items after shuffle:', finalItems.length);
+        // Parse items to get only UIDs and filter out null/undefined
+        const parseItems = result.items.map(item => item.uid).filter(uid => uid && uid !== null && uid !== undefined);
 
-        // Create 8 columns
+        console.log(`[Grid] Total items from service: ${result.items.length}, valid UIDs: ${parseItems.length}`);
+
+        const finalItems = shuffle(parseItems);
+        console.log(`[Grid] finalItems length: ${finalItems.length}`);
+
+        // Calculate items per column dynamically based on available items
+        const calculatedMapsPerColumn = Math.ceil(finalItems.length / TOTAL_COLUMNS);
+        MAPS_PER_COLUMN = calculatedMapsPerColumn;
+        console.log(`[Grid] Calculated MAPS_PER_COLUMN: ${MAPS_PER_COLUMN}`);
+
+        // Create columns with calculated items each, randomly distributed
         const columns = [];
-        for (let i = 0; i < 8; i++) {
-            columns.push([...shuffle(finalItems)]);
+        const itemsCopy = [...finalItems];
+
+        for (let i = 0; i < TOTAL_COLUMNS; i++) {
+            const columnItems = [];
+            for (let j = 0; j < MAPS_PER_COLUMN; j++) {
+                if (itemsCopy.length === 0) {
+                    break;
+                }
+                // Pick random item from remaining items
+                const randomIndex = Math.floor(Math.random() * itemsCopy.length);
+                const item = itemsCopy[randomIndex];
+                columnItems.push(item);
+                itemsCopy.splice(randomIndex, 1);
+            }
+            console.log(`[Grid] Column ${i}: ${columnItems.length} items`);
+            columns.push(columnItems);
         }
 
         data.maps = columns;
-        console.log('[getMaps] Created columns:', columns.length, 'with', columns[0]?.length, 'items each');
 
         // Save to localStorage for one week
         localStorage.setItem('landing_maps', JSON.stringify(data.maps));
-        localStorage.setItem('landing_maps_date_v4', new Date().toISOString());
-        console.log('[getMaps] Saved to localStorage');
+        localStorage.setItem('landing_maps_date', new Date().toISOString());
     } else {
         console.error('[getMaps] Service failed:', result.message);
     }
@@ -117,7 +129,7 @@ const readyMaps = ref(new Set());
 // Generate random animation delays for first items across all columns
 const generateRandomDelays = () => {
     const delays = {};
-    const totalItems = 8 * MAX_ANIMATED_ITEMS; // 8 columns × MAX_ANIMATED_ITEMS each
+    const totalItems = TOTAL_COLUMNS * MAX_ANIMATED_ITEMS; // columns × MAX_ANIMATED_ITEMS each
 
     // Create array of sequential delay values
     const delayValues = [];
@@ -130,7 +142,7 @@ const generateRandomDelays = () => {
 
     // Distribute shuffled delays across columns
     let delayIndex = 0;
-    for (let col = 0; col < 8; col++) {
+    for (let col = 0; col < TOTAL_COLUMNS; col++) {
         delays[col] = [];
 
         for (let i = 0; i < MAX_ANIMATED_ITEMS; i++) {

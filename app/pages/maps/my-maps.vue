@@ -327,7 +327,6 @@ onUnmounted(() => {
     if (statusPollingInterval) {
         clearInterval(statusPollingInterval);
         statusPollingInterval = null;
-        console.log('Cleaned up polling interval on unmount');
     }
 });
 </script>

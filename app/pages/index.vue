@@ -193,6 +193,13 @@ useHead({
         <div class="w-full py-10">
             <MapsGrid />
         </div>
+
+        <!-- LANDING SECTIONS -->
+        <LandingFeatures />
+        <LandingHowItWorks />
+        <LandingSocialProof />
+        <LandingFAQ />
+        <LandingCTA />
     </div>
 </template>
 
