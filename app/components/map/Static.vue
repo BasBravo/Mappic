@@ -140,18 +140,15 @@ function cacheMapData(uid, data) {
 
                 // First, try cleaning expired entries
                 const expiredCleaned = cleanExpiredCache();
-                console.log(`Cleaned ${expiredCleaned} expired cache entries`);
 
                 // If that's not enough, clean oldest entries
                 if (expiredCleaned === 0) {
                     const oldestCleaned = cleanOldestCacheEntries(5);
-                    console.log(`Cleaned ${oldestCleaned} oldest cache entries`);
                 }
 
                 // Try saving again
                 try {
                     localStorage.setItem(cacheKey, JSON.stringify(cacheData));
-                    console.log('Successfully cached after cleanup');
                 } catch (secondAttemptError) {
                     console.warn('Still cannot cache after cleanup, operating without cache for this item');
                 }
@@ -176,62 +173,68 @@ async function getMapData() {
         // Always fetch from service first to check for changes
         const result = await mapService.getMap(props.uid, { deep: true });
 
-        if (result.success) {
-            // Check if we have cached data
-            const cacheKey = `${CACHE_PREFIX}${props.uid}`;
-            let cachedEntry = null;
-            let shouldUseCache = false;
+        if (!result) {
+            error.value = true;
+            return;
+        }
 
-            // Try to read from localStorage with fallback
+        if (!result.success) {
+            error.value = true;
+            return;
+        }
+
+        // Check if we have cached data
+        const cacheKey = `${CACHE_PREFIX}${props.uid}`;
+        let cachedEntry = null;
+        let shouldUseCache = false;
+
+        // Try to read from localStorage with fallback
+        try {
+            cachedEntry = localStorage.getItem(cacheKey);
+        } catch (storageError) {
+            console.warn('[MapStatic] Error reading from localStorage:', storageError);
+            cachedEntry = null;
+        }
+
+        if (cachedEntry) {
             try {
-                cachedEntry = localStorage.getItem(cacheKey);
-            } catch (storageError) {
-                console.warn('Error reading from localStorage:', storageError);
-                cachedEntry = null;
-            }
+                const parsedEntry = JSON.parse(cachedEntry);
+                const isValidTime = parsedEntry.timestamp && isCacheValid(parsedEntry.timestamp);
+                const hasChanges = hasKeyFieldsChanged(parsedEntry.keyFields, result.data);
 
-            if (cachedEntry) {
-                try {
-                    const parsedEntry = JSON.parse(cachedEntry);
-                    const isValidTime = parsedEntry.timestamp && isCacheValid(parsedEntry.timestamp);
-                    const hasChanges = hasKeyFieldsChanged(parsedEntry.keyFields, result.data);
-
-                    // Use cache only if it's within time limit AND key fields haven't changed
-                    if (isValidTime && !hasChanges) {
-                        shouldUseCache = true;
-                        mapData.value = parsedEntry.data;
-                        imageUrl.value = parsedEntry.data?._references?.file_map_resized?.url;
-                    } else {
-                        // Remove outdated or changed cache
-                        try {
-                            localStorage.removeItem(cacheKey);
-                        } catch (removeError) {
-                            console.warn('Error removing cache entry:', removeError);
-                        }
-                    }
-                } catch (err) {
-                    console.error('Error parsing cached data:', err);
+                // Use cache only if it's within time limit AND key fields haven't changed
+                if (isValidTime && !hasChanges) {
+                    shouldUseCache = true;
+                    mapData.value = parsedEntry.data;
+                    imageUrl.value = parsedEntry.data?._references?.file_map_resized?.url;
+                } else {
+                    // Remove outdated or changed cache
                     try {
                         localStorage.removeItem(cacheKey);
                     } catch (removeError) {
-                        console.warn('Error removing corrupted cache entry:', removeError);
+                        console.warn('[MapStatic] Error removing cache entry:', removeError);
                     }
                 }
+            } catch (err) {
+                console.error('[MapStatic] Error parsing cached data:', err);
+                try {
+                    localStorage.removeItem(cacheKey);
+                } catch (removeError) {
+                    console.warn('[MapStatic] Error removing corrupted cache entry:', removeError);
+                }
             }
+        }
 
-            // If not using cache, use fresh data and update cache
-            if (!shouldUseCache) {
-                mapData.value = result.data;
-                imageUrl.value = result.data?._references?.file_map_resized?.url;
+        // If not using cache, use fresh data and update cache
+        if (!shouldUseCache) {
+            mapData.value = result.data;
+            imageUrl.value = result.data?._references?.file_map_resized?.url;
 
-                // Cache the fresh data
-                cacheMapData(props.uid, result.data);
-            }
-        } else {
-            error.value = true;
+            // Cache the fresh data
+            cacheMapData(props.uid, result.data);
         }
     } catch (err) {
-        console.error('Error fetching map data:', err);
+        console.error('[MapStatic] Error fetching map data:', err);
         error.value = true;
     } finally {
         loading.value = false;
@@ -284,8 +287,7 @@ onMounted(() => {
             <!-- Error state -->
             <div v-if="error" class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                 <div class="text-center">
-                    <div class="text-2xl text-gray-400 mb-2">🗺️</div>
-                    <div class="text-xs text-gray-500">Map not available</div>
+                    <div class="text-xs text-gray-500 p-10">Map not available</div>
                 </div>
             </div>
 
