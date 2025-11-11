@@ -47,7 +47,7 @@ function back() {
 
 <template>
     <div class="min-h-[calc(100dvh-4rem)] flex justify-center">
-        <div class="flex flex-col gap-6 max-w-sm w-full my-auto py-8">
+        <div class="flex flex-col gap-6 max-w-sm w-full my-auto py-20">
             <!-- ERROR -->
             <div
                 v-if="error"
@@ -83,12 +83,12 @@ function back() {
                         <UInput v-model="data.email" class="w-full" type="email" :placeholder="t('Insert your email')" size="xl" required />
                     </UFormField>
 
-                    <UButton type="submit" :loading="loading" :label="t('Send reset email')" size="xl" block class="mt-3" />
+                    <UButton color="neutral" type="submit" :loading="loading" :label="t('Send reset email')" size="xl" block class="mt-3" />
                 </UForm>
 
                 <!-- Actions -->
                 <div class="w-full flex justify-between items-center mt-4 text-sm">
-                    <UButton :label="t('Return')" icon="i-tabler-arrow-left" variant="ghost" @click="back" />
+                    <UButton color="neutral" :label="t('Return')" icon="i-tabler-arrow-left" variant="ghost" @click="back" />
                 </div>
             </div>
         </div>

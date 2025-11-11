@@ -200,7 +200,7 @@ onUnmounted(() => {
                     <h2 class="text-2xl font-bold text-red-600">{{ $t('Error') }}</h2>
                     <p class="text-gray-600">{{ error }}</p>
                 </div>
-                <UButton @click="createNew" :label="$t('Create new map')" color="primary" size="lg" class="w-full justify-center" />
+                <UButton @click="createNew" :label="$t('Create new map')" color="neutral" size="lg" class="w-full justify-center" />
             </div>
 
             <!-- Map data state -->
@@ -253,6 +253,7 @@ onUnmounted(() => {
                         @click="downloadMap"
                         :label="$t('Download map')"
                         icon="i-tabler-download"
+                        color="neutral"
                         size="xl"
                         class="w-full justify-center" />
 
@@ -263,6 +264,7 @@ onUnmounted(() => {
                         :label="$t('View my maps')"
                         icon="i-tabler-map"
                         variant="outline"
+                        color="neutral"
                         size="xl"
                         class="w-full justify-center" />
 
@@ -272,6 +274,7 @@ onUnmounted(() => {
                         :label="$t('Create new map')"
                         icon="i-tabler-plus"
                         variant="outline"
+                        color="neutral"
                         size="xl"
                         class="w-full justify-center" />
                 </div>

@@ -172,7 +172,7 @@ const registerUrl = computed(() => {
 // Check if already authenticated (auth check is done in auth.client.ts plugin)
 watch(
     () => authStore.isAuthenticated,
-    async (isAuthenticated) => {
+    async isAuthenticated => {
         if (isAuthenticated) {
             await navigateTo('/');
         }
@@ -182,7 +182,7 @@ watch(
 
 <template>
     <div class="min-h-[calc(100dvh-4rem)] flex justify-center">
-        <div class="flex flex-col gap-6 max-w-sm w-full my-auto py-8">
+        <div class="flex flex-col gap-6 max-w-sm w-full my-auto py-20">
             <!-- ERROR -->
             <div
                 v-if="error"
@@ -215,12 +215,13 @@ watch(
                             required />
                     </UFormField>
 
-                    <UButton type="submit" :loading="loading" :label="t('Login')" size="xl" block class="mt-3" />
+                    <UButton color="neutral" type="submit" :loading="loading" :label="t('Login')" size="xl" block class="mt-3" />
                 </UForm>
 
                 <!-- Social Login -->
                 <div class="w-full grid grid-cols-2 gap-3 mt-4">
                     <UButton
+                        color="neutral"
                         icon="i-tabler-brand-google"
                         :label="t('Google')"
                         variant="outline"
@@ -229,6 +230,7 @@ watch(
                         :loading="loadingGoogle"
                         @click="handleGoogleLogin" />
                     <UButton
+                        color="neutral"
                         icon="i-tabler-brand-github"
                         :label="t('GitHub')"
                         variant="outline"
@@ -240,8 +242,8 @@ watch(
 
                 <!-- Actions -->
                 <div class="w-full flex justify-between items-center mt-4 text-sm">
-                    <UButton :label="t('Return')" icon="i-tabler-arrow-left" variant="ghost" @click="back" />
-                    <UButton :label="t('Forgot password')" variant="ghost" to="/auth/reset-password" />
+                    <UButton color="neutral" :label="t('Return')" icon="i-tabler-arrow-left" variant="ghost" @click="back" />
+                    <UButton color="neutral" :label="t('Forgot password')" variant="ghost" to="/auth/reset-password" />
                 </div>
             </div>
 
@@ -249,7 +251,7 @@ watch(
                 <span class="text-sm text-gray-500">
                     {{ t("Don't have an account?") }}
                 </span>
-                <UButton :label="t('Register')" size="xl" variant="outline" :to="registerUrl" />
+                <UButton color="neutral" :label="t('Register')" size="xl" variant="outline" :to="registerUrl" />
             </div>
         </div>
     </div>

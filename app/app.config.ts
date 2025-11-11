@@ -166,6 +166,11 @@ export default defineAppConfig({
                 base: 'data-[state=unchecked]:bg-black/20 bg-default',
             },
         },
+        checkbox: {
+            slots: {
+                base: 'ring-black/20',
+            },
+        },
         select: {
             slots: {
                 base: 'rounded-full ',
