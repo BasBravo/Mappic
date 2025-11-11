@@ -48,11 +48,11 @@ useSeoMeta({
         </ClientOnly>
 
         <!-- Espacio inicial -->
-        <div class="h-46" />
+        <div class="h-22 md:h-46" />
 
         <section>
-            <div class="mx-auto max-w-3xl flex flex-col justify-center items-center">
-                <h1 class="mt-4 text-7xl font-semibold tracking-tight text-balance text-gray-900">Terms of Use</h1>
+            <div class="mx-auto max-w-3xl flex flex-col justify-center md:items-center">
+                <h1 class="mt-4 text-5xl md:text-7xl font-semibold tracking-tight text-balance text-gray-900">Terms of Use</h1>
             </div>
         </section>
 

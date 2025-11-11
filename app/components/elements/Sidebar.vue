@@ -94,12 +94,16 @@ onUnmounted(() => {
     <!-- Mobile Hamburger Button -->
     <div class="md:hidden fixed top-7 left-5 z-50">
         <div>
-            <EffectGlass class="rounded-full p-1">
-                <UButton
+            <EffectGlass class="flex items-center rounded-full p-0.5" :displace="2">
+                <!-- <UButton
                     @click="toggleMobileMenu"
                     variant="ghost"
                     size="xl"
-                    :icon="isMobileMenuOpen ? 'i-tabler-x' : 'i-tabler-menu-2'"></UButton>
+                    :icon="isMobileMenuOpen ? 'i-tabler-x' : 'i-tabler-menu-2'"></UButton> -->
+                <div class="flex items-center p-2 w-10 h-10" @click="toggleMobileMenu">
+                    <UIcon :name="isMobileMenuOpen ? 'i-tabler-x' : 'i-tabler-menu-2'" size="24" class="cursor-pointer" />
+                </div>
+                <div id="HeaderMenuMobile" class="-translate-x-2" />
             </EffectGlass>
         </div>
     </div>
@@ -143,7 +147,7 @@ onUnmounted(() => {
             @mouseleave="handleMouseLeave"
             class="relative z-10 flex transition-all duration-300 ease-in-out overflow-hidden"
             :class="isOpen ? 'w-[230px]' : 'w-12'">
-            <div class="w-full flex flex-col pt-2 pb-4 space-y-4 flex-shrink-0">
+            <div class="w-full flex flex-col pt-[3.5px] pb-4 space-y-4 flex-shrink-0">
                 <!-- LOGO -->
                 <div class="flex flex-col space-y-3 px-3">
                     <div class="w-10 h-10 flex items-center justify-center">

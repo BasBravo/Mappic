@@ -1,3 +1,19 @@
+<script setup>
+const { showBanner, acceptAll, rejectAll, setModalVisible } = useCookies();
+
+const handleAcceptAll = () => {
+    acceptAll();
+};
+
+const handleRejectAll = () => {
+    rejectAll();
+};
+
+const handleCustomize = () => {
+    setModalVisible(true);
+};
+</script>
+
 <template>
     <Transition
         enter-active-class="transition duration-300 ease-out"
@@ -38,19 +54,3 @@
         </div>
     </Transition>
 </template>
-
-<script setup>
-const { showBanner, acceptAll, rejectAll, setModalVisible } = useCookies();
-
-const handleAcceptAll = () => {
-    acceptAll();
-};
-
-const handleRejectAll = () => {
-    rejectAll();
-};
-
-const handleCustomize = () => {
-    setModalVisible(true);
-};
-</script>

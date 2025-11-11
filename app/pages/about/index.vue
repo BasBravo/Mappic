@@ -97,11 +97,7 @@ if (locale?.value == 'zh') {
 
 <template>
     <div class="w-full text-black">
-        <ClientOnly>
-            <teleport to="#HeaderMenu">
-                <NavAbout />
-            </teleport>
-        </ClientOnly>
+        <NavAbout />
 
         <!-- Espacio inicial -->
         <div class="h-24 md:h-46" />
@@ -370,7 +366,9 @@ if (locale?.value == 'zh') {
                                             </td>
                                             <td class="px-4 py-3">
                                                 <div class="text-sm text-gray-900 font-mono">
-                                                    {{ locale.value == 'en' ? `Max ${sizeData.maxPxSize}px` : `Máx ${sizeData.maxPxSize}px` }}
+                                                    {{
+                                                        locale.value == 'en' ? `Max ${sizeData.maxPxSize}px` : `Máx ${sizeData.maxPxSize}px`
+                                                    }}
                                                 </div>
                                                 <div class="text-xs text-gray-500">
                                                     {{
@@ -466,7 +464,9 @@ if (locale?.value == 'zh') {
             <div class="items-center mx-auto max-w-screen-xl gap-8 md:gap-16 grid grid-cols-1 md:grid-cols-3 py-16 px-4 md:px-6">
                 <div class="flex justify-center order-2 md:order-1">
                     <div class="max-w-64 md:max-w-96">
-                        <MapStatic uid="23704b45d0e94756903eafe109e535fc" :interactive="false" />
+                        <ClientOnly>
+                            <MapStatic uid="23704b45d0e94756903eafe109e535fc" :interactive="false" />
+                        </ClientOnly>
                     </div>
                 </div>
                 <div class="md:col-span-2 text-center md:text-left order-1 md:order-2">

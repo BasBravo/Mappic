@@ -79,9 +79,18 @@ if (displayLocale.value == 'en') {
         </ClientOnly>
 
         <!-- Espacio inicial -->
-        <div class="h-46" />
+        <div class="h-22 md:h-46" />
 
         <section>
+            <div class="mx-auto max-w-3xl flex md:flex-col gap-3 md:justify-center items-center">
+                <img src="/images/avatar-bas.png" alt="Bas Bravo" class="w-12 md:w-20 rounded-full border-black border-2" />
+                <h1 class="text-5xl md:text-7xl font-semibold tracking-tight text-balance text-gray-900">
+                    {{ displayLocale == 'en' ? 'About the dev' : '' }} {{ displayLocale == 'es' ? 'Sobre el dev' : '' }}
+                </h1>
+            </div>
+        </section>
+
+        <!-- <section>
             <div class="mx-auto max-w-3xl flex flex-col justify-center items-center">
                 <div>
                     <img src="/images/avatar-bas.png" alt="Bas Bravo" class="w-20 rounded-full border-black border-2" />
@@ -91,7 +100,7 @@ if (displayLocale.value == 'en') {
                     {{ displayLocale == 'es' ? 'Sobre el dev' : '' }}
                 </h1>
             </div>
-        </section>
+        </section> -->
 
         <section class="mx-auto max-w-2xl py-10 space-y-4">
             <p

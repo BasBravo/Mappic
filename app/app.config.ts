@@ -126,6 +126,7 @@ export default defineAppConfig({
         select: {
             slots: {
                 base: 'rounded-full ',
+                content: 'rounded-2xl',
             },
             variants: {
                 size: {
@@ -148,6 +149,11 @@ export default defineAppConfig({
                         trailingIcon: 'size-8',
                     },
                 },
+            },
+        },
+        dropdownMenu: {
+            slots: {
+                content: 'rounded-2xl',
             },
         },
         modal: {

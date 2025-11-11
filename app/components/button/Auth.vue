@@ -29,6 +29,13 @@ watch(
 );
 
 const userOptions = computed(() => [
+    // Label name
+    [
+        {
+            label: user.value?.name || label,
+            onSelect: () => navigateTo('/account/my-profile'),
+        },
+    ],
     [
         {
             label: t('My Profile'),
@@ -102,9 +109,10 @@ onMounted(async () => {
                         content: 'max-w-48',
                     }">
                     <UButton rounded size="lg" class="flex items-center gap-2 max-w-22 md:max-w-36 truncate md:w-auto">
-                        <span class="text-md font-semibold capitalize whitespace-nowrap truncate">
+                        <span class="hidden md:block text-md font-semibold capitalize whitespace-nowrap truncate">
                             {{ user?.name || label }}
                         </span>
+                        <UIcon class="md:hidden" name="i-tabler-user" size="18" />
                     </UButton>
                 </UDropdownMenu>
                 <UDropdownMenu
@@ -121,18 +129,21 @@ onMounted(async () => {
 
         <!-- Login button for non-authenticated users -->
         <template v-else>
-            <EffectGlass class="flex items-center rounded-full gap-1 p-1" :displace="2">
-                <UButton rounded size="lg" @click="login">
-                    <span class="text-md font-semibold capitalize whitespace-nowrap truncate">{{ t('Login') }}</span>
-                </UButton>
-                <UButton
-                    class="hidden md:block"
-                    rounded
-                    size="lg"
-                    variant="ghost"
-                    :label="`${credits || 0} ${$t('Credits')}`"
-                    @click="openCreditsModal" />
-                <UButton class="md:hidden" rounded size="lg" variant="ghost" :label="`${credits || 0}`" @click="openCreditsModal" />
+            <EffectGlass class="flex items-center rounded-full p-1" :displace="2">
+                <div class="flex gap-1 items-center">
+                    <UButton rounded size="lg" @click="login">
+                        <span class="hidden md:block text-md font-semibold capitalize whitespace-nowrap truncate">{{ t('Login') }}</span>
+                        <UIcon class="md:hidden" name="i-tabler-key" size="18" />
+                    </UButton>
+                    <UButton
+                        class="hidden md:block"
+                        rounded
+                        size="lg"
+                        variant="ghost"
+                        :label="`${credits || 0} ${$t('Credits')}`"
+                        @click="openCreditsModal" />
+                    <UButton class="md:hidden" rounded size="lg" variant="ghost" :label="`${credits || 0}`" @click="openCreditsModal" />
+                </div>
             </EffectGlass>
         </template>
 
