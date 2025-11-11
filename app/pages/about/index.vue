@@ -459,44 +459,8 @@ if (locale?.value == 'zh') {
                 </div>
             </div>
         </section>
-
-        <section>
-            <div class="items-center mx-auto max-w-screen-xl gap-8 md:gap-16 grid grid-cols-1 md:grid-cols-3 py-16 px-4 md:px-6">
-                <div class="flex justify-center order-2 md:order-1">
-                    <div class="max-w-64 md:max-w-96">
-                        <ClientOnly>
-                            <MapStatic uid="23704b45d0e94756903eafe109e535fc" :interactive="false" />
-                        </ClientOnly>
-                    </div>
-                </div>
-                <div class="md:col-span-2 text-center md:text-left order-1 md:order-2">
-                    <h2 class="mb-4 text-3xl md:text-4xl tracking-tight font-extrabold">
-                        {{
-                            getLocalizedText(
-                                'Create your next map with Mappic',
-                                'Crea tu próximo mapa con Mappic',
-                                '使用Mappic创建您的下一张地图'
-                            )
-                        }}
-                    </h2>
-                    <p class="mb-6 font-light text-base md:text-lg">
-                        {{
-                            locale.value == 'en'
-                                ? 'Create custom maps of any city in the world in a few minutes. Choose the style, size, and design that best suits your needs and preferences.'
-                                : ''
-                        }}
-                        {{
-                            locale.value == 'es'
-                                ? 'Crea mapas personalizados de cualquier ciudad del mundo en pocos minutos. Elige el estilo, tamaño y diseño que mejor se adapte a tus necesidades y preferencias.'
-                                : ''
-                        }}
-                    </p>
-                    <NuxtLink :to="`/${locale.value}`">
-                        <!-- <ZButton :label="capitalize($t(locale.value == 'en' ? 'create map' : 'crea mapa'))" /> -->
-                        <UButton size="2xl" :label="capitalize(t(locale.value == 'en' ? 'create map' : 'crea mapa'))" />
-                    </NuxtLink>
-                </div>
-            </div>
-        </section>
+        <ClientOnly>
+            <LandingCTA />
+        </ClientOnly>
     </div>
 </template>

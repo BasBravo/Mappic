@@ -632,7 +632,7 @@ onMounted(async () => {
             </div>
         </ElementsModal>
 
-        <div class="flex flex-col lg:flex-row w-full md:h-full gap-20 p-10 px-20 justify-center">
+        <div class="flex flex-col lg:flex-row w-full md:h-full gap-20 p-20 justify-center">
             <!-- Vista previa del mapa -->
             <div class="h-[400px] md:h-full w-full md:max-w-[450px] flex items-center justify-center relative">
                 <div class="w-full h-full flex items-center justify-center">

@@ -119,7 +119,7 @@ const loginUrl = computed(() => {
 // Check if already authenticated (auth check is done in auth.client.ts plugin)
 watch(
     () => authStore.isAuthenticated,
-    async (isAuthenticated) => {
+    async isAuthenticated => {
         if (isAuthenticated) {
             if (redirect) {
                 await navigateTo(redirect, { external: true });
@@ -133,7 +133,7 @@ watch(
 
 <template>
     <div class="min-h-[calc(100dvh-4rem)] flex justify-center">
-        <div class="flex flex-col gap-6 max-w-sm w-full my-auto py-8">
+        <div class="flex flex-col gap-6 max-w-sm w-full my-auto py-20">
             <!-- ERROR -->
             <div
                 v-if="error"
@@ -180,15 +180,15 @@ watch(
                     </UFormField>
 
                     <UFormField name="terms" class="pt-2">
-                        <UCheckbox v-model="data.terms" :label="t('I accept the terms of service')" size="xl" required />
+                        <UCheckbox color="neutral" v-model="data.terms" :label="t('I accept the terms of service')" size="xl" required />
                     </UFormField>
 
-                    <UButton type="submit" :loading="loading" :label="t('Create account')" size="xl" block class="mt-3" />
+                    <UButton color="neutral" type="submit" :loading="loading" :label="t('Create account')" size="xl" block class="mt-3" />
                 </UForm>
 
                 <!-- Actions -->
                 <div class="w-full flex justify-between items-center mt-4 text-sm">
-                    <UButton :label="t('Return')" icon="i-tabler-arrow-left" variant="ghost" @click="back" />
+                    <UButton color="neutral" :label="t('Return')" icon="i-tabler-arrow-left" variant="ghost" @click="back" />
                 </div>
             </div>
 
@@ -197,7 +197,7 @@ watch(
                 <span class="text-sm text-gray-500">
                     {{ t('If you have an account') }}
                 </span>
-                <UButton :to="loginUrl" :label="t('Login')" variant="outline" size="xl" />
+                <UButton color="neutral" :to="loginUrl" :label="t('Login')" variant="outline" size="xl" />
             </div>
         </div>
     </div>

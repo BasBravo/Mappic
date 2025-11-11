@@ -384,7 +384,7 @@ onMounted(() => {
 
                     <template #content>
                         <div class="grid grid-cols-2 gap-4 p-8">
-                            <span class="col-span-2 text-center font-medium pb-4">{{ $t('Share this map') }}</span>
+                            <span class="col-span-2 text-center font-medium text-lg pb-4">{{ $t('Share this map') }}</span>
 
                             <UButton
                                 color="neutral"
@@ -427,7 +427,7 @@ onMounted(() => {
                                 class="col-span-2 w-full justify-center"
                                 @click="copyToClipboard"
                                 size="xl"
-                                variant="soft"
+                                variant="outline"
                                 icon="i-tabler-copy"
                                 :label="$t('Copy URL')" />
                         </div>
