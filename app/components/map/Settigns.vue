@@ -180,17 +180,17 @@ onMounted(() => {
 <template>
     <div class="flex gap-3 items-center">
         <EffectGlass class="flex gap-2 p-1 rounded-full" :displace="2">
-            <UButton icon="i-tabler-arrow-left" variant="ghost" color="primary" size="xl" @click="goHomeAndReset" />
+            <UButton color="neutral" icon="i-tabler-arrow-left" variant="ghost" size="xl" @click="goHomeAndReset" />
         </EffectGlass>
         <EffectGlass class="flex gap-2 p-1 rounded-full" :displace="2">
-            <UButton icon="i-tabler-plus" variant="ghost" color="primary" size="xl" @click="zoomIn" />
-            <UButton icon="i-tabler-minus" variant="ghost" color="primary" size="xl" @click="zoomOut" />
+            <UButton color="neutral" icon="i-tabler-plus" variant="ghost" size="xl" @click="zoomIn" />
+            <UButton color="neutral" icon="i-tabler-minus" variant="ghost" size="xl" @click="zoomOut" />
         </EffectGlass>
         <EffectGlass class="flex gap-2 p-1 rounded-full" :displace="2">
-            <UButton :label="$t('Change style')" variant="ghost" color="primary" size="xl" @click="openStylePanel" />
-            <UButton :label="$t('Customize')" variant="ghost" color="primary" size="xl" @click="openCustomizePanel" />
+            <UButton color="neutral" :label="$t('Change style')" variant="ghost" size="xl" @click="openStylePanel" />
+            <UButton color="neutral" :label="$t('Customize')" variant="ghost" size="xl" @click="openCustomizePanel" />
             <div class="w-2"></div>
-            <UButton :label="$t('Generate')" icon="i-tabler-wand" color="primary" size="xl" @click="generate()" />
+            <UButton color="neutral" :label="$t('Generate')" icon="i-tabler-wand" size="xl" @click="generate()" />
         </EffectGlass>
     </div>
 
@@ -262,18 +262,18 @@ onMounted(() => {
                 <UInput class="w-full" v-model="mapStore.mapTitle" placeholder="Ej: Mi mapa personalizado" size="xl" />
             </UFormField>
             <UFormField :label="$t('Title size')" class="relative">
-                <USlider v-model="mapStore.mapTitleSize" :min="0" :max="100" :step="1" :default-value="50" size="lg" color="primary" />
+                <USlider v-model="mapStore.mapTitleSize" :min="0" :max="100" :step="1" :default-value="50" size="lg" color="neutral" />
                 <div class="absolute right-0 -top-6 text-sm text-gray-600">{{ mapStore.mapTitleSize }}%</div>
             </UFormField>
             <UFormField :label="$t('Subtitle')">
                 <UInput class="w-full" v-model="mapStore.mapSubtitle" placeholder="Ej: Un lugar especial" size="xl" />
             </UFormField>
             <UFormField :label="$t('Subtitle size')" class="relative">
-                <USlider v-model="mapStore.mapSubtitleSize" :min="0" :max="100" :step="1" :default-value="50" size="lg" color="primary" />
+                <USlider v-model="mapStore.mapSubtitleSize" :min="0" :max="100" :step="1" :default-value="50" size="lg" color="neutral" />
                 <div class="absolute right-0 -top-6 text-sm text-gray-600">{{ mapStore.mapSubtitleSize }}%</div>
             </UFormField>
             <UFormField :label="$t('Show info')">
-                <USwitch v-model="mapStore.showInfo" size="lg" color="primary" />
+                <USwitch v-model="mapStore.showInfo" size="lg" color="neutral" />
             </UFormField>
             <UFormField v-if="mapStore.showInfo" :label="$t('Custom info')">
                 <UTextarea
@@ -286,7 +286,7 @@ onMounted(() => {
 
             <UFormField :label="$t('Frame size')">
                 <template #hint>
-                    <USwitch v-model="mapStore.mapLandscape" size="xs" color="primary">
+                    <USwitch v-model="mapStore.mapLandscape" size="xs" color="neutral">
                         <template #label>
                             {{ $t('Landscape') }}
                         </template>

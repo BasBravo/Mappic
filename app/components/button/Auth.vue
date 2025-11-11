@@ -108,7 +108,7 @@ onMounted(async () => {
                     :ui="{
                         content: 'max-w-48',
                     }">
-                    <UButton rounded size="lg" class="flex items-center gap-2 max-w-22 md:max-w-36 truncate md:w-auto">
+                    <UButton color="neutral" rounded size="lg" class="flex items-center gap-2 max-w-22 md:max-w-36 truncate md:w-auto">
                         <span class="hidden md:block text-md font-semibold capitalize whitespace-nowrap truncate">
                             {{ user?.name || label }}
                         </span>
@@ -121,8 +121,14 @@ onMounted(async () => {
                     :ui="{
                         content: 'max-w-48',
                     }">
-                    <UButton class="hidden md:block" rounded size="lg" variant="ghost" :label="`${credits || 0} ${$t('Credits')}`" />
-                    <UButton class="md:hidden" rounded size="lg" variant="ghost" :label="`${credits || 0}`" />
+                    <UButton
+                        color="neutral"
+                        class="hidden md:block"
+                        rounded
+                        size="lg"
+                        variant="ghost"
+                        :label="`${credits || 0} ${$t('Credits')}`" />
+                    <UButton color="neutral" class="md:hidden" rounded size="lg" variant="ghost" :label="`${credits || 0}`" />
                 </UDropdownMenu>
             </div>
         </EffectGlass>
@@ -131,18 +137,26 @@ onMounted(async () => {
         <template v-else>
             <EffectGlass class="flex items-center rounded-full p-1" :displace="2">
                 <div class="flex gap-1 items-center">
-                    <UButton rounded size="lg" @click="login">
+                    <UButton color="neutral" rounded size="lg" @click="login">
                         <span class="hidden md:block text-md font-semibold capitalize whitespace-nowrap truncate">{{ t('Login') }}</span>
                         <UIcon class="md:hidden" name="i-tabler-key" size="18" />
                     </UButton>
                     <UButton
+                        color="neutral"
                         class="hidden md:block"
                         rounded
                         size="lg"
                         variant="ghost"
                         :label="`${credits || 0} ${$t('Credits')}`"
                         @click="openCreditsModal" />
-                    <UButton class="md:hidden" rounded size="lg" variant="ghost" :label="`${credits || 0}`" @click="openCreditsModal" />
+                    <UButton
+                        color="neutral"
+                        class="md:hidden"
+                        rounded
+                        size="lg"
+                        variant="ghost"
+                        :label="`${credits || 0}`"
+                        @click="openCreditsModal" />
                 </div>
             </EffectGlass>
         </template>
@@ -152,9 +166,9 @@ onMounted(async () => {
 
         <template #fallback>
             <div class="flex glass glass-bg-white items-center rounded-full gap-1 p-1">
-                <UButton icon="i-tabler-user" rounded size="lg" :label="t('Login')" disabled />
-                <UButton class="hidden md:block" rounded size="lg" variant="ghost" :label="`0 ${$t('Credits')}`" disabled />
-                <UButton class="md:hidden" rounded size="lg" variant="ghost" :label="`0 ${$t('Credits')}`" disabled />
+                <UButton color="neutral" icon="i-tabler-user" rounded size="lg" :label="t('Login')" disabled />
+                <UButton color="neutral" class="hidden md:block" rounded size="lg" variant="ghost" :label="`0 ${$t('Credits')}`" disabled />
+                <UButton color="neutral" class="md:hidden" rounded size="lg" variant="ghost" :label="`0 ${$t('Credits')}`" disabled />
             </div>
         </template>
     </ClientOnly>

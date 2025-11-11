@@ -8,34 +8,32 @@
 }
 
 :root {
-    /* Colores */
-    --ui-primary: #000000;
-    --ui-secondary: #e0e0e0;
-    --bg-color: #f7f7f7;
+    --ui-primary: #ff6b5c;
+    --ui-secondary: #1e3a5f;
 
     /* Texto */
-    /* --ui-text: #0b0b0b;
+    --ui-text: #17181c;
     --ui-text-dimmed: #6c757d;
     --ui-text-muted: #9aa0a6;
     --ui-text-toned: #555555;
-    --ui-text-highlighted: #0d0d0d;
-    --ui-text-inverted: #ffffff; */
+    --ui-text-highlighted: #1e3a5f;
+    --ui-text-inverted: #ffffff;
 
     /* Fondos */
     --ui-bg: #f7f7f7;
-    /* --ui-bg-muted: #f8f9fa;
+    --ui-bg-muted: #ffffff;
     --ui-bg-elevated: #ffffff;
-    --ui-bg-accented: #00ff9c;
-    --ui-bg-inverted: #0d0d0d; */
+    --ui-bg-accented: #47e1ba;
+    --ui-bg-inverted: #17181c;
 
     /* Bordes */
-    /* --ui-border: #dcdfe3;
+    --ui-border: #dcdfe3;
     --ui-border-muted: #d6d6d6;
-    --ui-border-accented: #b8b8b8;
-    --ui-border-inverted: #0d0d0d; */
+    --ui-border-accented: #47e1ba;
+    --ui-border-inverted: #1e3a5f;
 
     /* Estados */
-    /* --ui-error: #ff2e63; */
+    --ui-error: #ff6b5c;
 }
 
 @layer base {
@@ -45,9 +43,7 @@
 }
 
 body {
-    /* background: linear-gradient(to bottom, #ebe3ed, #f2e7da); */
-    background-color: var(--bg-color);
-    /* transition: background-color 0.3s ease; */
+    background-color: var(--ui-bg);
 }
 
 /* GLASS */

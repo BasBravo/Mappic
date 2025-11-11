@@ -374,19 +374,20 @@ onMounted(() => {
 <template>
     <div class="flex gap-3 items-center">
         <EffectGlass class="hidden md:flex gap-2 p-1 rounded-full" :displace="2">
-            <UButton icon="i-tabler-arrow-left" variant="ghost" color="primary" size="xl" @click="goBackPage" />
+            <UButton color="neutral" icon="i-tabler-arrow-left" variant="ghost" size="xl" @click="goBackPage" />
         </EffectGlass>
         <EffectGlass class="rounded-full p-1" :displace="2">
             <div class="flex gap-1 items-center">
                 <!-- Share button with popover -->
                 <UPopover mode="hover">
-                    <UButton :label="$t('Share')" variant="ghost" color="primary" size="xl" icon="i-tabler-share" />
+                    <UButton color="neutral" :label="$t('Share')" variant="ghost" size="xl" icon="i-tabler-share" />
 
                     <template #content>
                         <div class="grid grid-cols-2 gap-4 p-8">
                             <span class="col-span-2 text-center font-medium pb-4">{{ $t('Share this map') }}</span>
 
                             <UButton
+                                color="neutral"
                                 @click="shareOnX"
                                 size="xl"
                                 variant="outline"
@@ -395,6 +396,7 @@ onMounted(() => {
                                 :label="$t('X')" />
 
                             <UButton
+                                color="neutral"
                                 @click="shareOnFacebook"
                                 size="xl"
                                 variant="outline"
@@ -403,6 +405,7 @@ onMounted(() => {
                                 :label="$t('Facebook')" />
 
                             <UButton
+                                color="neutral"
                                 @click="shareOnLinkedIn"
                                 size="xl"
                                 variant="outline"
@@ -411,6 +414,7 @@ onMounted(() => {
                                 :label="$t('LinkedIn')" />
 
                             <UButton
+                                color="neutral"
                                 @click="shareOnWhatsApp"
                                 size="xl"
                                 variant="outline"
@@ -419,6 +423,7 @@ onMounted(() => {
                                 :label="$t('WhatsApp')" />
 
                             <UButton
+                                color="neutral"
                                 class="col-span-2 w-full justify-center"
                                 @click="copyToClipboard"
                                 size="xl"
@@ -434,6 +439,7 @@ onMounted(() => {
                     <!-- Vote button -->
                     <UButton
                         @click="toggleVote"
+                        color="neutral"
                         variant="ghost"
                         :color="hasVoted ? 'error' : 'primary'"
                         size="xl"
@@ -448,7 +454,7 @@ onMounted(() => {
                     <div class="w-2"></div>
 
                     <!-- Recreate map button -->
-                    <UButton class="md:hidden" @click="recreateMap" :label="$t('Get map')" icon="i-tabler-map" color="primary" size="xl" />
+                    <UButton class="md:hidden" @click="recreateMap" :label="$t('Get map')" icon="i-tabler-map" color="neutral" size="xl" />
 
                     <!-- Edit copy button -->
                     <UButton
@@ -456,7 +462,7 @@ onMounted(() => {
                         @click="editMapCopy"
                         :label="$t('Edit map')"
                         icon="i-tabler-wand"
-                        color="primary"
+                        color="neutral"
                         size="xl" />
                 </template>
 
@@ -469,7 +475,7 @@ onMounted(() => {
                         :icon="hasDownloaded ? 'i-tabler-check' : 'i-tabler-download'"
                         :loading="isDownloading"
                         :disabled="hasDownloaded"
-                        color="primary"
+                        color="neutral"
                         size="xl" />
                 </template>
             </div>
