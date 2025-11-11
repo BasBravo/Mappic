@@ -34,16 +34,39 @@ function onPageChange(value) {
 </script>
 
 <template>
-    <!-- Tablet: Selector dropdown -->
-    <div>
-        <USelect
-            v-model="selectedPage"
-            :ui="{
-                base: 'p-3  bg-black/5 ring-0 ',
-            }"
-            :items="myPages"
-            @update:model-value="onPageChange"
-            class="text-sm font-semibold min-w-36 w-full"
-            size="lg" />
+    <!-- Desktop -->
+    <div class="hidden md:flex">
+        <ClientOnly>
+            <teleport to="#HeaderMenu">
+                <EffectGlass class="flex items-center rounded-full p-1" :displace="2">
+                    <USelect
+                        v-model="selectedPage"
+                        :ui="{
+                            base: 'p-2 bg-transparent ring-0 ',
+                        }"
+                        :items="myPages"
+                        @update:model-value="onPageChange"
+                        class="text-sm font-semibold min-w-36 w-full"
+                        size="lg" />
+                </EffectGlass>
+            </teleport>
+        </ClientOnly>
+    </div>
+    <!-- Mobile -->
+    <div class="md:hidden">
+        <ClientOnly>
+            <teleport to="#HeaderMenuMobile">
+                <USelect
+                    v-model="selectedPage"
+                    :ui="{
+                        base: 'bg-transparent ring-0 ',
+                        content: 'min-w-36 ',
+                    }"
+                    :items="myPages"
+                    @update:model-value="onPageChange"
+                    class="text-sm font-semibold w-full"
+                    size="lg" />
+            </teleport>
+        </ClientOnly>
     </div>
 </template>
