@@ -52,6 +52,7 @@ const map = ref(null);
 // Reactive data
 const currentZoom = ref(11);
 const frameSizes = ref('');
+const mapSizes = ref('');
 const isSmallScreen = ref(false);
 const ready = ref(false);
 const mapVisible = ref(false);
@@ -325,12 +326,20 @@ const calculateFrameSize = () => {
         if (design.landscape) {
             const finalWidth = Math.max(sizes.height, minWidth);
             const finalHeight = Math.max(sizes.width, minHeight);
+            mapSizes.value = {
+                width: finalWidth,
+                height: finalHeight,
+            };
             frameSizes.value = `min-width: ${minWidth}px; min-height: ${minHeight}px; width: ${finalWidth.toFixed(
                 0
             )}px; height: ${finalHeight.toFixed(0)}px;`;
         } else {
             const finalWidth = Math.max(sizes.width, minWidth);
             const finalHeight = Math.max(sizes.height, minHeight);
+            mapSizes.value = {
+                width: finalWidth,
+                height: finalHeight,
+            };
             frameSizes.value = `min-width: ${minWidth}px; min-height: ${minHeight}px; width: ${finalWidth.toFixed(
                 0
             )}px; height: ${finalHeight.toFixed(0)}px;`;
@@ -343,18 +352,7 @@ const calculateFrameSize = () => {
     const maxHeight = window.innerHeight - padding;
     const containerRect = frameArea.value.getBoundingClientRect();
 
-    console.log('calculateFrameSize - editable mode:', {
-        aspect: design.aspect,
-        widthRatio,
-        heightRatio,
-        landscape: design.landscape,
-        containerWidth: containerRect.width,
-        maxHeight,
-    });
-
     let sizes = mapService.calculateSizes(containerRect.width * 0.8, design.aspect);
-
-    console.log('Initial sizes calculated:', sizes);
 
     // Adjust if too tall
     if (sizes.height > maxHeight) {
@@ -371,17 +369,23 @@ const calculateFrameSize = () => {
     if (design.landscape) {
         const finalWidth = Math.max(sizes.height, minWidth);
         const finalHeight = Math.max(sizes.width, minHeight);
+        mapSizes.value = {
+            width: finalWidth,
+            height: finalHeight,
+        };
         frameSizes.value = `min-width: ${minWidth}px; min-height: ${minHeight}px; width: ${finalWidth.toFixed(
             0
         )}px; height: ${finalHeight.toFixed(0)}px;`;
-        console.log('Applied landscape with min sizes:', frameSizes.value);
     } else {
         const finalWidth = Math.max(sizes.width, minWidth);
         const finalHeight = Math.max(sizes.height, minHeight);
+        mapSizes.value = {
+            width: finalWidth,
+            height: finalHeight,
+        };
         frameSizes.value = `min-width: ${minWidth}px; min-height: ${minHeight}px; width: ${finalWidth.toFixed(
             0
         )}px; height: ${finalHeight.toFixed(0)}px;`;
-        console.log('Applied portrait with min sizes:', frameSizes.value);
     }
 };
 
@@ -580,18 +584,23 @@ defineExpose({
     flyToLocation,
     getMapInfo,
     design,
+    mapSizes,
 });
 </script>
 
 <template>
     <!-- Loading State -->
-    <div v-if="stylesLoading" class="fixed inset-0 z-50 flex items-center justify-center">
+    <div
+        v-if="stylesLoading"
+        class="bg-white inset-0 z-50 flex items-center justify-center rounded-4xl border-2 border-black/10"
+        :style="frameSizes">
         <div class="text-center">
             <Loader color="#374151" />
         </div>
     </div>
 
     <div
+        v-show="!stylesLoading"
         ref="frameArea"
         class="mappic-render min-h-[calc(100dvh-4rem)] w-full relative flex justify-center items-center gap-4 pb-20"
         :class="[`theme_base theme_${mapStyle.key}`]">

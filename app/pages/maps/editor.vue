@@ -12,6 +12,13 @@ if (!mapStore.hasSelectedLocation) {
     navigateTo('/');
 }
 
+const paddingY = computed(() => {
+    if (!mapBaseRef.value?.mapSizes) return 0;
+    const innerHeight = window.innerHeight;
+    const mapHeight = mapBaseRef.value?.mapSizes?.height;
+    return (mapHeight - innerHeight) / 2;
+});
+
 useHead({
     title: 'Mappic - Map Editor',
     meta: [
@@ -33,7 +40,8 @@ useHead({
         </div>
 
         <div
-            class="hidden md:flex md:-translate-x-12 justify-center items-center w-full min-h-[calc(100dvh-4rem)] max-w-[1200px] mx-auto py-20">
+            class="hidden md:flex md:-translate-x-12 justify-center items-center w-full min-h-[calc(100dvh-4rem)] max-w-[1200px] mx-auto"
+            :style="'padding: ' + paddingY + 'px 0'">
             <MapBase
                 ref="mapBaseRef"
                 class="-translate-y-4"
