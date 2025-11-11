@@ -20,13 +20,53 @@ interface AuthState {
     loading: boolean;
 }
 
+const STORAGE_KEY = 'mappic-auth-store';
+
+// Helper para guardar en localStorage
+function saveToLocalStorage(state: AuthState) {
+    if (typeof window !== 'undefined') {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                user: state.user,
+                auth: state.auth,
+                isAuthenticated: state.isAuthenticated
+            }));
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
+    }
+}
+
+// Helper para cargar desde localStorage
+function loadFromLocalStorage(): Partial<AuthState> | null {
+    if (typeof window !== 'undefined') {
+        try {
+            const data = localStorage.getItem(STORAGE_KEY);
+            if (data) {
+                return JSON.parse(data);
+            }
+        } catch (error) {
+            console.error('Error loading from localStorage:', error);
+        }
+    }
+    return null;
+}
+
 export const useAuthStore = defineStore('auth', {
-    state: (): AuthState => ({
-        user: null,
-        auth: null,
-        isAuthenticated: false,
-        loading: false,
-    }),
+    state: (): AuthState => {
+        // Cargar estado inicial desde localStorage
+        const savedState = loadFromLocalStorage();
+        
+        console.log('[AuthStore] Inicializando store...');
+        console.log('[AuthStore] Estado cargado desde localStorage:', savedState);
+        
+        return {
+            user: savedState?.user || null,
+            auth: savedState?.auth || null,
+            isAuthenticated: savedState?.isAuthenticated || false,
+            loading: false,
+        };
+    },
 
     actions: {
         saveUser(userData: { auth: AuthData; data: User }) {
@@ -34,15 +74,16 @@ export const useAuthStore = defineStore('auth', {
             this.user = userData.data;
             this.isAuthenticated = true;
 
-            // Store token in localStorage
-            if (typeof window !== 'undefined') {
-                localStorage.setItem('auth_token', userData.auth.token);
-            }
+            // Guardar en localStorage
+            saveToLocalStorage(this.$state);
         },
 
         setUser(user: User) {
             this.user = user;
             this.isAuthenticated = true;
+            
+            // Guardar en localStorage
+            saveToLocalStorage(this.$state);
         },
 
         clear() {
@@ -50,9 +91,9 @@ export const useAuthStore = defineStore('auth', {
             this.auth = null;
             this.isAuthenticated = false;
 
-            // Remove token from localStorage
+            // Limpiar localStorage
             if (typeof window !== 'undefined') {
-                localStorage.removeItem('auth_token');
+                localStorage.removeItem(STORAGE_KEY);
             }
         },
 
@@ -64,6 +105,31 @@ export const useAuthStore = defineStore('auth', {
             return this.auth?.token || null;
         },
 
+        /**
+         * Verifica si la sesión persistida es válida
+         * Se usa al restaurar la sesión después de un refresh
+         */
+        async validateSession() {
+            try {
+                // Si no hay datos persistidos, no hay nada que validar
+                if (!this.user || !this.auth?.token) {
+                    console.log('[Store] No hay sesión persistida para validar');
+                    return false;
+                }
+                
+                console.log('[Store] Validando sesión persistida...');
+                console.log('[Store] Usuario:', this.user.name, this.user.email);
+                console.log('[Store] Token presente:', !!this.auth.token);
+                
+                // La sesión persistida es válida si tenemos usuario y token
+                // Firebase Auth mantiene la sesión automáticamente en el navegador
+                return true;
+            } catch (error) {
+                console.error('[Store] Error validando sesión:', error);
+                this.clear();
+                return false;
+            }
+        },
 
         async logout() {
             this.loading = true;
@@ -73,8 +139,8 @@ export const useAuthStore = defineStore('auth', {
                 const authService = (await import('~~/shared/services/auth')).createAuth();
                 await authService._init();
                 
-                if (authService._firebaseAuth?.signOut) {
-                    await authService._firebaseAuth.signOut();
+                if (authService._firebaseAuth?.logout) {
+                    await authService._firebaseAuth.logout();
                 }
                 
                 // Clear local state
@@ -87,10 +153,5 @@ export const useAuthStore = defineStore('auth', {
                 this.loading = false;
             }
         },
-    },
-
-    persist: {
-        key: 'mappic-auth-store',
-        paths: ['user', 'auth', 'isAuthenticated'],
     },
 });
