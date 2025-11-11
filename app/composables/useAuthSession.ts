@@ -3,41 +3,41 @@ import { createAuth } from '~~/shared/services/auth';
 
 /**
  * Composable para manejar la sesión de autenticación
- * Restaura sesión desde localStorage (persistida por Pinia)
+ * Restaura sesión desde Firebase Auth (fuente de verdad)
  */
 export const useAuthSession = () => {
-    const authStore = useAuthStore() as any;
+    const authStore = useAuthStore();
 
     /**
      * Restaurar sesión desde localStorage
      * Se ejecuta al inicializar la app
-     * Pinia ya restaura automáticamente el estado persistido
+     * 
+     * Flujo:
+     * 1. Pinia restaura el estado desde localStorage automáticamente
+     * 2. Validamos que los datos persistidos existan
+     * 3. Firebase Auth mantiene la sesión automáticamente en el navegador
      */
     const restoreSession = async () => {
         try {
-            // Pinia ya ha restaurado el estado persistido desde localStorage
-            // Solo necesitamos validar que el token sea válido
+            console.log('[Auth] Iniciando restauración de sesión...');
+            console.log('[Auth] Estado actual del store:');
+            console.log('[Auth] - isAuthenticated:', authStore.isAuthenticated);
+            console.log('[Auth] - user:', authStore.user);
+            console.log('[Auth] - auth:', authStore.auth);
             
-            if (authStore.isAuthenticated && authStore.auth?.token && authStore.user?.uid) {
-                try {
-                    // Validar token con el backend
-                    const authService = createAuth();
-                    const tokenValidation = await authService.verifyToken(authStore.auth.token);
-                    
-                    if (!tokenValidation.success) {
-                        // Token inválido, limpiar sesión
-                        console.warn('Token validation failed, clearing session');
-                        authStore.clear();
-                    } else {
-                        console.log('Session restored from localStorage');
-                    }
-                } catch (error) {
-                    console.error('Error validating token:', error);
-                    // En caso de error, mantener la sesión (podría ser un problema de red)
-                }
+            // Validar sesión persistida
+            const isValid = await authStore.validateSession();
+            
+            if (isValid) {
+                console.log('[Auth] ✓ Sesión restaurada correctamente');
+                console.log('[Auth] Usuario:', authStore.user?.name, authStore.user?.email);
+            } else {
+                console.log('[Auth] ✗ No hay sesión válida');
             }
         } catch (error) {
-            console.error('Error in restoreSession:', error);
+            console.error('[Auth] Error en restoreSession:', error);
+            // En caso de error crítico, limpiar la sesión
+            authStore.clear();
         }
     };
 
