@@ -126,6 +126,7 @@ defineExpose({
                 </div>
                 <UButton
                     v-else-if="search"
+                    color="neutral"
                     variant="ghost"
                     size="lg"
                     icon="i-tabler-x"

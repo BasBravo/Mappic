@@ -183,7 +183,7 @@ useHead({
                 </div>
                 <!-- Botón para continuar editando mapa existente -->
                 <div v-if="mapStore.selectedLocation" class="flex justify-start">
-                    <UButton :to="'/maps/editor'" size="lg" icon="i-tabler-pencil">
+                    <UButton color="neutral" :to="'/maps/editor'" size="lg" icon="i-tabler-pencil">
                         {{ $t('Continue editing') }}: {{ mapStore.mapTitle }}
                     </UButton>
                 </div>

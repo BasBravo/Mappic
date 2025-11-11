@@ -185,7 +185,7 @@ onMounted(() => {
                 <!-- Panel Header -->
                 <div class="panel-header flex items-center justify-between p-4 px-6 pr-4 bg-black/5 cursor-grab active:cursor-grabbing">
                     <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
-                    <UButton icon="i-tabler-x" variant="ghost" size="lg" @click="closePanel" />
+                    <UButton color="neutral" icon="i-tabler-x" variant="ghost" size="xl" @click="closePanel" />
                 </div>
 
                 <!-- Panel Content -->

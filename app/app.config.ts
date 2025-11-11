@@ -73,6 +73,38 @@ export default defineAppConfig({
             slots: {
                 base: 'rounded-2xl',
             },
+            variants: {
+                variant: {
+                    outline:
+                        'bg-white ring-black/20 dark:bg-black/20  dark:ring-black/40 focus-visible:ring-black/40 focus-visible:ring-1 dark:focus-visible:ring-1 dark:focus-visible:ring-primary shadow-none',
+                },
+                size: {
+                    '2xl': {
+                        base: 'px-4 py-3 text-lg gap-2.5',
+                        leading: 'ps-4',
+                        trailing: 'pe-4',
+                        leadingIcon: 'size-6',
+                        leadingAvatarSize: 'sm',
+                        trailingIcon: 'size-6',
+                    },
+                    '3xl': {
+                        base: 'px-5 py-4 text-xl gap-3',
+                        leading: 'ps-5',
+                        trailing: 'pe-5',
+                        leadingIcon: 'size-6',
+                        leadingAvatarSize: 'sm',
+                        trailingIcon: 'size-7',
+                    },
+                    '4xl': {
+                        base: 'px-6 py-5 text-2xl gap-3.5',
+                        leading: 'ps-6',
+                        trailing: 'pe-6',
+                        leadingIcon: 'size-8',
+                        leadingAvatarSize: 'md',
+                        trailingIcon: 'size-8',
+                    },
+                },
+            },
         },
         button: {
             slots: {
@@ -102,9 +134,9 @@ export default defineAppConfig({
             },
             compoundVariants: [
                 {
-                    color: 'secondary',
-                    variant: 'solid',
-                    class: 'text-black',
+                    color: 'neutral',
+                    variant: 'outline',
+                    class: 'ring-black/10',
                 },
                 {
                     size: '2xl' as any,
@@ -123,12 +155,27 @@ export default defineAppConfig({
                 },
             ],
         },
+        slider: {
+            slots: {
+                track: 'bg-secondary/20',
+                range: 'absolute',
+            },
+        },
+        switch: {
+            slots: {
+                base: 'data-[state=unchecked]:bg-black/20 bg-default',
+            },
+        },
         select: {
             slots: {
                 base: 'rounded-full ',
                 content: 'rounded-2xl',
             },
             variants: {
+                variant: {
+                    outline:
+                        'bg-black/5 ring-black/20 dark:bg-black/20  dark:ring-black/40 focus-visible:ring-black/40 focus-visible:ring-1 dark:focus-visible:ring-1 dark:focus-visible:ring-primary shadow-none',
+                },
                 size: {
                     '2xl': {
                         base: 'px-4 py-3 text-lg gap-2.5',
@@ -149,6 +196,11 @@ export default defineAppConfig({
                         trailingIcon: 'size-8',
                     },
                 },
+            },
+            defaultVariants: {
+                size: 'lg',
+                color: 'primary',
+                variant: 'outline',
             },
         },
         dropdownMenu: {

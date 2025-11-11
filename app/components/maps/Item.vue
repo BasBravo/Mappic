@@ -108,7 +108,7 @@ function selectMapForOptions() {
                     <div class="flex gap-1 items-center">
                         <UButton
                             size="sm"
-                            color="primary"
+                            color="neutral"
                             variant="outline"
                             icon="i-tabler-refresh"
                             :label="$t('Try again')"
@@ -125,7 +125,13 @@ function selectMapForOptions() {
                 </div>
                 <div v-else class="flex gap-1 items-center">
                     <div>
-                        <UButton size="sm" variant="outline" :disabled="map.in_progress" @click="handleViewClick" :label="$t('View')" />
+                        <UButton
+                            color="neutral"
+                            size="sm"
+                            variant="outline"
+                            :disabled="map.in_progress"
+                            @click="handleViewClick"
+                            :label="$t('View')" />
                     </div>
 
                     <UDropdownMenu
@@ -134,6 +140,7 @@ function selectMapForOptions() {
                             content: 'w-48',
                         }">
                         <UButton
+                            color="neutral"
                             variant="outline"
                             size="sm"
                             :disabled="map.in_progress"

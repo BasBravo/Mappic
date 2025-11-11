@@ -69,7 +69,7 @@ async function changeLanguage(code) {
             :ui="{
                 content: 'w-32',
             }">
-            <UButton icon="i-tabler-language" rounded size="lg" variant="ghost" />
+            <UButton color="neutral" icon="i-tabler-language" rounded size="lg" variant="ghost" />
         </UDropdownMenu>
     </div>
 </template>

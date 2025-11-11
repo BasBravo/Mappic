@@ -715,10 +715,11 @@ onMounted(async () => {
                         <div class="fixed left-0 right-0 flex justify-center bottom-0 translate-y-3 z-10">
                             <div class="flex gap-3 items-center">
                                 <EffectGlass class="flex gap-2 p-1 rounded-full" :displace="2">
-                                    <UButton icon="i-tabler-arrow-left" variant="ghost" size="xl" @click="goBack" />
+                                    <UButton color="neutral" icon="i-tabler-arrow-left" variant="ghost" size="xl" @click="goBack" />
                                 </EffectGlass>
                                 <EffectGlass class="flex gap-2 p-1 rounded-full" :displace="2">
                                     <UButton
+                                        color="neutral"
                                         v-if="hasEnoughCredits"
                                         type="submit"
                                         icon="i-tabler-wand"

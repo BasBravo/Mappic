@@ -399,6 +399,7 @@ onUnmounted(() => {
                                 <UFormField :label="$t('Quality')">
                                     <USelect
                                         v-model="data.filters.quality"
+                                        color="neutral"
                                         class="w-full lg:w-40"
                                         :items="qualityOptions"
                                         value-key="key"
@@ -409,6 +410,7 @@ onUnmounted(() => {
                                 <UFormField :label="$t('Style')">
                                     <USelect
                                         v-model="data.filters.style"
+                                        color="neutral"
                                         class="w-full lg:w-40"
                                         :items="styleOptions"
                                         value-key="key"
@@ -419,6 +421,7 @@ onUnmounted(() => {
                                 <UFormField :label="$t('Composition')">
                                     <USelect
                                         v-model="data.filters.composition"
+                                        color="neutral"
                                         class="w-full lg:w-40"
                                         :items="compositionOptions"
                                         value-key="key"
@@ -428,8 +431,12 @@ onUnmounted(() => {
                         </div>
 
                         <div class="flex items-center gap-4 pt-6">
-                            <div v-if="!hasFilteredMaps">
-                                <UButton variant="outline" @click="data.filters = { quality: 'all', style: 'all', composition: 'all' }">
+                            <div
+                                v-if="data.filters.quality !== 'all' || data.filters.style !== 'all' || data.filters.composition !== 'all'">
+                                <UButton
+                                    color="neutral"
+                                    variant="outline"
+                                    @click="data.filters = { quality: 'all', style: 'all', composition: 'all' }">
                                     {{ $t('Clear Filters') }}
                                 </UButton>
                             </div>
