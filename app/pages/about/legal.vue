@@ -52,7 +52,7 @@ useSeoMeta({
 
         <section>
             <div class="mx-auto max-w-3xl flex flex-col justify-center md:items-center">
-                <h1 class="mt-4 text-5xl md:text-7xl font-semibold tracking-tight text-balance text-gray-900">Terms of Use</h1>
+                <h1 class="mt-4 text-5xl md:text-7xl font-medium tracking-tight text-balance text-gray-900">Terms of Use</h1>
             </div>
         </section>
 

@@ -115,7 +115,7 @@ if (locale?.value == 'zh') {
                 </div>
                 <!-- Titular: mobile abajo, desktop izquierda -->
                 <div class="mr-auto place-self-center lg:order-1 lg:col-span-7 text-left">
-                    <h1 class="text-5xl md:text-7xl font-semibold tracking-tight text-balance text-gray-900">
+                    <h1 class="text-5xl md:text-7xl font-medium tracking-tight text-balance text-gray-900">
                         {{
                             getLocalizedText(
                                 'Create custom maps of your favorite cities',
@@ -346,13 +346,13 @@ if (locale?.value == 'zh') {
                                 <table class="w-full text-left">
                                     <thead class="border-b border-gray-300">
                                         <tr>
-                                            <th class="px-4 py-3 text-sm font-semibold text-gray-900">
+                                            <th class="px-4 py-3 text-sm font-medium text-gray-900">
                                                 {{ getLocalizedText('Size', 'Tamaño', '尺寸') }}
                                             </th>
-                                            <th class="px-4 py-3 text-sm font-semibold text-gray-900">
+                                            <th class="px-4 py-3 text-sm font-medium text-gray-900">
                                                 {{ getLocalizedText('Resolution', 'Resolución', '分辨率') }}
                                             </th>
-                                            <th class="px-4 py-3 text-sm font-semibold text-gray-900 text-center">
+                                            <th class="px-4 py-3 text-sm font-medium text-gray-900 text-center">
                                                 {{ getLocalizedText('Cost', 'Costo', '成本') }}
                                             </th>
                                         </tr>
@@ -406,13 +406,13 @@ if (locale?.value == 'zh') {
                                 <table class="w-full text-left">
                                     <thead class="border-b border-gray-300">
                                         <tr>
-                                            <th class="px-4 py-3 text-sm font-semibold text-gray-900">
+                                            <th class="px-4 py-3 text-sm font-medium text-gray-900">
                                                 {{ locale.value == 'en' ? 'Pack' : 'Paquete' }}
                                             </th>
-                                            <th class="px-4 py-3 text-sm font-semibold text-gray-900 text-center">
+                                            <th class="px-4 py-3 text-sm font-medium text-gray-900 text-center">
                                                 {{ locale.value == 'en' ? 'Credits' : 'Créditos' }}
                                             </th>
-                                            <th class="px-4 py-3 text-sm font-semibold text-gray-900 text-center">
+                                            <th class="px-4 py-3 text-sm font-medium text-gray-900 text-center">
                                                 {{ locale.value == 'en' ? 'Price' : 'Precio' }}
                                             </th>
                                         </tr>
@@ -446,7 +446,7 @@ if (locale?.value == 'zh') {
                     <!-- Nota adicional -->
                     <div class="mt-8 rounded-lg">
                         <p class="text-sm text-center">
-                            <span class="font-semibold">
+                            <span class="font-medium">
                                 {{ locale.value == 'en' ? 'Note:' : 'Nota:' }}
                             </span>
                             {{

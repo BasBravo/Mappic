@@ -368,7 +368,7 @@ onUnmounted(() => {
                 image-src="/opendoodles/clumsy.svg"
                 :title="$t('Login Required')"
                 :description="$t('Please log in to view your maps.')">
-                <UButton size="xl" block :to="'/auth/login'">
+                <UButton color="neutral" size="xl" block :to="'/auth/login'">
                     {{ $t('Login') }}
                 </UButton>
             </CardComposition>
@@ -393,7 +393,7 @@ onUnmounted(() => {
             <div v-else class="flex flex-col pb-10 gap-10 w-full">
                 <div class="mt-20 md:p-4">
                     <!-- Titulo -->
-                    <h1 class="text-4xl md:text-6xl max-w-3xl font-semibold tracking-tight text-balance">
+                    <h1 class="text-4xl md:text-6xl max-w-3xl font-medium tracking-tight text-balance">
                         {{ t('My Maps') }}
                     </h1>
 

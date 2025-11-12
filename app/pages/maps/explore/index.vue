@@ -2,6 +2,7 @@
 // IMPORTS //////////////////////
 
 import { createMapService } from '~~/shared/services/map';
+import { createUser } from '~~/shared/services/user';
 import { getPurchasableMaps } from '~~/shared/services/mapPurchase';
 import { styles, compositions } from '~~/data/design';
 import { useAuthStore } from '~~/stores/authStore';
@@ -10,6 +11,7 @@ import { capitalize } from '~~/app/utils';
 // SERVICES //////////////////////
 
 const mapService = createMapService();
+const userService = createUser();
 
 // COMPOSABLES & STORES //////////////////////
 
@@ -45,11 +47,7 @@ const data = reactive({
 
 // COMPUTED //////////////////////
 
-const isUserAuthenticated = computed(() => authStore.isAuthenticated);
-const user = computed(() => authStore.user);
-const hasAnyMaps = computed(() => data.maps.length > 0);
 const hasFilteredMaps = computed(() => data.filteredMaps.length > 0);
-
 const paginatedMaps = computed(() => {
     const start = (data.pagination.page - 1) * data.pagination.pageSize;
     const end = start + data.pagination.pageSize;
@@ -98,12 +96,61 @@ async function getExploreMaps() {
             filters: [
                 { key: 'quality', operator: '!=', value: 's' }, // Exclude small maps
                 { key: 'status', operator: '==', value: 'success' },
+                { key: 'is_purchased_copy', operator: '==', value: false },
                 { key: 'created_at', direction: 'desc' },
             ],
         });
 
         if (result.success) {
-            data.maps = result.items || [];
+            const maps = result.items || [];
+
+            // Extract unique user IDs from maps
+            const userIds = [
+                ...new Set(
+                    maps
+                        .map(map => {
+                            if (map.user && typeof map.user === 'string') {
+                                const parts = map.user.split('/');
+                                return parts.length > 1 ? parts[1] : null;
+                            }
+                            return null;
+                        })
+                        .filter(Boolean)
+                ),
+            ];
+
+            // Fetch user data for all unique user IDs
+            const usersData = {};
+            await Promise.all(
+                userIds.map(async userId => {
+                    const userResult = await userService.getUser(userId);
+                    if (userResult.success && userResult.data) {
+                        usersData[userId] = {
+                            id: userId,
+                            name: userResult.data.name || userResult.data.email || 'Unknown',
+                            email: userResult.data.email,
+                        };
+                    }
+                })
+            );
+
+            // Enrich maps with user data
+            data.maps = maps.map(map => {
+                if (map.user && typeof map.user === 'string') {
+                    const parts = map.user.split('/');
+                    const userId = parts.length > 1 ? parts[1] : null;
+
+                    return {
+                        ...map,
+                        user: usersData[userId] || { id: userId, name: map.email || 'Unknown', email: map.email },
+                    };
+                }
+                return {
+                    ...map,
+                    user: { id: null, name: null, email: map.email },
+                };
+            });
+
             data.pagination.total = data.maps.length;
             filterMaps(data.maps);
         }
@@ -188,7 +235,7 @@ onMounted(async () => {
             <div class="flex flex-col pb-10 gap-10 w-full">
                 <div class="mt-20 md:p-4">
                     <!-- Titulo -->
-                    <h1 class="text-4xl md:text-6xl max-w-3xl font-semibold tracking-tight text-balance">
+                    <h1 class="text-4xl md:text-6xl max-w-3xl font-medium tracking-tight text-balance">
                         {{ t('Explore maps and discover new ones') }}
                     </h1>
 
@@ -246,7 +293,13 @@ onMounted(async () => {
                 <!-- Maps Grid -->
                 <div v-else>
                     <div class="w-full grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-20 mb-8 md:p-4">
-                        <MapsItem v-for="map in paginatedMaps" :key="map.uid" :map="map" @select="handleMapSelect" :editable="false" />
+                        <MapsItem
+                            v-for="map in paginatedMaps"
+                            :key="map.uid"
+                            :map="map"
+                            :user="map.user"
+                            @select="handleMapSelect"
+                            :editable="false" />
                     </div>
 
                     <!-- Pagination -->

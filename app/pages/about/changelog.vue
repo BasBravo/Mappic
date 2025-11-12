@@ -54,14 +54,14 @@ useSeoMeta({
 
         <section>
             <div class="mx-auto max-w-3xl flex flex-col justify-center md:items-center">
-                <h1 class="mt-4 text-5xl md:text-7xl font-semibold tracking-tight text-balance text-gray-900">Changelog</h1>
+                <h1 class="mt-4 text-5xl md:text-7xl font-medium tracking-tight text-balance text-gray-900">Changelog</h1>
             </div>
         </section>
 
         <section class="mx-auto max-w-2xl py-10 space-y-4">
             <h2 class="mb-4 text-xl font-extrabold leading-none text-gray-900 md:text-2xl dark:text-white">2.0.1</h2>
             <dl>
-                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">18/08/2025</dt>
+                <dt class="mb-2 font-medium leading-none text-gray-900 dark:text-white">18/08/2025</dt>
                 <dd class="flex flex-col mb-4 font-light text-gray-700 sm:mb-5 dark:text-gray-400">
                     <p>Add Mandarin Chinese translation</p>
                     <p>New sections in the About the project area.</p>
@@ -73,7 +73,7 @@ useSeoMeta({
 
             <h2 class="mb-4 text-xl font-extrabold leading-none text-gray-900 md:text-2xl dark:text-white">2.0.0</h2>
             <dl>
-                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">22/07/2025</dt>
+                <dt class="mb-2 font-medium leading-none text-gray-900 dark:text-white">22/07/2025</dt>
                 <dd class="flex flex-col mb-4 font-light text-gray-700 sm:mb-5 dark:text-gray-400">
                     <p>New design and map generation engine.</p>
                     <p>New domain mappic.app and redirects.</p>
@@ -94,7 +94,7 @@ useSeoMeta({
 
             <h2 class="mb-4 text-xl font-extrabold leading-none text-gray-900 md:text-2xl dark:text-white">1.3.0</h2>
             <dl>
-                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">13/10/2024</dt>
+                <dt class="mb-2 font-medium leading-none text-gray-900 dark:text-white">13/10/2024</dt>
                 <dd class="flex flex-col mb-4 font-light text-gray-700 sm:mb-5 dark:text-gray-400">
                     <p>Redesign of the map composition editing interface.</p>
                     <p>New CLEAN composition to generate maps without additional elements.</p>
@@ -106,7 +106,7 @@ useSeoMeta({
 
             <h2 class="mb-4 text-xl font-extrabold leading-none text-gray-900 md:text-2xl dark:text-white">1.2.0</h2>
             <dl>
-                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">24/09/2024</dt>
+                <dt class="mb-2 font-medium leading-none text-gray-900 dark:text-white">24/09/2024</dt>
                 <dd class="flex flex-col mb-4 font-light text-gray-700 sm:mb-5 dark:text-gray-400">
                     <p>New section of my maps.</p>
                     <p>Improved map sharing method.</p>
@@ -117,7 +117,7 @@ useSeoMeta({
 
             <h2 class="mb-4 text-xl font-extrabold leading-none text-gray-900 md:text-2xl dark:text-white">1.1.1</h2>
             <dl>
-                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">12/09/2024</dt>
+                <dt class="mb-2 font-medium leading-none text-gray-900 dark:text-white">12/09/2024</dt>
                 <dd class="flex flex-col mb-4 font-light text-gray-700 sm:mb-5 dark:text-gray-400">
                     <p>Fixed a bug that caused some geographic areas to be poorly positioned in the final design.</p>
                     <p>New map styles.</p>
@@ -128,7 +128,7 @@ useSeoMeta({
 
             <h2 class="mb-4 text-xl font-extrabold leading-none text-gray-900 md:text-2xl dark:text-white">1.1.0</h2>
             <dl>
-                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">08/08/2024</dt>
+                <dt class="mb-2 font-medium leading-none text-gray-900 dark:text-white">08/08/2024</dt>
                 <dd class="flex flex-col mb-4 font-light text-gray-700 sm:mb-5 dark:text-gray-400">
                     <p>New login and register pages.</p>
                     <p>Added the option to save generated maps.</p>
@@ -141,7 +141,7 @@ useSeoMeta({
 
             <h2 class="mb-4 text-xl font-extrabold leading-none text-gray-900 md:text-2xl dark:text-white">1.0.2</h2>
             <dl>
-                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">03/07/2024</dt>
+                <dt class="mb-2 font-medium leading-none text-gray-900 dark:text-white">03/07/2024</dt>
                 <dd class="flex flex-col mb-4 font-light text-gray-700 sm:mb-5 dark:text-gray-400">
                     <p>Added the option to select the style, size and composition of the map.</p>
                     <p>Improved user interface.</p>
@@ -153,7 +153,7 @@ useSeoMeta({
 
             <h2 class="mb-4 text-xl font-extrabold leading-none text-gray-900 md:text-2xl dark:text-white">1.0.1</h2>
             <dl>
-                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">24/06/2024</dt>
+                <dt class="mb-2 font-medium leading-none text-gray-900 dark:text-white">24/06/2024</dt>
                 <dd class="flex flex-col mb-4 font-light text-gray-700 sm:mb-5 dark:text-gray-400">
                     <p>Deployment of mappic on the Product Hunt platform.</p>
                     <div class="h-3"></div>
@@ -167,7 +167,7 @@ useSeoMeta({
 
             <h2 class="mb-4 text-xl font-extrabold leading-none text-gray-900 md:text-2xl dark:text-white">1.0.0</h2>
             <dl>
-                <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">10/06/2024</dt>
+                <dt class="mb-2 font-medium leading-none text-gray-900 dark:text-white">10/06/2024</dt>
                 <dd class="flex flex-col mb-4 font-light text-gray-700 sm:mb-5 dark:text-gray-400">
                     <p>Initial launch of mappic.</p>
                     <p>Integration of the Nominatim and Mapbox API for map generation.</p>

@@ -515,5 +515,9 @@ export default {
     'Discover beautiful maps created by our community': '发现我们社区创建的美丽地图',
     'Search': '搜索',
     'Clear Filters': '清除筛选器',
-    'No maps found with the current filters.': '未找到与当前筛选器匹配的地图。'
+    'No maps found with the current filters.': '未找到与当前筛选器匹配的地图。',
+    'Created by': '创建者',
+    'Maps by {user}': '{user} 的地图',
+    'View all maps by this user': '查看此用户的所有地图',
+    'No maps found for this user': '未找到此用户的地图'
 }

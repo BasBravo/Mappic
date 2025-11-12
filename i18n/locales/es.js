@@ -512,5 +512,9 @@ export default {
     'Discover beautiful maps created by our community': 'Descubre hermosos mapas creados por nuestra comunidad',
     'Search': 'Buscar',
     'Clear Filters': 'Limpiar Filtros',
-    'No maps found with the current filters.': 'No se encontraron mapas con los filtros actuales.'
+    'No maps found with the current filters.': 'No se encontraron mapas con los filtros actuales.',
+    'Created by': 'Creado por',
+    'Maps by {user}': 'Mapas de {user}',
+    'View all maps by this user': 'Ver todos los mapas de este usuario',
+    'No maps found for this user': 'No se encontraron mapas para este usuario'
 }
