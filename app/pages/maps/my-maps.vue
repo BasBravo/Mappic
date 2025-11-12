@@ -145,7 +145,6 @@ async function confirmDelete() {
 
     // try {
     const result = await mapService.delete(deleteModal.mapToDelete.uid);
-    console.log('Delete result:::', result);
 
     if (result.success) {
         // Remove from maps array
@@ -344,12 +343,12 @@ onUnmounted(() => {
                         <p v-if="deleteModal.mapToDelete" class="text-lg text-gray-600">
                             <strong>{{ deleteModal.mapToDelete.design?.title || $t('Untitled Map') }}</strong>
                         </p>
-                        <p class="text-xs text-center w-full text-red-600">
+                        <p class="text-center w-full text-red-600">
                             {{ $t('This action cannot be undone.') }}
                         </p>
                     </div>
                     <div class="w-full flex justify-between gap-3">
-                        <UButton variant="soft" size="xl" class="w-full justify-center" @click="cancelDelete">
+                        <UButton color="neutral" variant="soft" size="xl" class="w-full justify-center" @click="cancelDelete">
                             {{ $t('Cancel') }}
                         </UButton>
                         <UButton color="error" variant="solid" size="xl" class="w-full justify-center" @click="confirmDelete">
@@ -392,58 +391,57 @@ onUnmounted(() => {
 
             <!-- Maps content -->
             <div v-else class="flex flex-col pb-10 gap-10 w-full">
-                <EffectGlass class="relative mt-20 z-10 p-6 rounded-3xl" :displace="2">
-                    <div class="flex flex-col lg:flex-row justify-between w-full">
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            <div>
-                                <UFormField :label="$t('Quality')">
-                                    <USelect
-                                        v-model="data.filters.quality"
-                                        color="neutral"
-                                        class="w-full lg:w-40"
-                                        :items="qualityOptions"
-                                        value-key="key"
-                                        text-key="label" />
-                                </UFormField>
-                            </div>
-                            <div>
-                                <UFormField :label="$t('Style')">
-                                    <USelect
-                                        v-model="data.filters.style"
-                                        color="neutral"
-                                        class="w-full lg:w-40"
-                                        :items="styleOptions"
-                                        value-key="key"
-                                        text-key="label" />
-                                </UFormField>
-                            </div>
-                            <div>
-                                <UFormField :label="$t('Composition')">
-                                    <USelect
-                                        v-model="data.filters.composition"
-                                        color="neutral"
-                                        class="w-full lg:w-40"
-                                        :items="compositionOptions"
-                                        value-key="key"
-                                        text-key="label" />
-                                </UFormField>
-                            </div>
-                        </div>
+                <div class="mt-20 md:p-4">
+                    <!-- Titulo -->
+                    <h1 class="text-4xl md:text-6xl max-w-3xl font-semibold tracking-tight text-balance">
+                        {{ t('My Maps') }}
+                    </h1>
 
-                        <div class="flex items-center gap-4 pt-6">
-                            <div
-                                v-if="data.filters.quality !== 'all' || data.filters.style !== 'all' || data.filters.composition !== 'all'">
-                                <UButton
-                                    color="neutral"
-                                    variant="outline"
-                                    @click="data.filters = { quality: 'all', style: 'all', composition: 'all' }">
-                                    {{ $t('Clear Filters') }}
-                                </UButton>
+                    <!-- Filters Section -->
+                    <div class="flex justify-between items-center relative mt-4 md:mt-10 z-10 py-6 border-b border-black/10">
+                        <div class="flex flex-col lg:flex-row justify-between w-full gap-6">
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                <div>
+                                    <UFormField :label="$t('Quality')">
+                                        <USelect
+                                            v-model="data.filters.quality"
+                                            color="neutral"
+                                            class="w-full lg:w-40"
+                                            :items="qualityOptions"
+                                            value-key="key"
+                                            text-key="label" />
+                                    </UFormField>
+                                </div>
+                                <div>
+                                    <UFormField :label="$t('Style')">
+                                        <USelect
+                                            v-model="data.filters.style"
+                                            color="neutral"
+                                            class="w-full lg:w-40"
+                                            :items="styleOptions"
+                                            value-key="key"
+                                            text-key="label" />
+                                    </UFormField>
+                                </div>
+                                <div>
+                                    <UFormField :label="$t('Composition')">
+                                        <USelect
+                                            v-model="data.filters.composition"
+                                            color="neutral"
+                                            class="w-full lg:w-40"
+                                            :items="compositionOptions"
+                                            value-key="key"
+                                            text-key="label" />
+                                    </UFormField>
+                                </div>
                             </div>
-                            <div class="text-sm text-gray-600">{{ data.filteredMaps.length }} {{ $t('maps found') }}</div>
+
+                            <div class="pt-6 hidden lg:flex min-w-40 justify-end">
+                                <div class="text-sm text-gray-600">{{ data.filteredMaps.length }} {{ $t('maps found') }}</div>
+                            </div>
                         </div>
                     </div>
-                </EffectGlass>
+                </div>
 
                 <!-- No filtered results -->
                 <div v-if="!hasFilteredMaps" class="flex flex-col w-full items-center justify-center py-20">
@@ -457,6 +455,7 @@ onUnmounted(() => {
                             v-for="map in data.filteredMaps"
                             :key="map.uid"
                             :map="map"
+                            :editable="true"
                             @delete="openDeleteModal"
                             @regenerate="regenerateMap"
                             @select="handleMapSelect" />

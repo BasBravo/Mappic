@@ -8,6 +8,7 @@ export default {
         home: "主页",
         my_maps: "我的地图",
         market: "商店",
+        explore: "探索",
         about: "关于",
         editor: "地图编辑器"
     },
@@ -472,7 +473,7 @@ export default {
     'cookies.banner.acceptAll': '全部接受',
     'cookies.banner.rejectAll': '全部拒绝',
     'cookies.banner.customize': '自定义',
-    
+
     'cookies.modal.title': 'Cookie 偏好设置',
     'cookies.modal.save': '保存偏好设置',
     'cookies.modal.necessary': '必需',
@@ -482,6 +483,37 @@ export default {
     'cookies.modal.descriptions.necessary': '对于安全性、身份验证和基本网站功能至关重要。这些 Cookie 无法禁用。',
     'cookies.modal.descriptions.analytics': '帮助我们了解您如何使用我们的网站，以改进您的体验。包括 Google Analytics。',
     'cookies.modal.descriptions.marketing': '用于个性化广告和再营销。允许我们向您展示相关内容。',
-    'cookies.modal.descriptions.preferences': '记住您的选择，如语言、主题和其他偏好设置，以供将来访问。'
+    'cookies.modal.descriptions.preferences': '记住您的选择，如语言、主题和其他偏好设置，以供将来访问。',
 
+    // Map Purchase System
+    'Explore Maps': '探索地图',
+    'Search maps...': '搜索地图...',
+    'maps found': '找到的地图',
+    'Page': '页面',
+    'of': '共',
+    'Buy Map': '购买地图',
+    'Buy': '购买',
+    'Purchase Cost': '购买成本',
+    'Confirm Purchase': '确认购买',
+    'After purchase, this map will be added to your collection.': '购买后，此地图将添加到您的收藏中。',
+    'Cannot purchase': '无法购买',
+    'Insufficient credits': '积分不足',
+    'Small maps cannot be purchased': '小地图无法购买',
+    'You cannot purchase your own map': '您无法购买自己的地图',
+    'Map not found': '未找到地图',
+    'Error loading map': '加载地图出错',
+    'User or map information missing': '用户或地图信息缺失',
+    'Error purchasing map': '购买地图出错',
+    'Error processing purchase': '处理购买出错',
+    'Map purchased successfully!': '地图购买成功！',
+    'Go Back': '返回',
+    'No preview available': '无可用预览',
+    'Untitled Map': '无标题地图',
+    'Quality': '质量',
+    'Style': '样式',
+    'Composition': '构图',
+    'Discover beautiful maps created by our community': '发现我们社区创建的美丽地图',
+    'Search': '搜索',
+    'Clear Filters': '清除筛选器',
+    'No maps found with the current filters.': '未找到与当前筛选器匹配的地图。'
 }

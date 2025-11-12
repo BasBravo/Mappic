@@ -95,6 +95,42 @@ export const getPopularCreditPurchasePack = (): CreditPurchasePack | undefined =
 };
 
 // ==============================================
+// MAP PURCHASE COSTS (what it costs to buy maps)
+// ==============================================
+
+export const mapPurchaseCosts = {
+    m: {
+        cost: 1,
+        name: 'medium',
+    },
+    l: {
+        cost: 3,
+        name: 'large',
+    },
+    xl: {
+        cost: 5,
+        name: 'high',
+    },
+    xxl: {
+        cost: 6,
+        name: 'ultrahigh',
+    },
+} as const;
+
+export const getMapPurchaseCost = (size: string): number => {
+    return mapPurchaseCosts[size.toLowerCase() as keyof typeof mapPurchaseCosts]?.cost || 1;
+};
+
+export const canPurchaseMap = (userCredits: number, mapSize: string): boolean => {
+    const cost = getMapPurchaseCost(mapSize);
+    return userCredits >= cost;
+};
+
+export const getMapPurchaseCostFromGenerationCost = (generationCost: number): number => {
+    return Math.ceil(generationCost / 2);
+};
+
+// ==============================================
 // LEGACY EXPORTS (for backward compatibility)
 // ==============================================
 

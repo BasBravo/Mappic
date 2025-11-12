@@ -2,6 +2,7 @@
 import { useAuthStore } from '~~/stores/authStore';
 import { useMapStore } from '~~/stores/mapStore';
 import { createMapService } from '~~/shared/services/map';
+import { getMapPurchaseCost } from '~~/data/credits';
 
 // Props
 const props = defineProps({
@@ -364,6 +365,26 @@ const goBackPage = () => {
     }
 };
 
+// Buy map functionality
+const buyMap = () => {
+    const currentUser = authStore.user;
+
+    // Check if user is authenticated
+    if (!currentUser?.uid) {
+        navigateTo('/auth/login');
+        return;
+    }
+
+    // Navigate to buy page
+    navigateTo(`/maps/buy?uid=${props.uid}`);
+};
+
+// Computed property for purchase cost
+const purchaseCost = computed(() => {
+    if (!mapData.value) return 0;
+    return getMapPurchaseCost(mapData.value.quality);
+});
+
 // Set current URL on mount
 onMounted(() => {
     currentUrl.value = window.location.href;
@@ -450,6 +471,16 @@ onMounted(() => {
                         }">
                         {{ voteCount == -1 ? $t('...') : voteCount }}
                     </UButton>
+
+                    <div class="w-2"></div>
+
+                    <!-- Buy map button -->
+                    <UButton
+                        @click="buyMap"
+                        :label="`${$t('Buy Map')} (${purchaseCost} 💳)`"
+                        icon="i-tabler-shopping-cart"
+                        color="primary"
+                        size="xl" />
 
                     <div class="w-2"></div>
 

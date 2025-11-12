@@ -13,6 +13,7 @@ export default {
         home: "Home",
         my_maps: "My Maps",
         market: "Market",
+        explore: "Explore",
         about: "About",
         editor: "Map Editor"
     },
@@ -412,7 +413,7 @@ export default {
     'cookies.banner.acceptAll': 'Accept All',
     'cookies.banner.rejectAll': 'Reject All',
     'cookies.banner.customize': 'Customize',
-    
+
     'cookies.modal.title': 'Cookie Preferences',
     'cookies.modal.save': 'Save Preferences',
     'cookies.modal.necessary': 'Necessary',
@@ -422,5 +423,38 @@ export default {
     'cookies.modal.descriptions.necessary': 'Essential for security, authentication, and basic website functionality. These cookies cannot be disabled.',
     'cookies.modal.descriptions.analytics': 'Help us understand how you use our website so we can improve your experience. Includes Google Analytics.',
     'cookies.modal.descriptions.marketing': 'Used for personalized advertising and retargeting. Allows us to show you relevant content.',
-    'cookies.modal.descriptions.preferences': 'Remember your choices like language, theme, and other preferences for future visits.'
+    'cookies.modal.descriptions.preferences': 'Remember your choices like language, theme, and other preferences for future visits.',
+
+    // Map Purchase System
+    'Explore Maps': 'Explore Maps',
+    'Search maps...': 'Search maps...',
+    'maps found': 'maps found',
+    'Page': 'Page',
+    'of': 'of',
+    'Buy Map': 'Buy Map',
+    'Buy': 'Buy',
+    'Buy Map': 'Buy Map',
+    'Purchase Cost': 'Purchase Cost',
+    'Confirm Purchase': 'Confirm Purchase',
+    'After purchase, this map will be added to your collection.': 'After purchase, this map will be added to your collection.',
+    'Cannot purchase': 'Cannot purchase',
+    'Insufficient credits': 'Insufficient credits',
+    'Small maps cannot be purchased': 'Small maps cannot be purchased',
+    'You cannot purchase your own map': 'You cannot purchase your own map',
+    'Map not found': 'Map not found',
+    'Error loading map': 'Error loading map',
+    'User or map information missing': 'User or map information missing',
+    'Error purchasing map': 'Error purchasing map',
+    'Error processing purchase': 'Error processing purchase',
+    'Map purchased successfully!': 'Map purchased successfully!',
+    'Go Back': 'Go Back',
+    'No preview available': 'No preview available',
+    'Untitled Map': 'Untitled Map',
+    'Quality': 'Quality',
+    'Style': 'Style',
+    'Composition': 'Composition',
+    'Discover beautiful maps created by our community': 'Discover beautiful maps created by our community',
+    'Search': 'Search',
+    'Clear Filters': 'Clear Filters',
+    'No maps found with the current filters.': 'No maps found with the current filters.'
 }
