@@ -7,17 +7,17 @@ export const navigationConfig = {
             route: '/',
         },
         {
+            id: 'explore',
+            icon: 'i-tabler-search',
+            label: 'nav.explore',
+            route: '/maps/explore',
+        },
+        {
             id: 'maps',
             icon: 'i-tabler-map',
             label: 'nav.my_maps',
             route: '/maps/my-maps',
         },
-        // {
-        //     id: 'market',
-        //     icon: 'i-tabler-building-store',
-        //     label: 'nav.market',
-        //     route: '/market',
-        // },
         {
             id: 'about',
             icon: 'i-tabler-info-hexagon',

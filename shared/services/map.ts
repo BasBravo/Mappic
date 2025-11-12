@@ -83,16 +83,9 @@ export const createMapService = () => {
         },
         delete: async (uid: string): Promise<any> => {
             const uidMap = cleanUid(uid);
-            console.log(`Deleting map with UID: ${uidMap}`);
-
             const result = await map.collection.find(uidMap);
-            console.log(`Found map for deletion:`, result);
 
             if (result.success) {
-                const file = createFile();
-                const dataMap = result.data;
-                if (dataMap.file_map) file.delete(dataMap.file_map);
-                if (dataMap.file_map_resized) file.delete(dataMap.file_map_resized);
                 const resultDelete = await map.collection.delete(uidMap);
                 return resultDelete;
             }

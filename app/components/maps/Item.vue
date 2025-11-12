@@ -1,9 +1,7 @@
 <script setup>
 const props = defineProps({
-    map: {
-        type: Object,
-        required: true,
-    },
+    map: { type: Object, required: true },
+    editable: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(['delete', 'regenerate', 'select']);
@@ -52,7 +50,7 @@ function selectMapForOptions() {
 <template>
     <div class="w-full flex flex-col lg:flex-row items-start relative">
         <div class="relative w-full lg:max-w-60">
-            <a :href="`/${locale}/maps/${map.uid}`" class="block w-full">
+            <NuxtLink :to="`/${locale}/maps/${map.uid}`" class="block w-full">
                 <MapStatic
                     :key="`${map.uid}-${map._refreshKey || 0}`"
                     class="shadow-none w-full rounded-lg cursor-pointer"
@@ -60,14 +58,16 @@ function selectMapForOptions() {
                     :uid="map.uid"
                     :interactive="false"
                     @click="handleMapSelect" />
-            </a>
+            </NuxtLink>
         </div>
 
         <div class="flex flex-col justify-between gap-2 px-2 md:px-4 py-4 md:py-2 flex-1">
             <div class="flex items-center gap-2">
-                <h3 class="text-2xl font-semibold text-gray-900" :class="{ 'text-gray-500': map.in_progress }">
-                    {{ map.design?.title || '-' }}
-                </h3>
+                <NuxtLink :to="`/${locale}/maps/${map.uid}`">
+                    <h3 class="text-2xl font-semibold text-gray-900" :class="{ 'text-gray-500': map.in_progress }">
+                        {{ map.design?.title || '-' }}
+                    </h3>
+                </NuxtLink>
                 <div v-if="map.in_progress" class="flex items-center px-2">
                     <Loader size="16" />
                 </div>
@@ -105,7 +105,7 @@ function selectMapForOptions() {
                             </div>
                         </div>
                     </div>
-                    <div class="flex gap-1 items-center">
+                    <div v-if="editable" class="flex gap-1 items-center">
                         <UButton
                             size="sm"
                             color="neutral"
@@ -123,7 +123,7 @@ function selectMapForOptions() {
                         </UDropdownMenu>
                     </div>
                 </div>
-                <div v-else class="flex gap-1 items-center">
+                <div v-else-if="editable" class="flex gap-1 items-center">
                     <div>
                         <UButton
                             color="neutral"
