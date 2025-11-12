@@ -25,7 +25,7 @@ const handleCustomize = () => {
         <div v-if="showBanner" class="fixed bottom-0 left-0 right-0 z-50 p-10">
             <div
                 class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 bg-white/60 backdrop-blur-sm rounded-2xl border border-black/10 shadow-lg">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
                     <!-- Content -->
                     <div class="flex-1">
                         <div class="flex mb-2 items-center gap-2 text-black">
@@ -38,14 +38,14 @@ const handleCustomize = () => {
                     </div>
 
                     <!-- Actions -->
-                    <div class="flex flex-wrap gap-2 w-full sm:w-auto">
-                        <UButton color="neutral" variant="outline" @click="handleRejectAll" class="flex-1 sm:flex-none">
+                    <div class="flex flex-wrap gap-2 w-auto p-6 lg:p-0">
+                        <UButton color="neutral" variant="outline" size="lg" @click="handleRejectAll">
                             {{ $t('cookies.banner.rejectAll') }}
                         </UButton>
-                        <UButton color="neutral" variant="outline" @click="handleCustomize" class="flex-1 sm:flex-none">
+                        <UButton color="neutral" variant="outline" size="lg" @click="handleCustomize">
                             {{ $t('cookies.banner.customize') }}
                         </UButton>
-                        <UButton color="primary" @click="handleAcceptAll" class="flex-1 sm:flex-none">
+                        <UButton color="primary" size="lg" @click="handleAcceptAll">
                             {{ $t('cookies.banner.acceptAll') }}
                         </UButton>
                     </div>

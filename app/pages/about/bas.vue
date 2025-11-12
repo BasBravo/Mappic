@@ -84,7 +84,7 @@ if (displayLocale.value == 'en') {
         <section>
             <div class="mx-auto max-w-3xl flex md:flex-col gap-3 md:justify-center items-center">
                 <img src="/images/avatar-bas.png" alt="Bas Bravo" class="w-12 md:w-20 rounded-full border-black border-2" />
-                <h1 class="text-5xl md:text-7xl font-semibold tracking-tight text-balance text-gray-900">
+                <h1 class="text-5xl md:text-7xl font-medium tracking-tight text-balance text-gray-900">
                     {{ displayLocale == 'en' ? 'About the dev' : '' }} {{ displayLocale == 'es' ? 'Sobre el dev' : '' }}
                 </h1>
             </div>
@@ -95,7 +95,7 @@ if (displayLocale.value == 'en') {
                 <div>
                     <img src="/images/avatar-bas.png" alt="Bas Bravo" class="w-20 rounded-full border-black border-2" />
                 </div>
-                <h1 class="mt-4 text-7xl font-semibold tracking-tight text-balance text-gray-900">
+                <h1 class="mt-4 text-7xl font-medium tracking-tight text-balance text-gray-900">
                     {{ displayLocale == 'en' ? 'About the dev' : '' }}
                     {{ displayLocale == 'es' ? 'Sobre el dev' : '' }}
                 </h1>

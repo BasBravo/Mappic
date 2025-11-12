@@ -456,5 +456,9 @@ export default {
     'Discover beautiful maps created by our community': 'Discover beautiful maps created by our community',
     'Search': 'Search',
     'Clear Filters': 'Clear Filters',
-    'No maps found with the current filters.': 'No maps found with the current filters.'
+    'No maps found with the current filters.': 'No maps found with the current filters.',
+    'Created by': 'Created by',
+    'Maps by {user}': 'Maps by {user}',
+    'View all maps by this user': 'View all maps by this user',
+    'No maps found for this user': 'No maps found for this user'
 }

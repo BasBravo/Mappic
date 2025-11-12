@@ -3,6 +3,9 @@ import { useAuthStore } from '~~/stores/authStore';
 import { useMapStore } from '~~/stores/mapStore';
 import { createMapService } from '~~/shared/services/map';
 import { getMapPurchaseCost } from '~~/data/credits';
+import { purchaseMap, validatePurchaseEligibility } from '~~/shared/services/mapPurchase';
+import { createUser } from '~~/shared/services/user';
+import { useCredits } from '~~/app/composables/useCredits';
 
 // Props
 const props = defineProps({
@@ -22,12 +25,23 @@ const loading = ref(false);
 const hasVoted = ref(false);
 const voteCount = ref(-1);
 const openModalExit = ref(false);
+const openModalBuy = ref(false);
 const isDownloading = ref(false);
 const hasDownloaded = ref(false);
 const heartExplode = ref(false);
 
+// Purchase data
+const purchasing = ref(false);
+const purchaseError = ref('');
+const userCredits = ref(0);
+const eligibility = ref(null);
+
 // Current URL for sharing
 const currentUrl = ref('');
+
+// Composables
+const { t, locale } = useI18n();
+const { updateCredits } = useCredits();
 
 // Computed properties
 const isOwner = computed(() => {
@@ -45,6 +59,13 @@ const isOwner = computed(() => {
     }
 
     return false;
+});
+
+const canPurchase = computed(() => eligibility.value?.canPurchase || false);
+
+const imageUrl = computed(() => {
+    if (!mapData.value) return '';
+    return mapData.value._references?.file_map_resized?.url || mapData.value._references?.file_map?.url || '';
 });
 
 // Get map data
@@ -366,7 +387,7 @@ const goBackPage = () => {
 };
 
 // Buy map functionality
-const buyMap = () => {
+const buyMap = async () => {
     const currentUser = authStore.user;
 
     // Check if user is authenticated
@@ -375,8 +396,83 @@ const buyMap = () => {
         return;
     }
 
-    // Navigate to buy page
-    navigateTo(`/maps/buy?uid=${props.uid}`);
+    // Load purchase data
+    await loadPurchaseData();
+
+    // Open modal
+    openModalBuy.value = true;
+};
+
+// Load purchase data
+const loadPurchaseData = async () => {
+    const currentUser = authStore.user;
+    if (!currentUser?.uid) return;
+
+    try {
+        purchaseError.value = '';
+
+        // Get user credits
+        const userService = createUser();
+        userCredits.value = await userService.getUserCredits(currentUser.uid);
+
+        // Validate purchase eligibility
+        eligibility.value = await validatePurchaseEligibility(props.uid, currentUser.uid);
+    } catch (err) {
+        console.error('Error loading purchase data:', err);
+        purchaseError.value = t('Error loading purchase information');
+    }
+};
+
+// Process purchase
+const processPurchase = async () => {
+    const currentUser = authStore.user;
+    if (!currentUser?.uid) {
+        purchaseError.value = t('User information missing');
+        return;
+    }
+
+    try {
+        purchasing.value = true;
+        purchaseError.value = '';
+
+        // Validate eligibility one more time
+        const finalEligibility = await validatePurchaseEligibility(props.uid, currentUser.uid);
+        if (!finalEligibility.canPurchase) {
+            purchaseError.value = finalEligibility.reason || t('Cannot purchase this map');
+            return;
+        }
+
+        // Process purchase
+        const result = await purchaseMap(props.uid, currentUser.uid);
+
+        if (!result.success) {
+            purchaseError.value = result.message || t('Error purchasing map');
+            return;
+        }
+
+        // Update credits in global state
+        await updateCredits(currentUser.uid);
+
+        // Close modal
+        openModalBuy.value = false;
+
+        // Success - redirect to new map
+        if (result.newMapId) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+            navigateTo(`/${locale.value}/maps/${result.newMapId}`);
+        }
+    } catch (err) {
+        console.error('Error processing purchase:', err);
+        purchaseError.value = err instanceof Error ? err.message : t('Error processing purchase');
+    } finally {
+        purchasing.value = false;
+    }
+};
+
+// Close buy modal
+const closeBuyModal = () => {
+    openModalBuy.value = false;
+    purchaseError.value = '';
 };
 
 // Computed property for purchase cost
@@ -472,29 +568,11 @@ onMounted(() => {
                         {{ voteCount == -1 ? $t('...') : voteCount }}
                     </UButton>
 
-                    <div class="w-2"></div>
-
                     <!-- Buy map button -->
-                    <UButton
-                        @click="buyMap"
-                        :label="`${$t('Buy Map')} (${purchaseCost} 💳)`"
-                        icon="i-tabler-shopping-cart"
-                        color="primary"
-                        size="xl" />
-
-                    <div class="w-2"></div>
+                    <UButton @click="buyMap" :label="$t('Buy Map')" color="primary" size="xl" />
 
                     <!-- Recreate map button -->
-                    <UButton class="md:hidden" @click="recreateMap" :label="$t('Get map')" icon="i-tabler-map" color="neutral" size="xl" />
-
-                    <!-- Edit copy button -->
-                    <UButton
-                        class="hidden md:flex"
-                        @click="editMapCopy"
-                        :label="$t('Edit map')"
-                        icon="i-tabler-wand"
-                        color="neutral"
-                        size="xl" />
+                    <!-- <UButton class="md:hidden" @click="recreateMap" :label="$t('Get map')" icon="i-tabler-map" color="neutral" size="xl" /> -->
                 </template>
 
                 <!-- Options for owners -->
@@ -511,6 +589,96 @@ onMounted(() => {
                 </template>
             </div>
         </EffectGlass>
+        <EffectGlass class="hidden md:flex gap-2 p-1 rounded-full" :displace="2">
+            <!-- Edit copy button -->
+            <UButton @click="editMapCopy" :label="$t('Edit map')" icon="i-tabler-wand" color="neutral" size="xl" />
+        </EffectGlass>
+        <!-- Buy Map Modal -->
+        <ElementsModal v-model:open="openModalBuy" :title="$t('Buy Map')">
+            <div class="space-y-6">
+                <!-- Error Message -->
+                <div v-if="purchaseError" class="p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <p class="text-red-800 text-sm">{{ purchaseError }}</p>
+                </div>
+
+                <!-- Map Preview and Details -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Image -->
+                    <div class="flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden min-h-[250px]">
+                        <img v-if="imageUrl" :src="imageUrl" :alt="mapData?.design?.title || 'Map'" class="w-full h-full object-cover" />
+                        <div v-else class="text-gray-400">{{ $t('No preview available') }}</div>
+                    </div>
+
+                    <!-- Details -->
+                    <div class="space-y-4">
+                        <!-- Title -->
+                        <div>
+                            <h3 class="text-2xl font-bold mb-1">
+                                {{ mapData?.design?.title || $t('Untitled Map') }}
+                            </h3>
+                            <p v-if="mapData?.suggestion?.display_name" class="text-gray-600 text-sm">
+                                {{ mapData.suggestion.display_name }}
+                            </p>
+                        </div>
+
+                        <!-- Map Details -->
+                        <div class="text-xs uppercase">
+                            <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                                <span class="text-gray-600">{{ $t('Quality') }}:</span>
+                                <span class="font-semibold">{{ mapData?.quality }}</span>
+                            </div>
+                            <div v-if="mapData?.design?.style" class="flex justify-between items-center py-2 border-b border-gray-200">
+                                <span class="text-gray-600">{{ $t('Style') }}:</span>
+                                <span class="font-semibold">{{ mapData.design.style }}</span>
+                            </div>
+                            <div
+                                v-if="mapData?.design?.composition"
+                                class="flex justify-between items-center py-2 border-b border-gray-200">
+                                <span class="text-gray-600">{{ $t('Composition') }}:</span>
+                                <span class="font-semibold">{{ mapData.design.composition }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Purchase Info -->
+                <div class="p-4 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">{{ $t('Purchase Cost') }}:</span>
+                        <span class="text-2xl font-bold">{{ purchaseCost }}</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-2 border-t border-black/10">
+                        <span class="font-medium">{{ $t('Your Credits') }}:</span>
+                        <span class="text-xl font-semibold" :class="userCredits >= purchaseCost ? 'text-black' : 'text-red-600'">
+                            {{ userCredits }}
+                        </span>
+                    </div>
+                    <p class="text-sm pt-2">
+                        {{ $t('After purchase, this map will be added to your collection.') }}
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3">
+                    <UButton block size="xl" color="neutral" variant="outline" :disabled="purchasing" @click="closeBuyModal">
+                        {{ $t('Cancel') }}
+                    </UButton>
+                    <UButton
+                        v-if="canPurchase"
+                        block
+                        size="xl"
+                        color="primary"
+                        :loading="purchasing"
+                        :disabled="purchasing"
+                        @click="processPurchase">
+                        {{ $t('Confirm Purchase') }}
+                    </UButton>
+                    <UButton v-else block size="xl" color="neutral" variant="outline" disabled>
+                        {{ eligibility?.reason || $t('Cannot purchase') }}
+                    </UButton>
+                </div>
+            </div>
+        </ElementsModal>
     </div>
 </template>
 

@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
     map: { type: Object, required: true },
+    user: { type: Object, required: true },
     editable: { type: Boolean, default: false },
 });
 
@@ -73,7 +74,7 @@ function selectMapForOptions() {
                 </div>
             </div>
 
-            <div class="flex flex-wrap gap-2">
+            <div class="flex flex-wrap gap-x-2 gap-y-1">
                 <div class="flex items-center gap-1 text-xs">
                     <span class="text-gray-500">{{ $t('Quality') }}:</span>
                     <span class="font-mono font-bold uppercase">
@@ -90,7 +91,27 @@ function selectMapForOptions() {
                     <span class="text-gray-500">{{ $t('Status') }}:</span>
                     <span class="font-mono font-bold uppercase">{{ $t('Processing') }}...</span>
                 </div>
+                <div v-if="map.is_purchased_copy" class="flex items-center gap-1 text-xs">
+                    <span class="text-gray-500">{{ $t('Origin') }}:</span>
+                    <span class="font-mono font-bold uppercase">{{ $t('Copy') }}</span>
+                </div>
+                <div class="w-full"></div>
+                <div v-if="props.user && props.user.name" class="flex items-center gap-1 text-xs">
+                    <span class="text-gray-500">{{ $t('Created by') }}:</span>
+                    <NuxtLink :to="`/${locale}/maps/explore/${props.user.id}`" class="font-mono font-bold uppercase underline">
+                        {{ props.user.name }}
+                    </NuxtLink>
+                </div>
             </div>
+
+            <!-- <div v-if="props.user" class="flex items-center gap-1 text-xs mt-2">
+                <span class="text-gray-500">{{ $t('Created by') }}:</span>
+                <NuxtLink
+                    :to="`/${locale}/maps/explore/${props.user.id}`"
+                    class="font-medium text-primary-600 hover:text-primary-700 hover:underline transition-colors">
+                    {{ props.user.name }}
+                </NuxtLink>
+            </div> -->
             <div class="h-2" />
             <div v-if="!map.in_progress">
                 <div v-if="map.error" class="flex flex-col gap-2">
