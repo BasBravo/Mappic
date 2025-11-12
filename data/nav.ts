@@ -2,7 +2,7 @@ export const navigationConfig = {
     primaryMenuItems: [
         {
             id: 'home',
-            icon: 'i-tabler-wand',
+            icon: 'i-tabler-smart-home',
             label: 'nav.home',
             route: '/',
         },

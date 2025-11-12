@@ -242,11 +242,18 @@ onMounted(async () => {
 
                 <!-- Action Buttons -->
                 <div class="grid grid-cols-2 w-full gap-4">
-                    <UButton :label="$t('My maps')" size="xl" class="w-full justify-center" icon="i-tabler-map" @click="goToMaps" />
+                    <UButton
+                        color="neutral"
+                        :label="$t('My maps')"
+                        size="xl"
+                        class="w-full justify-center"
+                        icon="i-tabler-map"
+                        @click="goToMaps" />
 
                     <UButton
                         :label="$t('Home')"
                         variant="outline"
+                        color="neutral"
                         size="xl"
                         class="w-full justify-center"
                         icon="i-tabler-smart-home"
@@ -285,6 +292,7 @@ onMounted(async () => {
                     <UButton
                         :label="$t('Return Home')"
                         variant="outline"
+                        color="neutral"
                         block
                         size="xl"
                         class="w-full justify-center"
