@@ -44,8 +44,4 @@ export const aboutPages = [
         label: 'change log',
         to: `/about/changelog`,
     },
-    {
-        label: 'legal',
-        to: `/about/legal`,
-    },
 ];

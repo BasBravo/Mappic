@@ -462,5 +462,6 @@ if (locale?.value == 'zh') {
         <ClientOnly>
             <LandingCTA />
         </ClientOnly>
+        <ElementsFooterLinks />
     </div>
 </template>
