@@ -25,7 +25,9 @@ onUnmounted(() => {
         <div
             class="absolute hidden md:flex translate-y-[4px] opacity-0 transition-all duration-200"
             :class="[{ 'opacity-100 -translate-x-[30px]': scrollTopPos < 100 }, { 'opacity-0 -translate-x-[26px]': scrollTopPos >= 100 }]">
-            <span class="text-4xl font-medium text-[#FF6B5C]">appic</span>
+            <NuxtLink to="/">
+                <span class="text-4xl font-medium text-[#FF6B5C]">appic</span>
+            </NuxtLink>
         </div>
         <div class="flex justify-between items-center pr-2">
             <div class="md:hidden"></div>

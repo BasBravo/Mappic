@@ -197,6 +197,8 @@ useHead({
         <!-- <LandingSocialProof /> -->
         <LandingFAQ />
         <LandingCTA />
+
+        <ElementsFooterLinks />
     </div>
 </template>
 

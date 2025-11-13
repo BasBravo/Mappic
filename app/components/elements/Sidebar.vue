@@ -123,7 +123,9 @@ onUnmounted(() => {
                 <NuxtLink class="w-10 h-10 flex items-center justify-center" to="/">
                     <Logo />
                 </NuxtLink>
-                <span class="text-4xl font-medium font-outline-bg text-[#FF6B5C] -translate-x-2.5 translate-y-[9px]">appic</span>
+                <NuxtLink to="/">
+                    <span class="text-4xl font-medium font-outline-bg text-[#FF6B5C] -translate-x-2.5 translate-y-[9px]">appic</span>
+                </NuxtLink>
             </div>
 
             <!-- Mobile Primary Items -->

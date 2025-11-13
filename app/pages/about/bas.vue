@@ -146,4 +146,7 @@ if (displayLocale.value == 'en') {
                 "></p>
         </section>
     </div>
+    <div class="w-full my-10">
+        <ElementsFooterLinks />
+    </div>
 </template>
