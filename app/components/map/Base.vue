@@ -172,6 +172,13 @@ const initializeMap = () => {
 
     // Restore bounds if available for exact position recovery
     map.value.on('load', () => {
+        // Resize map to ensure it fills the container
+        nextTick(() => {
+            if (map.value) {
+                map.value.resize();
+            }
+        });
+
         if (mapStore.mapBounds && Array.isArray(mapStore.mapBounds) && mapStore.mapBounds.length === 2) {
             try {
                 const bounds = mapStore.mapBounds;
@@ -239,6 +246,13 @@ const initializeMap = () => {
     // Set zoom limits
     map.value.setMinZoom(zoomLevels.min);
     map.value.setMaxZoom(zoomLevels.max);
+
+    // Force resize after initialization to ensure proper rendering
+    nextTick(() => {
+        if (map.value) {
+            map.value.resize();
+        }
+    });
 
     ready.value = true;
     mapVisible.value = true;
@@ -518,6 +532,12 @@ const loadMapStyles = async () => {
             link.onload = () => {
                 stylesLoading.value = false;
                 stylesLoaded.value = true;
+                // Resize map when styles are loaded
+                nextTick(() => {
+                    if (map.value) {
+                        map.value.resize();
+                    }
+                });
                 resolve(void 0);
             };
 
@@ -559,9 +579,21 @@ onBeforeMount(async () => {
 // Lifecycle
 onMounted(async () => {
     calculateFrameSize();
+    
+    // Wait for DOM to be fully rendered before initializing map
+    await nextTick();
+    
     setTimeout(() => {
         initializeMap();
-    }, 100);
+        
+        // Additional resize after a short delay to ensure container is stable
+        setTimeout(() => {
+            if (map.value) {
+                map.value.resize();
+            }
+        }, 300);
+    }, 150);
+    
     window.addEventListener('resize', handleResize);
 });
 
