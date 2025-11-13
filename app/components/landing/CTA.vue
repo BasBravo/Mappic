@@ -42,7 +42,7 @@ const goTop = () => {
         <div class="items-center mx-auto max-w-screen-xl gap-8 md:gap-16 grid grid-cols-1 md:grid-cols-3 py-16 px-4 md:px-6">
             <div class="flex justify-center order-2 md:order-1">
                 <div class="max-w-64 md:max-w-96">
-                    <MapStatic uid="23704b45d0e94756903eafe109e535fc" :interactive="false" />
+                    <MapStatic uid="23704b45d0e94756903eafe109e535fc" class="w-96" :interactive="false" />
                 </div>
             </div>
             <div class="md:col-span-2 text-center md:text-left order-1 md:order-2 text-white">

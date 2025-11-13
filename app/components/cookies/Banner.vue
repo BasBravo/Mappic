@@ -24,7 +24,7 @@ const handleCustomize = () => {
         leave-to-class="translate-y-full opacity-0">
         <div v-if="showBanner" class="fixed bottom-0 left-0 right-0 z-50 p-10">
             <div
-                class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 bg-white/60 backdrop-blur-sm rounded-2xl border border-black/10 shadow-lg">
+                class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 bg-white/80 backdrop-blur-sm rounded-2xl border border-black/10 shadow-lg">
                 <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
                     <!-- Content -->
                     <div class="flex-1">

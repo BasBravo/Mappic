@@ -21,6 +21,27 @@ const mapOptions = computed(() => [
     ],
 ]);
 
+const mapDimensionsInPixels = computed(() => {
+    // Extract width and height from aspect ratio (e.g., "50:70" -> [50, 70])
+    const widthPx = parseInt(props.map.width);
+    const heightPx = parseInt(props.map.height);
+
+    // Standard print resolution: 300 DPI (dots per inch)
+    // 1 inch = 2.54 cm
+    // So: pixels = cm * (300 / 2.54) ≈ cm * 118.11
+    const cmToPixels = 300 / 2.54;
+
+    const widthCm = Math.round(widthPx / cmToPixels);
+    const heightCm = Math.round(heightPx / cmToPixels);
+
+    return {
+        widthCm,
+        heightCm,
+        widthPx,
+        heightPx,
+    };
+});
+
 // Methods
 function handleMapSelect() {
     if (!props.map.in_progress) {
@@ -54,7 +75,7 @@ function selectMapForOptions() {
             <NuxtLink :to="`/${locale}/maps/${map.uid}`" class="block w-full">
                 <MapStatic
                     :key="`${map.uid}-${map._refreshKey || 0}`"
-                    class="shadow-none w-full rounded-lg cursor-pointer"
+                    class="shadow-none w-full rounded-xl cursor-pointer"
                     :class="{ 'opacity-50': map.in_progress }"
                     :uid="map.uid"
                     :interactive="false"
@@ -102,12 +123,14 @@ function selectMapForOptions() {
                         {{ map.votes || 0 }}
                     </span>
                 </div>
+                <div class="w-full border-b my-1 border-black/10"></div>
+
                 <!-- Dimensions -->
-                <div class="flex items-center gap-1 text-xs">
-                    <span class="text-gray-500">{{ $t('Dimensions') }}:</span>
-                    <span class="font-mono font-bold">
-                        {{ parseFloat(map.width).toFixed(0) }} x {{ parseFloat(map.height).toFixed(0) }} px
-                    </span>
+                <div class="flex flex-col gap-1 text-xs">
+                    <!-- in cm -->
+                    <span class="font-mono text-gray-500">{{ mapDimensionsInPixels.widthCm }}x{{ mapDimensionsInPixels.heightCm }} cm</span>
+                    <!-- in px -->
+                    <span class="font-mono text-gray-500">{{ mapDimensionsInPixels.widthPx }}x{{ mapDimensionsInPixels.heightPx }} px</span>
                 </div>
                 <template v-if="props.user && props.user.name">
                     <div class="w-full border-b my-1 border-black/10"></div>

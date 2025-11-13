@@ -154,23 +154,10 @@ useHead({
 
 <template>
     <div class="w-full">
-        <BadgeProductHunt class="hidden md:flex" />
-
-        <!-- Title -->
-        <ClientOnly>
-            <teleport to="#SidebarBottom">
-                <div class="fixed flex top-0 bottom-0 py-6 left-12 z-10 h-dvh justify-center items-end text-black/60">
-                    <div class="text-xs transform [writing-mode:vertical-rl] rotate-180">
-                        {{ $t('maps created by users') }}
-                    </div>
-                </div>
-            </teleport>
-        </ClientOnly>
-
         <!-- Espacio inicial -->
         <div class="h-46" />
 
-        <div class="pb-20 xl:px-20 text-black">
+        <div class="xl:px-20 text-black">
             <h1 class="text-5xl md:text-7xl 2xl:text-8xl md:max-w-2xl 2xl:max-w-5xl font-medium tracking-tight text-balance">
                 {{ $t('home.title') }}
             </h1>
@@ -190,8 +177,18 @@ useHead({
             </div>
         </div>
         <!-- GRID DE MAPAS  -->
-        <div class="w-full py-10 min-h-[calc(100vh-20rem)]">
-            <MapsGrid />
+        <div class="w-full py-0 md:py-10">
+            <div class="min-h-[calc(100vh-20rem)]">
+                <MapsGrid />
+            </div>
+            <div class="flex justify-center py:0 md:py-10 pt-20">
+                <!-- go to explore -->
+                <div class="min-w-64">
+                    <UButton color="neutral" variant="outline" :to="'/maps/explore'" size="3xl" block>
+                        {{ $t('Explore more maps') }}
+                    </UButton>
+                </div>
+            </div>
         </div>
 
         <!-- LANDING SECTIONS -->

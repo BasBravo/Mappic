@@ -29,8 +29,6 @@ function shuffle(array) {
 
 // Get maps from service
 async function getMaps() {
-    console.log('[Grid] getMaps() called');
-
     // Check if maps are cached in localStorage for one week
     if (localStorage.getItem('landing_maps') && localStorage.getItem('landing_maps_date')) {
         const lastDate = new Date(localStorage.getItem('landing_maps_date'));
@@ -75,15 +73,11 @@ async function getMaps() {
         // Parse items to get only UIDs and filter out null/undefined
         const parseItems = result.items.map(item => item.uid).filter(uid => uid && uid !== null && uid !== undefined);
 
-        console.log(`[Grid] Total items from service: ${result.items.length}, valid UIDs: ${parseItems.length}`);
-
         const finalItems = shuffle(parseItems);
-        console.log(`[Grid] finalItems length: ${finalItems.length}`);
 
         // Calculate items per column dynamically based on available items
         const calculatedMapsPerColumn = Math.ceil(finalItems.length / TOTAL_COLUMNS);
         MAPS_PER_COLUMN = calculatedMapsPerColumn;
-        console.log(`[Grid] Calculated MAPS_PER_COLUMN: ${MAPS_PER_COLUMN}`);
 
         // Create columns with calculated items each, randomly distributed
         const columns = [];
@@ -101,7 +95,6 @@ async function getMaps() {
                 columnItems.push(item);
                 itemsCopy.splice(randomIndex, 1);
             }
-            console.log(`[Grid] Column ${i}: ${columnItems.length} items`);
             columns.push(columnItems);
         }
 

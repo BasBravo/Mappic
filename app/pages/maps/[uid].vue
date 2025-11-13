@@ -39,39 +39,6 @@ async function getMapData() {
 // Current URL for sharing
 const currentUrl = ref('');
 
-// Social sharing functions
-const shareOnTwitter = () => {
-    const text = encodeURIComponent(`Check out this beautiful map: ${mapData.value?.title || 'Untitled Map'}`);
-    const url = encodeURIComponent(currentUrl.value);
-    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
-};
-
-const shareOnFacebook = () => {
-    const url = encodeURIComponent(currentUrl.value);
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
-};
-
-const shareOnLinkedIn = () => {
-    const url = encodeURIComponent(currentUrl.value);
-    const title = encodeURIComponent(mapData.value?.title || 'Untitled Map');
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}`, '_blank');
-};
-
-const shareOnWhatsApp = () => {
-    const text = encodeURIComponent(`Check out this beautiful map: ${mapData.value?.title || 'Untitled Map'} ${currentUrl.value}`);
-    window.open(`https://wa.me/?text=${text}`, '_blank');
-};
-
-const copyToClipboard = async () => {
-    try {
-        await navigator.clipboard.writeText(currentUrl.value);
-        // You could add a toast notification here
-        alert('URL copied to clipboard!');
-    } catch (err) {
-        console.error('Failed to copy URL:', err);
-    }
-};
-
 // SEO Meta tags
 const seoTitle = computed(() => {
     if (!mapData.value) return 'Map | Mappic';
@@ -86,6 +53,27 @@ const seoDescription = computed(() => {
 
 const seoImage = computed(() => {
     return imageUrl.value || '/default-map-preview.jpg';
+});
+
+const mapDimensionsInPixels = computed(() => {
+    // Extract width and height from aspect ratio (e.g., "50:70" -> [50, 70])
+    const widthPx = parseInt(mapData.value?.width);
+    const heightPx = parseInt(mapData.value?.height);
+
+    // Standard print resolution: 300 DPI (dots per inch)
+    // 1 inch = 2.54 cm
+    // So: pixels = cm * (300 / 2.54) ≈ cm * 118.11
+    const cmToPixels = 300 / 2.54;
+
+    const widthCm = Math.round(widthPx / cmToPixels);
+    const heightCm = Math.round(heightPx / cmToPixels);
+
+    return {
+        widthCm,
+        heightCm,
+        widthPx,
+        heightPx,
+    };
 });
 
 // Set current URL on mount
@@ -129,8 +117,58 @@ useHead({
             <MapSharedOptions :uid="uid" />
         </div>
 
-        <div class="flex flex-col gap-6 w-full max-w-[700px] my-auto py-20">
+        <div v-if="mapData" class="flex flex-col gap-3 w-full max-w-[700px] my-auto py-20">
+            <div class="gap-2 flex md:justify-center text-xs text-black/40 w-80 truncate md:w-full">
+                <span class="uppercase">{{ $t(mapData.design.style) }}</span>
+                <span>|</span>
+                <span class="uppercase">{{ $t(mapData.design.composition) }}</span>
+                <span>|</span>
+                <span class="uppercase">
+                    {{ mapDimensionsInPixels.widthCm }}×{{ mapDimensionsInPixels.heightCm }}cm ({{ mapDimensionsInPixels.widthPx }}×{{
+                        mapDimensionsInPixels.heightPx
+                    }}
+                    px)
+                </span>
+                <span>|</span>
+            </div>
             <MapStatic :uid="uid" :interactive="false" />
+        </div>
+        <!-- TODO: Show map info -->
+        <div v-if="mapData" class="hidden gap-x-2 gap-y-1">
+            <div class="flex items-center gap-1 text-xs">
+                <span class="text-gray-500">{{ $t('Quality') }}:</span>
+                <span class="font-mono font-bold uppercase">
+                    {{ mapData.quality?.toUpperCase() || '-' }}
+                </span>
+            </div>
+            <div class="flex items-center gap-1 text-xs">
+                <span class="text-gray-500">{{ $t('Style') }}:</span>
+                <span class="font-mono font-bold uppercase">
+                    {{ mapData.design?.style || '-' }}
+                </span>
+            </div>
+            <div v-if="mapData.in_progress" class="flex items-center gap-1 text-xs">
+                <span class="text-gray-500">{{ $t('Status') }}:</span>
+                <span class="font-mono font-bold uppercase">{{ $t('Processing') }}...</span>
+            </div>
+            <div v-if="mapData.is_purchased_copy" class="flex items-center gap-1 text-xs">
+                <span class="text-gray-500">{{ $t('Origin') }}:</span>
+                <span class="font-mono font-bold uppercase">{{ $t('Copy') }}</span>
+            </div>
+            <!-- votes -->
+            <div class="flex items-center gap-1 text-xs">
+                <span class="text-gray-500">{{ $t('Votes') }}:</span>
+                <span class="font-mono font-bold uppercase">
+                    {{ mapData.votes || 0 }}
+                </span>
+            </div>
+            <!-- Dimensions -->
+            <div class="flex items-center gap-1 text-xs">
+                <span class="text-gray-500">{{ $t('Dimensions') }}:</span>
+                <span class="font-mono font-bold">
+                    {{ parseFloat(mapData.width).toFixed(0) }} x {{ parseFloat(mapData.height).toFixed(0) }} px
+                </span>
+            </div>
         </div>
     </div>
 </template>
