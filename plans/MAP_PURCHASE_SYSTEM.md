@@ -210,7 +210,7 @@ export async function validatePurchaseEligibility(
 
 **Cambios**:
 
--   ✅ Agregar botón "Buy Map" en la sección de opciones para no-propietarios
+-   ✅ Agregar botón "Buy map" en la sección de opciones para no-propietarios
 -   ✅ Mostrar costo de compra en el botón o tooltip
 -   ✅ Validar autenticación antes de permitir compra
 -   ✅ Redirigir a página de compra
@@ -219,7 +219,7 @@ export async function validatePurchaseEligibility(
 
 ```vue
 <!-- Después del botón de voto, antes de "Edit map" -->
-<UButton @click="buyMap" :label="`${$t('Buy Map')} (${purchaseCost} credits)`" icon="i-tabler-shopping-cart" color="primary" size="xl" />
+<UButton @click="buyMap" :label="`${$t('Buy map')} (${purchaseCost} credits)`" icon="i-tabler-shopping-cart" color="primary" size="xl" />
 ```
 
 **Lógica**:
@@ -283,11 +283,11 @@ maps: {
         noMaps: 'No maps found',
         creator: 'Created by',
         cost: 'Cost',
-        buy: 'Buy Map',
+        buy: 'Buy map',
         owned: 'You own this map',
     },
     purchase: {
-        title: 'Buy Map',
+        title: 'Buy map',
         cost: 'Cost',
         credits: 'Credits',
         available: 'Available',
@@ -332,7 +332,7 @@ maps: {
 3. Busca o filtra mapas
 4. Hace click en un mapa
 5. Ve detalles en /maps/[uid]
-6. Hace click en "Buy Map"
+6. Hace click en "Buy map"
 7. Va a /maps/buy?uid=<mapId>
 8. Confirma compra
 9. Se deduce créditos
@@ -345,7 +345,7 @@ maps: {
 
 ```
 1. Usuario está en /maps/[uid] (mapa de otro)
-2. Ve botón "Buy Map" en SharedOptions
+2. Ve botón "Buy map" en SharedOptions
 3. Hace click
 4. Va a /maps/buy?uid=<mapId>
 5. Confirma compra

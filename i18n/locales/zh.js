@@ -491,7 +491,7 @@ export default {
     'maps found': '找到的地图',
     'Page': '页面',
     'of': '共',
-    'Buy Map': '购买地图',
+    'Buy map': '购买地图',
     'Buy': '购买',
     'Purchase Cost': '购买成本',
     'Confirm Purchase': '确认购买',

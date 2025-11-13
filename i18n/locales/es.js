@@ -488,7 +488,7 @@ export default {
     'maps found': 'mapas encontrados',
     'Page': 'Página',
     'of': 'de',
-    'Buy Map': 'Comprar Mapa',
+    'Buy map': 'Comprar mapa',
     'Buy': 'Comprar',
     'Purchase Cost': 'Costo de Compra',
     'Confirm Purchase': 'Confirmar Compra',
