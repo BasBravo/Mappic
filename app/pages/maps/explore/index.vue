@@ -18,6 +18,7 @@ const userService = createUser();
 const authStore = useAuthStore();
 const { t, locale } = useI18n();
 const router = useRouter();
+const route = useRoute();
 
 // SEO //////////////////////
 
@@ -32,6 +33,7 @@ const data = reactive({
     maps: [],
     filteredMaps: [],
     loading: true,
+    isInitialLoad: true,
     filters: {
         quality: 'all',
         style: 'all',
@@ -190,8 +192,10 @@ function filterMaps(items) {
         );
     }
 
-    // Reset pagination when filters change
-    data.pagination.page = 1;
+    // Reset pagination when filters change (pero no en carga inicial)
+    if (!data.isInitialLoad) {
+        data.pagination.page = 1;
+    }
     data.filteredMaps = filtered;
 }
 
@@ -218,10 +222,45 @@ watch(
     { deep: true }
 );
 
+// Sincronizar página con URL (ignorar en carga inicial)
+watch(
+    () => data.pagination.page,
+    (newPage) => {
+        if (!data.isInitialLoad) {
+            router.push({
+                query: {
+                    ...route.query,
+                    page: newPage > 1 ? newPage : undefined,
+                },
+            });
+        }
+    }
+);
+
+// Scroll al top cuando cambie la página en la URL
+watch(
+    () => route.query.page,
+    () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }
+);
+
 // LIFECYCLE //////////////////////
 
 onMounted(async () => {
+    // Leer página inicial de la URL
+    const pageFromUrl = parseInt(route.query.page) || 1;
+    data.pagination.page = pageFromUrl;
+    
     await getExploreMaps();
+    
+    // Marcar que la carga inicial ha terminado
+    nextTick(() => {
+        data.isInitialLoad = false;
+    });
 });
 </script>
 

@@ -489,7 +489,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex gap-3 items-center">
+    <div v-show="mapData" class="flex gap-3 items-center">
         <EffectGlass class="hidden md:flex gap-2 p-1 rounded-full" :displace="2">
             <UButton color="neutral" icon="i-tabler-arrow-left" variant="ghost" size="xl" @click="goBackPage" />
         </EffectGlass>
@@ -569,7 +569,7 @@ onMounted(() => {
                     </UButton>
 
                     <!-- Buy map button -->
-                    <UButton @click="buyMap" :label="$t('Buy Map')" color="primary" size="xl" />
+                    <UButton @click="buyMap" :label="$t('Buy map')" color="neutral" size="xl" />
 
                     <!-- Recreate map button -->
                     <!-- <UButton class="md:hidden" @click="recreateMap" :label="$t('Get map')" icon="i-tabler-map" color="neutral" size="xl" /> -->
@@ -591,10 +591,10 @@ onMounted(() => {
         </EffectGlass>
         <EffectGlass class="hidden md:flex gap-2 p-1 rounded-full" :displace="2">
             <!-- Edit copy button -->
-            <UButton @click="editMapCopy" :label="$t('Edit map')" icon="i-tabler-wand" color="neutral" size="xl" />
+            <UButton @click="editMapCopy" :label="$t('Edit map')" icon="i-tabler-wand" color="neutral" variant="ghost" size="xl" />
         </EffectGlass>
-        <!-- Buy Map Modal -->
-        <ElementsModal v-model:open="openModalBuy" :title="$t('Buy Map')">
+        <!-- Buy map Modal -->
+        <ElementsModal v-model:open="openModalBuy" :title="$t('Buy map')">
             <div class="space-y-6">
                 <!-- Error Message -->
                 <div v-if="purchaseError" class="p-4 bg-red-50 border border-red-200 rounded-lg">

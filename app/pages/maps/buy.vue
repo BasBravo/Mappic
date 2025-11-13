@@ -133,7 +133,7 @@ function goBack() {
 // SEO //////////////////////
 
 useHead({
-    title: `${t('Buy Map')} - Mappic`,
+    title: `${t('Buy map')} - Mappic`,
     meta: [{ name: 'description', content: t('Purchase a beautiful map') }],
 });
 
@@ -158,10 +158,7 @@ onMounted(async () => {
 
         <!-- Error State -->
         <div v-else-if="error && !mapData" class="w-full max-w-2xl">
-            <CardComposition
-                image-src="/opendoodles/clumsy.svg"
-                :title="$t('Error')"
-                :description="error">
+            <CardComposition image-src="/opendoodles/clumsy.svg" :title="$t('Error')" :description="error">
                 <UButton size="xl" block @click="goBack">
                     {{ $t('Go Back') }}
                 </UButton>
@@ -174,13 +171,8 @@ onMounted(async () => {
                 <EffectGlass class="p-8 rounded-3xl" :displace="2">
                     <!-- Header -->
                     <div class="flex items-center justify-between mb-8">
-                        <h1 class="text-3xl font-bold">{{ $t('Buy Map') }}</h1>
-                        <UButton
-                            icon="i-tabler-x"
-                            color="neutral"
-                            variant="ghost"
-                            size="xl"
-                            @click="goBack" />
+                        <h1 class="text-3xl font-bold">{{ $t('Buy map') }}</h1>
+                        <UButton icon="i-tabler-x" color="neutral" variant="ghost" size="xl" @click="goBack" />
                     </div>
 
                     <!-- Error Message -->
@@ -192,11 +184,7 @@ onMounted(async () => {
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                         <!-- Image -->
                         <div class="flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden min-h-[300px]">
-                            <img
-                                v-if="imageUrl"
-                                :src="imageUrl"
-                                :alt="mapData.design?.title || 'Map'"
-                                class="w-full h-full object-cover" />
+                            <img v-if="imageUrl" :src="imageUrl" :alt="mapData.design?.title || 'Map'" class="w-full h-full object-cover" />
                             <div v-else class="text-gray-400">{{ $t('No preview available') }}</div>
                         </div>
 
@@ -238,7 +226,9 @@ onMounted(async () => {
                                     </div>
                                     <div class="flex justify-between items-center pt-2 border-t border-blue-200">
                                         <span class="text-gray-700">{{ $t('Credits') }}:</span>
-                                        <span class="text-xl font-semibold" :class="userCredits >= purchaseCost ? 'text-green-600' : 'text-red-600'">
+                                        <span
+                                            class="text-xl font-semibold"
+                                            :class="userCredits >= purchaseCost ? 'text-green-600' : 'text-red-600'">
                                             {{ userCredits }} 💳
                                         </span>
                                     </div>
@@ -250,30 +240,13 @@ onMounted(async () => {
 
                             <!-- Purchase Button -->
                             <div class="mt-8 space-y-3">
-                                <UButton
-                                    v-if="canPurchase"
-                                    block
-                                    size="xl"
-                                    color="primary"
-                                    :loading="purchasing"
-                                    @click="processPurchase">
+                                <UButton v-if="canPurchase" block size="xl" color="primary" :loading="purchasing" @click="processPurchase">
                                     {{ $t('Confirm Purchase') }}
                                 </UButton>
-                                <UButton
-                                    v-else
-                                    block
-                                    size="xl"
-                                    color="neutral"
-                                    variant="outline"
-                                    disabled>
+                                <UButton v-else block size="xl" color="neutral" variant="outline" disabled>
                                     {{ eligibility?.reason || $t('Cannot purchase') }}
                                 </UButton>
-                                <UButton
-                                    block
-                                    size="xl"
-                                    color="neutral"
-                                    variant="outline"
-                                    @click="goBack">
+                                <UButton block size="xl" color="neutral" variant="outline" @click="goBack">
                                     {{ $t('Cancel') }}
                                 </UButton>
                             </div>

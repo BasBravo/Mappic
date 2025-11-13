@@ -103,19 +103,19 @@ function purchaseCredits(pack) {
                 <div
                     v-for="pack in creditPurchasePacks"
                     :key="pack.id"
-                    class="flex items-center justify-between p-5 border rounded-3xl cursor-pointer transition-all"
-                    :class="[pack.popular ? 'bg-black text-white' : 'bg-gray-100']"
+                    class="flex items-center justify-between p-5 border border-black/10 rounded-2xl cursor-pointer transition-all"
+                    :class="[pack.popular ? 'bg-primary/90 hover:bg-primary/100 text-white' : 'bg-gray-50 hover:bg-gray-100']"
                     @click="purchaseCredits(pack)">
                     <div class="flex items-center gap-5">
                         <div class="text-center">
                             <p class="text-2xl font-bold">{{ pack.credits }}</p>
-                            <p class="text-xs" :class="pack.popular ? 'text-gray-400' : 'text-gray-500'">
+                            <p class="text-xs">
                                 {{ $t('Credits') }}
                             </p>
                         </div>
                         <div>
                             <p class="font-medium">{{ $t(pack.description) }}</p>
-                            <p v-if="pack.popular" class="text-xs text-red-400 font-medium">
+                            <p v-if="pack.popular" class="text-xs font-medium">
                                 {{ $t('Popular') }}
                             </p>
                         </div>

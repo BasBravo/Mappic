@@ -74,7 +74,7 @@ function selectMapForOptions() {
                 </div>
             </div>
 
-            <div class="flex flex-wrap gap-x-2 gap-y-1">
+            <div class="flex flex-col gap-x-2 gap-y-1">
                 <div class="flex items-center gap-1 text-xs">
                     <span class="text-gray-500">{{ $t('Quality') }}:</span>
                     <span class="font-mono font-bold uppercase">
@@ -95,13 +95,29 @@ function selectMapForOptions() {
                     <span class="text-gray-500">{{ $t('Origin') }}:</span>
                     <span class="font-mono font-bold uppercase">{{ $t('Copy') }}</span>
                 </div>
-                <div class="w-full"></div>
-                <div v-if="props.user && props.user.name" class="flex items-center gap-1 text-xs">
-                    <span class="text-gray-500">{{ $t('Created by') }}:</span>
-                    <NuxtLink :to="`/${locale}/maps/explore/${props.user.id}`" class="font-mono font-bold uppercase underline">
-                        {{ props.user.name }}
-                    </NuxtLink>
+                <!-- votes -->
+                <div class="flex items-center gap-1 text-xs">
+                    <span class="text-gray-500">{{ $t('Votes') }}:</span>
+                    <span class="font-mono font-bold uppercase">
+                        {{ map.votes || 0 }}
+                    </span>
                 </div>
+                <!-- Dimensions -->
+                <div class="flex items-center gap-1 text-xs">
+                    <span class="text-gray-500">{{ $t('Dimensions') }}:</span>
+                    <span class="font-mono font-bold">
+                        {{ parseFloat(map.width).toFixed(0) }} x {{ parseFloat(map.height).toFixed(0) }} px
+                    </span>
+                </div>
+                <template v-if="props.user && props.user.name">
+                    <div class="w-full border-b my-1 border-black/10"></div>
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="text-gray-500">{{ $t('Created by') }}:</span>
+                        <NuxtLink :to="`/${locale}/maps/explore/${props.user.id}`" class="font-mono font-bold uppercase underline">
+                            {{ props.user.name }}
+                        </NuxtLink>
+                    </div>
+                </template>
             </div>
 
             <!-- <div v-if="props.user" class="flex items-center gap-1 text-xs mt-2">

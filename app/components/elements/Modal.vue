@@ -16,7 +16,7 @@ const isOpen = computed({
 <template>
     <UModal v-model:open="isOpen">
         <template #content>
-            <UButton class="absolute top-4 right-4" variant="ghost" size="xl" @click="isOpen = false" icon="i-tabler-x" />
+            <UButton class="absolute top-4 right-4" color="neutral" variant="ghost" size="xl" @click="isOpen = false" icon="i-tabler-x" />
 
             <div v-if="title" class="mb-6 p-4 text-center">
                 <span class="text-lg font-semibold">{{ title }}</span>
