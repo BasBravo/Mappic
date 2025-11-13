@@ -579,13 +579,13 @@ onBeforeMount(async () => {
 // Lifecycle
 onMounted(async () => {
     calculateFrameSize();
-    
+
     // Wait for DOM to be fully rendered before initializing map
     await nextTick();
-    
+
     setTimeout(() => {
         initializeMap();
-        
+
         // Additional resize after a short delay to ensure container is stable
         setTimeout(() => {
             if (map.value) {
@@ -593,7 +593,7 @@ onMounted(async () => {
             }
         }, 300);
     }, 150);
-    
+
     window.addEventListener('resize', handleResize);
 });
 
@@ -678,7 +678,7 @@ defineExpose({
                         </div>
 
                         <img
-                            v-if="mapStyle.key != 'picasso'"
+                            v-if="mapStyle.key != 'picasso' && design.composition != 'clean'"
                             :src="`/bg/${mapStyle.key}.png`"
                             class="absolute z-10 inset-0 w-full h-full pointer-events-none" />
 

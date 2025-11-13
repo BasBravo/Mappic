@@ -2,7 +2,7 @@ export const styles = [
     {
         key: 'minimal',
         value: 'Minimal',
-        id: 'clw62ax0302qk01oc3ush3t7c',
+        id: 'cmhxg107l000j01sl0yhycphg',
         src: `/styles/minimal.jpg`,
     },
     {
