@@ -11,6 +11,7 @@ const mapService = createMapService();
 // Reactive data
 const mapData = ref(null);
 const loading = ref(true);
+const { t, locale } = useI18n();
 const error = ref(false);
 const imageUrl = ref('');
 
@@ -130,6 +131,12 @@ useHead({
                     px)
                 </span>
                 <span>|</span>
+                <!-- User -->
+                <template v-if="mapData._summary?.user">
+                    <NuxtLink :to="`/${locale}/maps/explore/${mapData._summary.user.uid}`" class="uppercase text-black underline">
+                        {{ mapData._summary.user.name }}
+                    </NuxtLink>
+                </template>
             </div>
             <MapStatic :uid="uid" :interactive="false" />
         </div>
@@ -169,6 +176,7 @@ useHead({
                     {{ parseFloat(mapData.width).toFixed(0) }} x {{ parseFloat(mapData.height).toFixed(0) }} px
                 </span>
             </div>
+            <!-- User -->
         </div>
     </div>
 </template>

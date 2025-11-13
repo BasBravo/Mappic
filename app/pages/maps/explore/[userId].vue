@@ -27,6 +27,7 @@ const data = reactive({
     maps: [],
     filteredMaps: [],
     loading: true,
+    isInitialLoad: true,
     name: '',
     userEmail: '',
     filters: {
@@ -100,8 +101,6 @@ async function getUserMaps() {
     data.loading = true;
 
     try {
-        console.log('[getUserMaps] Starting to fetch maps for user:', userId.value);
-
         const filters = [
             { key: 'user', operator: '==', value: `doc:users/${userId.value}` },
             { key: 'quality', operator: '!=', value: 's' }, // Exclude small maps
@@ -110,29 +109,16 @@ async function getUserMaps() {
             { key: 'created_at', direction: 'desc' },
         ];
 
-        console.log('[getUserMaps] Filters:', JSON.stringify(filters, null, 2));
-
         const result = await mapService.getMaps({ filters });
-
-        console.log('[getUserMaps] Result from mapService:', {
-            success: result.success,
-            itemsCount: result.items?.length || 0,
-            message: result.message,
-        });
 
         if (result.success) {
             const maps = result.items || [];
-            console.log('[getUserMaps] Maps found:', maps.length);
 
             // Get user data
             const userResult = await userService.getUser(userId.value);
             let userData = null;
 
-            console.log('User Result:', userResult);
-            console.log('User ID:', userId.value);
-
             if (userResult.success && userResult.data) {
-                console.log('User Data from Firestore:', userResult.data);
                 const userName = userResult.data.name || userResult.data.email || 'Unknown';
                 userData = {
                     id: userId.value,
@@ -142,7 +128,6 @@ async function getUserMaps() {
                 data.name = userName;
                 data.userEmail = userResult.data.email || userId.value;
             } else {
-                console.log('User not found, using fallback from maps');
                 // Fallback to email from first map
                 if (maps.length > 0) {
                     const fallbackName = maps[0].email || 'Unknown User';
@@ -160,9 +145,6 @@ async function getUserMaps() {
                 }
             }
 
-            console.log('Final data.name:', data.name);
-            console.log('Final userData:', userData);
-
             // Enrich maps with user data
             data.maps = maps.map(map => ({
                 ...map,
@@ -171,9 +153,6 @@ async function getUserMaps() {
 
             data.pagination.total = data.maps.length;
             filterMaps(data.maps);
-
-            console.log('[getUserMaps] Final data.maps count:', data.maps.length);
-            console.log('[getUserMaps] Final data.filteredMaps count:', data.filteredMaps.length);
         } else {
             console.error('[getUserMaps] Failed to get maps:', result.message);
         }
@@ -213,8 +192,10 @@ function filterMaps(items) {
         );
     }
 
-    // Reset pagination when filters change
-    data.pagination.page = 1;
+    // Reset pagination when filters change (pero no en carga inicial)
+    if (!data.isInitialLoad) {
+        data.pagination.page = 1;
+    }
     data.filteredMaps = filtered;
 }
 
@@ -245,10 +226,45 @@ watch(
     { deep: true }
 );
 
+// Sincronizar página con URL (ignorar en carga inicial)
+watch(
+    () => data.pagination.page,
+    newPage => {
+        if (!data.isInitialLoad) {
+            router.push({
+                query: {
+                    ...route.query,
+                    page: newPage > 1 ? newPage : undefined,
+                },
+            });
+        }
+    }
+);
+
+// Scroll al top cuando cambie la página en la URL
+watch(
+    () => route.query.page,
+    () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }
+);
+
 // LIFECYCLE //////////////////////
 
 onMounted(async () => {
+    // Leer página inicial de la URL
+    const pageFromUrl = parseInt(route.query.page) || 1;
+    data.pagination.page = pageFromUrl;
+    
     await getUserMaps();
+    
+    // Marcar que la carga inicial ha terminado
+    nextTick(() => {
+        data.isInitialLoad = false;
+    });
 });
 </script>
 
@@ -331,13 +347,7 @@ onMounted(async () => {
                 <!-- Maps Grid -->
                 <div v-else>
                     <div class="w-full grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-20 mb-8 md:p-4">
-                        <MapsItem
-                            v-for="map in paginatedMaps"
-                            :key="map.uid"
-                            :map="map"
-                            :user="map.user"
-                            @select="handleMapSelect"
-                            :editable="false" />
+                        <MapsItem v-for="map in paginatedMaps" :key="map.uid" :map="map" @select="handleMapSelect" :editable="false" />
                     </div>
 
                     <!-- Pagination -->

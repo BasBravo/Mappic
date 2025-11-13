@@ -1,7 +1,6 @@
 <script setup>
 const props = defineProps({
     map: { type: Object, required: true },
-    user: { type: Object, required: true },
     editable: { type: Boolean, default: false },
 });
 
@@ -132,12 +131,12 @@ function selectMapForOptions() {
                     <!-- in px -->
                     <span class="font-mono text-gray-500">{{ mapDimensionsInPixels.widthPx }}x{{ mapDimensionsInPixels.heightPx }} px</span>
                 </div>
-                <template v-if="props.user && props.user.name">
+                <template v-if="map._summary?.user">
                     <div class="w-full border-b my-1 border-black/10"></div>
                     <div class="flex items-center gap-1 text-xs">
                         <span class="text-gray-500">{{ $t('Created by') }}:</span>
-                        <NuxtLink :to="`/${locale}/maps/explore/${props.user.id}`" class="font-mono font-bold uppercase underline">
-                            {{ props.user.name }}
+                        <NuxtLink :to="`/${locale}/maps/explore/${map._summary.user.uid}`" class="font-mono font-bold uppercase underline">
+                            {{ map._summary.user.name }}
                         </NuxtLink>
                     </div>
                 </template>
