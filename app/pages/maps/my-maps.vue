@@ -348,7 +348,7 @@ onUnmounted(() => {
                         </p>
                     </div>
                     <div class="w-full flex justify-between gap-3">
-                        <UButton color="neutral" variant="soft" size="xl" class="w-full justify-center" @click="cancelDelete">
+                        <UButton color="neutral" variant="outline" size="xl" class="w-full justify-center" @click="cancelDelete">
                             {{ $t('Cancel') }}
                         </UButton>
                         <UButton color="error" variant="solid" size="xl" class="w-full justify-center" @click="confirmDelete">

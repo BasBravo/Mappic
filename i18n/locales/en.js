@@ -459,5 +459,11 @@ export default {
     'Created by': 'Created by',
     'Maps by {user}': 'Maps by {user}',
     'View all maps by this user': 'View all maps by this user',
-    'No maps found for this user': 'No maps found for this user'
+    'No maps found for this user': 'No maps found for this user',
+    'Search by location or title': 'Search by location or title',
+    'e.g. Barcelona, New York, Paris...': 'e.g. Barcelona, New York, Paris...',
+    'Sort by': 'Sort by',
+    'Most voted': 'Most voted',
+    'Most recent': 'Most recent',
+    'maps found': 'maps found'
 }

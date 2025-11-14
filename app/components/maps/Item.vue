@@ -8,10 +8,33 @@ const emit = defineEmits(['delete', 'regenerate', 'select']);
 
 // Composables
 const { t, locale } = useI18n();
+const runtimeConfig = useRuntimeConfig();
+const { user } = useAuth();
+const toast = useToast();
+
+// Owner check
+const isOwner = computed(() => {
+    if (!user.value || !props.map.email) return false;
+    return user.value.email === props.map.email;
+});
+
+// State for error report modal
+const showReportModal = ref(false);
+const reportForm = ref({
+    message: '',
+});
+const submittingReport = ref(false);
+const reportError = ref('');
+const reportSuccess = ref(false);
 
 // Computed
 const mapOptions = computed(() => [
     [
+        {
+            label: t('Report issue'),
+            icon: 'i-tabler-bug',
+            onSelect: () => openReportModal(),
+        },
         {
             label: t('Delete'),
             icon: 'i-tabler-trash',
@@ -106,6 +129,54 @@ function selectMapForOptions() {
     // This function is called when the dropdown is clicked
     // Could be used for additional logic if needed
 }
+
+async function submitReport() {
+    if (!reportForm.value.message || !reportForm.value.message.trim()) {
+        return;
+    }
+
+    submittingReport.value = true;
+    reportError.value = '';
+    reportSuccess.value = false;
+
+    try {
+        await $fetch(`${runtimeConfig.public.functionsUrl}/mappic/send-report`, {
+            method: 'POST',
+            body: {
+                message: reportForm.value.message,
+                mapId: props.map.uid,
+                mapTitle: props.map.design?.title || null,
+                error: props.map.error || null,
+                locale: locale.value,
+            },
+        });
+
+        reportSuccess.value = true;
+        showReportModal.value = false;
+
+        toast.add({
+            title: t('Report sent successfully'),
+            icon: 'i-tabler-check',
+            color: 'green',
+        });
+    } catch (error) {
+        reportError.value = t('There was a problem sending your report. Please try again later.');
+        toast.add({
+            title: t('There was a problem sending your report. Please try again later.'),
+            icon: 'i-tabler-alert-circle',
+            color: 'red',
+        });
+    } finally {
+        submittingReport.value = false;
+    }
+}
+
+function openReportModal() {
+    reportError.value = '';
+    reportSuccess.value = false;
+    reportForm.value.message = '';
+    showReportModal.value = true;
+}
 </script>
 
 <template>
@@ -129,9 +200,6 @@ function selectMapForOptions() {
                         {{ map.design?.title || '-' }}
                     </h3>
                 </NuxtLink>
-                <div v-if="map.in_progress" class="flex items-center px-2">
-                    <Loader size="16" />
-                </div>
             </div>
 
             <div class="flex flex-col gap-x-2 gap-y-1">
@@ -149,11 +217,23 @@ function selectMapForOptions() {
                 </div>
                 <div v-if="map.in_progress" class="flex items-center gap-1 text-xs">
                     <span class="text-gray-500">{{ $t('Status') }}:</span>
-                    <span class="font-mono font-bold uppercase">{{ $t('Processing') }}...</span>
+                    <div class="flex items-center gap-1">
+                        <div v-if="map.in_progress" class="flex items-center px-1">
+                            <Loader size="12" />
+                        </div>
+                        <span class="font-mono font-bold uppercase">{{ $t('Processing') }}</span>
+                    </div>
                 </div>
                 <div v-if="map.is_purchased_copy" class="flex items-center gap-1 text-xs">
                     <span class="text-gray-500">{{ $t('Origin') }}:</span>
                     <span class="font-mono font-bold uppercase">{{ $t('Copy') }}</span>
+                </div>
+                <!-- zoom -->
+                <div class="flex items-center gap-1 text-xs">
+                    <span class="text-gray-500">{{ $t('Zoom') }}:</span>
+                    <span class="font-mono font-bold uppercase">
+                        {{ map.zoom || 0 }}
+                    </span>
                 </div>
                 <!-- votes -->
                 <div class="flex items-center gap-1 text-xs">
@@ -163,7 +243,7 @@ function selectMapForOptions() {
                     </span>
                 </div>
                 <!-- credits -->
-                <div class="flex items-center gap-1 text-xs">
+                <div v-if="isOwner" class="flex items-center gap-1 text-xs">
                     <span class="text-gray-500">{{ $t('Credits') }}:</span>
                     <span class="font-mono font-bold uppercase">
                         {{ map.credits_used || 0 }}
@@ -250,4 +330,49 @@ function selectMapForOptions() {
             </div>
         </div>
     </div>
+
+    <ElementsModal v-model:open="showReportModal" :title="$t('Report issue')">
+        <form class="space-y-2" @submit.prevent="submitReport">
+            <!-- title -->
+            <span class="text-lg font-semibold flex">{{ map.design.title }} (#{{ map.ticket }})</span>
+            <span class="flex w-full text-balance pb-4">
+                {{ $t('Please describe the issue you found with this map. We will review it as soon as possible.') }}
+            </span>
+
+            <UFormField :label="$t('Your message')" size="xl" name="message" required>
+                <UTextarea v-model="reportForm.message" class="w-full" :placeholder="$t('Describe the error or problem you found')" />
+            </UFormField>
+
+            <!-- <UFormField :label="$t('Map ID')" size="xl" name="map_id" required>
+                <UInput v-model="map.uid" class="w-full" readonly disabled />
+            </UFormField>
+
+            <UFormField :label="$t('Title')" size="xl" name="title" required>
+                <UInput v-model="map.design.title" class="w-full" readonly disabled />
+            </UFormField> -->
+
+            <!-- inputs hidden -->
+            <input type="hidden" v-model="map.uid" />
+            <input type="hidden" v-model="map.error" />
+            <input type="hidden" v-model="map.ticket" />
+
+            <div v-if="reportError" class="text-xs text-red-600">
+                {{ reportError }}
+            </div>
+            <div v-if="reportSuccess" class="text-xs text-emerald-600">
+                {{ $t('Your report has been sent successfully. Thank you!') }}
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+                <UButton type="button" color="neutral" size="lg" variant="outline" @click="showReportModal = false" :label="$t('Cancel')" />
+                <UButton
+                    type="submit"
+                    color="neutral"
+                    size="lg"
+                    :loading="submittingReport"
+                    :disabled="submittingReport || !reportForm.message || !reportForm.message.trim()"
+                    :label="$t('Send report')" />
+            </div>
+        </form>
+    </ElementsModal>
 </template>

@@ -516,5 +516,11 @@ export default {
     'Created by': 'Creado por',
     'Maps by {user}': 'Mapas de {user}',
     'View all maps by this user': 'Ver todos los mapas de este usuario',
-    'No maps found for this user': 'No se encontraron mapas para este usuario'
+    'No maps found for this user': 'No se encontraron mapas para este usuario',
+    'Search by location or title': 'Buscar por ubicación o título',
+    'e.g. Barcelona, New York, Paris...': 'ej. Barcelona, Nueva York, París...',
+    'Sort by': 'Ordenar por',
+    'Most voted': 'Más votados',
+    'Most recent': 'Más recientes',
+    'maps found': 'mapas encontrados'
 }

@@ -19,6 +19,7 @@ export interface iMap {
     delete: (uid: string) => Promise<any>;
 
     archive: (uid: string) => Promise<any>;
+    searchMaps: (params: any) => Promise<any>;
     searchSuggestions: (search: string, locale?: string) => Promise<any>;
     calculateSizes: (width: number, aspect: string, unit: string, landscape: boolean) => any;
     addVote: (mapUid: string, userUid: string) => Promise<any>;
@@ -95,6 +96,63 @@ export const createMapService = () => {
         archive: async (uid: string): Promise<any> => {
             const result = await map.collection.delete(uid, { soft: true });
             return result;
+        },
+        searchMaps: async (params: any): Promise<any> => {
+            try {
+                const config = useRuntimeConfig();
+                const functionsUrl = config.public.functionsUrl;
+
+                if (!functionsUrl) {
+                    throw new Error('functionsUrl is not configured in runtimeConfig');
+                }
+
+                // Construir query params
+                const queryParams = new URLSearchParams();
+
+                // Query de búsqueda (requerido)
+                if (params.q) queryParams.append('q', params.q);
+
+                // Filtros opcionales
+                if (params.style && params.style !== 'all') queryParams.append('style', params.style);
+                if (params.composition && params.composition !== 'all') queryParams.append('composition', params.composition);
+                if (params.quality && params.quality !== 'all') queryParams.append('quality', params.quality);
+
+                // Ordenamiento
+                if (params.sort) queryParams.append('sort', params.sort);
+
+                // Límite
+                if (params.limit) queryParams.append('limit', params.limit.toString());
+
+                // Hacer request al endpoint
+                const url = `${functionsUrl}/search?${queryParams.toString()}`;
+                console.log('🔍 Search URL:', url);
+                console.log('🔍 Search params:', params);
+
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error(`Search failed: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                return {
+                    success: true,
+                    items: data.results || [],
+                    total: data.total || 0,
+                    query: data.query || '',
+                    filters: data.filters || {},
+                    limit: data.limit || 20,
+                };
+            } catch (error) {
+                console.error('Error searching maps:', error);
+                return {
+                    success: false,
+                    message: error instanceof Error ? error.message : String(error),
+                    items: [],
+                    total: 0,
+                };
+            }
         },
         searchSuggestions: async (search: string, locale: string = 'en'): Promise<any> => {
             const urlSearch = `https://nominatim.openstreetmap.org/search?format=json&q=${search}&accept-language=${locale}&limit=5&namedetails=1`;

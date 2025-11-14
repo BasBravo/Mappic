@@ -47,11 +47,6 @@ const userOptions = computed(() => [
             icon: 'i-tabler-credit-card',
             onSelect: () => openCreditsModal(),
         },
-        {
-            label: t('Send a report'),
-            icon: 'i-tabler-send',
-            onSelect: () => openReport(),
-        },
     ],
     [
         {

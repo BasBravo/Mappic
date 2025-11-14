@@ -519,5 +519,11 @@ export default {
     'Created by': '创建者',
     'Maps by {user}': '{user} 的地图',
     'View all maps by this user': '查看此用户的所有地图',
-    'No maps found for this user': '未找到此用户的地图'
+    'No maps found for this user': '未找到此用户的地图',
+    'Search by location or title': '按位置或标题搜索',
+    'e.g. Barcelona, New York, Paris...': '例如：巴塞罗那、纽约、巴黎...',
+    'Sort by': '排序方式',
+    'Most voted': '最多投票',
+    'Most recent': '最新',
+    'maps found': '找到的地图'
 }

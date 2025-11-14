@@ -25,7 +25,6 @@ const props = defineProps({
 
 // Emits
 const emit = defineEmits(['profile-updated']);
-
 const { t } = useI18n();
 const { initializeFirebase } = useFirebase();
 const toast = useToast();

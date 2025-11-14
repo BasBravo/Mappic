@@ -267,12 +267,31 @@ const getZoomLevels = () => {
     };
 };
 
+const smoothZoom = delta => {
+    if (!map.value) return;
+
+    const current = map.value.getZoom();
+    const { min, max } = getZoomLevels();
+    let target = current + delta;
+
+    if (target < min) target = min;
+    if (target > max) target = max;
+
+    map.value.easeTo({
+        zoom: target,
+        duration: 400,
+        essential: true,
+    });
+};
+
 const zoomIn = () => {
-    if (map.value) map.value.zoomIn();
+    if (!map.value) return;
+    smoothZoom(0.25);
 };
 
 const zoomOut = () => {
-    if (map.value) map.value.zoomOut();
+    if (!map.value) return;
+    smoothZoom(-0.25);
 };
 
 const flyToLocation = (coordinates, zoom = 11) => {
