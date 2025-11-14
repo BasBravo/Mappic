@@ -41,6 +41,46 @@ const mapDimensionsInPixels = computed(() => {
     };
 });
 
+// Quiero que in_progress sea un computed que devuelva true si props.map.in_progress es true
+// Pero si lleva más de 1 hora desde la fecha de created_at, que devuelva false
+const in_progress = computed(() => {
+    const createdAt = props.map.created_at; // Puede ser Timestamp de Firestore o ms
+
+    // Si no hay fecha de creación, usamos directamente el flag
+    if (!createdAt) {
+        return props.map.in_progress;
+    }
+
+    let createdAtMs;
+
+    // Firestore Timestamp con toMillis()
+    if (typeof createdAt === 'object' && typeof createdAt.toMillis === 'function') {
+        createdAtMs = createdAt.toMillis();
+    }
+    // Objeto plano { seconds, nanoseconds }
+    else if (typeof createdAt === 'object' && typeof createdAt.seconds === 'number') {
+        const nanos = typeof createdAt.nanoseconds === 'number' ? createdAt.nanoseconds : 0;
+        createdAtMs = createdAt.seconds * 1000 + Math.floor(nanos / 1e6);
+    }
+    // Ya viene como número (ms)
+    else if (typeof createdAt === 'number') {
+        createdAtMs = createdAt;
+    }
+    // Formato desconocido: no tocamos la lógica original
+    else {
+        return props.map.in_progress;
+    }
+
+    const now = Date.now();
+    const diff = now - createdAtMs;
+    const diffHours = diff / (1000 * 60 * 60);
+
+    if (diffHours > 1) {
+        return false;
+    }
+    return props.map.in_progress;
+});
+
 // Methods
 function handleMapSelect() {
     if (!props.map.in_progress) {
@@ -122,6 +162,13 @@ function selectMapForOptions() {
                         {{ map.votes || 0 }}
                     </span>
                 </div>
+                <!-- credits -->
+                <div class="flex items-center gap-1 text-xs">
+                    <span class="text-gray-500">{{ $t('Credits') }}:</span>
+                    <span class="font-mono font-bold uppercase">
+                        {{ map.credits_used || 0 }}
+                    </span>
+                </div>
                 <div class="w-full border-b my-1 border-black/10"></div>
 
                 <!-- Dimensions -->
@@ -151,7 +198,7 @@ function selectMapForOptions() {
                 </NuxtLink>
             </div> -->
             <div class="h-2" />
-            <div v-if="!map.in_progress">
+            <div v-if="!in_progress">
                 <div v-if="map.error" class="flex flex-col gap-2">
                     <div class="bg-red-50 border border-red-200 rounded-lg p-3">
                         <div class="flex items-start gap-2">
@@ -184,13 +231,7 @@ function selectMapForOptions() {
                 </div>
                 <div v-else-if="editable" class="flex gap-1 items-center">
                     <div>
-                        <UButton
-                            color="neutral"
-                            size="sm"
-                            variant="outline"
-                            :disabled="map.in_progress"
-                            @click="handleViewClick"
-                            :label="$t('View')" />
+                        <UButton color="neutral" size="sm" variant="outline" @click="handleViewClick" :label="$t('View')" />
                     </div>
 
                     <UDropdownMenu
@@ -202,7 +243,6 @@ function selectMapForOptions() {
                             color="neutral"
                             variant="outline"
                             size="sm"
-                            :disabled="map.in_progress"
                             icon="i-tabler-dots-vertical"
                             @click.stop="selectMapForOptions" />
                     </UDropdownMenu>
