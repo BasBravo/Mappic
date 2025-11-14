@@ -275,32 +275,30 @@ onMounted(() => {
         <div
             class="w-full relative overflow-hidden rounded-2xl transition-all p-1.5 md:p-3 border border-black/20 bg-background"
             :class="[$attrs.class || '', props.interactive ? 'hover:p-0 hover:shadow-2xl' : '']">
-            <!-- Placeholder mientras carga -->
-            <div
-                v-if="!imageLoaded && !error"
-                class="w-full aspect-[9/13] bg-black/10 rounded-lg flex items-center justify-center animate-pulse"></div>
-            <!-- Loading state -->
-            <!-- <div v-if="loading" class="absolute inset-0 bg-gray-100 flex items-center justify-center">
-                <Loader size="24" />
-            </div> -->
+            <div class="w-full aspect-[9/13] relative">
+                <!-- Placeholder mientras carga -->
+                <div
+                    class="absolute inset-0 bg-black/10 rounded-lg flex items-center justify-center animate-pulse transition-opacity duration-300"
+                    :class="imageLoaded || error ? 'opacity-0 pointer-events-none' : 'opacity-100'"></div>
+
+                <!-- Map image -->
+                <div v-if="imageUrl" class="absolute inset-0 rounded-lg overflow-hidden">
+                    <img
+                        :src="imageUrl"
+                        :alt="mapData?.title || 'Map'"
+                        class="w-full h-full object-cover transition-opacity duration-500"
+                        :class="imageLoaded ? 'opacity-100' : 'opacity-0'"
+                        @error="handleImageError"
+                        @load="handleImageLoad"
+                        loading="lazy" />
+                </div>
+            </div>
 
             <!-- Error state -->
             <div v-if="error" class="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                 <div class="text-center">
                     <div class="text-xs text-gray-500 p-10">Map not available</div>
                 </div>
-            </div>
-
-            <!-- Map image -->
-            <div v-if="imageUrl" class="rounded-lg overflow-hidden">
-                <img
-                    :src="imageUrl"
-                    :alt="mapData?.title || 'Map'"
-                    class="w-full h-full object-cover transition-opacity duration-500"
-                    :class="imageLoaded ? 'opacity-100' : 'opacity-0'"
-                    @error="handleImageError"
-                    @load="handleImageLoad"
-                    loading="lazy" />
             </div>
 
             <!-- Overlay with map info -->
