@@ -162,7 +162,7 @@ const initializeMap = () => {
             container: mapId,
             center: mapCenter.value,
             zoom: mapStore.mapZoom || currentZoom.value,
-            style: `mapbox://styles/basbravo/${mapStyle.value.id}`,
+            style: `mapbox://styles/basbravo/${mapStyle.value.viewId}`,
             scrollZoom: false, // Disable mouse wheel zoom
         });
     } catch (error) {
@@ -440,7 +440,7 @@ watch(
         if (map.value && ready.value) {
             const style = styles.find(s => s.key === newStyle);
             if (style) {
-                map.value.setStyle(`mapbox://styles/basbravo/${style.id}`);
+                map.value.setStyle(`mapbox://styles/basbravo/${style.viewId}`);
             }
         }
     }

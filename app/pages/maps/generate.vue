@@ -264,7 +264,7 @@ function createRequestBody(result, design, bounds) {
         uid: result.uid,
         bounds,
         design,
-        style_id: styles.find(s => s.key === mapStore.selectedStyle)?.id || 'clw62ax0302qk01oc3ush3t7c',
+        style_id: styles.find(s => s.key === mapStore.selectedStyle)?.generateId || 'clw62ax0302qk01oc3ush3t7c',
         style_username: 'basbravo',
         width: adjusted.width,
         height: adjusted.height,
