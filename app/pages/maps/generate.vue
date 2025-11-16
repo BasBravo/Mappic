@@ -634,9 +634,11 @@ onMounted(async () => {
 
         <div class="flex flex-col lg:flex-row w-full md:h-full gap-20 p-20 justify-center">
             <!-- Vista previa del mapa -->
-            <div class="h-[400px] md:h-full w-full md:max-w-[450px] flex items-center justify-center relative">
+            <div class="h-[400px] md:h-full w-full md:max-w-[450px] flex items-center justify-center relative overflow-hidden">
                 <div class="w-full h-full flex items-center justify-center">
-                    <MapBase ref="mapBaseRef" :min-height="300" :min-width="200" :animation="false" :editable="false" />
+                    <div class="map-preview-scale">
+                        <MapBase ref="mapBaseRef" :min-height="1000" :min-width="700" :animation="false" :editable="false" />
+                    </div>
                 </div>
             </div>
 
@@ -751,3 +753,16 @@ onMounted(async () => {
         </div> -->
     </div>
 </template>
+
+<style scoped>
+.map-preview-scale {
+    transform-origin: center center;
+    transform: scale(0.45);
+}
+
+@media (max-width: 1024px) {
+    .map-preview-scale {
+        transform: scale(0.35);
+    }
+}
+</style>

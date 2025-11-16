@@ -2,13 +2,13 @@ export const styles = [
     {
         key: 'minimal',
         value: 'Minimal',
-        id: 'cmhxg107l000j01sl0yhycphg',
+        id: 'cmi28qt8t005j01r03f0zcib3',
         src: `/styles/minimal.jpg`,
     },
     {
         key: 'deep-red',
         value: 'Sweet Red',
-        id: 'cm3j5jmjw00lu01scdo4bet1j',
+        id: 'cmhyq3zym002b01sla41bbexc',
         src: `/styles/deep-red.jpg`,
     },
     {
