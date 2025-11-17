@@ -5,6 +5,20 @@ import { Items } from 'pleg-connect/firebase';
 import { createConfig } from './config.js';
 import { createFile } from './file.js';
 import { cleanUid } from '~~/helpers';
+import {
+    collection,
+    query,
+    where,
+    orderBy,
+    limit,
+    startAfter,
+    getDocs,
+    getCountFromServer,
+    getFirestore,
+    doc,
+    type QueryConstraint,
+    type DocumentSnapshot,
+} from 'firebase/firestore';
 
 export interface iMap {
     _ppi: number;
@@ -14,6 +28,8 @@ export interface iMap {
     collection: InstanceType<typeof Items>;
     getMap: (uid: string) => Promise<any>;
     getMaps: (options?: any) => Promise<any>;
+    getExploreMaps: (options?: any) => Promise<any>;
+    getMyMaps: (userId: string, options?: any) => Promise<any>;
     getByTicket: (ticket: string) => Promise<any>;
     save: (data: any, options: any) => Promise<any>;
     delete: (uid: string) => Promise<any>;
@@ -56,6 +72,224 @@ export const createMapService = () => {
         getMaps: async (options?: any): Promise<any> => {
             const result = await map.collection.get(options);
             return result;
+        },
+        getExploreMaps: async (options?: any): Promise<any> => {
+            try {
+                // Obtener instancia de Firestore (inicializada por el plugin 00.firebase-app.client.ts)
+                const db = getFirestore();
+                const mapsCollection = collection(db, 'maps');
+
+                // Construir constraints de la query
+                const constraints: QueryConstraint[] = [];
+
+                // Filtros base
+                // Usar 'in' en lugar de '!=' para evitar tener que ordenar por quality primero
+                if (options?.filters?.quality && options.filters.quality !== 'all') {
+                    // Si hay filtro de calidad específico, usarlo
+                    constraints.push(where('quality', '==', options.filters.quality));
+                } else {
+                    // Si no hay filtro, excluir solo 's' usando 'in' con las demás calidades
+                    constraints.push(where('quality', 'in', ['medium', 'high', 'superhigh', 'ultrahigh']));
+                }
+
+                constraints.push(where('status', '==', 'success'));
+                constraints.push(where('is_purchased_copy', '==', false));
+
+                // Filtros opcionales adicionales
+                if (options?.filters) {
+                    if (options.filters.style && options.filters.style !== 'all') {
+                        constraints.push(where('design.style', '==', options.filters.style));
+                    }
+                    if (options.filters.composition && options.filters.composition !== 'all') {
+                        constraints.push(where('design.composition', '==', options.filters.composition));
+                    }
+                }
+
+                // Ordenamiento
+                // Ahora podemos ordenar directamente por lo que queremos sin tener que ordenar por quality primero
+                if (options?.sort === 'votes') {
+                    // Ordenar por votos (desc) y luego por fecha (desc)
+                    constraints.push(orderBy('votes', 'desc'));
+                    constraints.push(orderBy('created_at', 'desc'));
+                } else {
+                    // Solo ordenar por fecha (desc) - los más recientes primero
+                    constraints.push(orderBy('created_at', 'desc'));
+                }
+
+                // Paginación
+                const page = options?.pagination?.page || 1;
+                const pageSize = options?.pagination?.pageSize || 50;
+
+                // Para páginas > 1, necesitamos obtener el último documento de la página anterior
+                let lastDoc: any = null;
+                if (page > 1) {
+                    // Obtener documentos hasta el inicio de la página actual
+                    const skipCount = (page - 1) * pageSize;
+                    const skipQuery = query(mapsCollection, ...constraints, limit(skipCount));
+                    const skipSnapshot = await getDocs(skipQuery);
+                    if (skipSnapshot.docs.length > 0) {
+                        lastDoc = skipSnapshot.docs[skipSnapshot.docs.length - 1];
+                    }
+                }
+
+                // Construir query final con paginación
+                const finalConstraints = [...constraints];
+                if (lastDoc) {
+                    finalConstraints.push(startAfter(lastDoc));
+                }
+                finalConstraints.push(limit(pageSize));
+
+                const finalQuery = query(mapsCollection, ...finalConstraints);
+                const snapshot = await getDocs(finalQuery);
+
+                // Obtener total de documentos (para paginación)
+                const countQuery = query(mapsCollection, ...constraints);
+                const countSnapshot = await getCountFromServer(countQuery);
+                const total = countSnapshot.data().count;
+
+                // Convertir documentos a objetos
+                const items = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return {
+                        uid: doc.id,
+                        ...data,
+                    };
+                });
+
+                console.log(`✅ getExploreMaps: Obtenidos ${items.length} mapas de ${total} totales (página ${page})`);
+
+                return {
+                    success: true,
+                    items,
+                    total,
+                    pages: Math.ceil(total / pageSize),
+                    page,
+                    pageSize,
+                };
+            } catch (error: any) {
+                console.error('❌ Error en getExploreMaps:', error);
+
+                // Detectar error de índice faltante
+                if (error.message && error.message.includes('index')) {
+                    console.warn('⚠️ Se requiere crear un índice compuesto en Firestore');
+                    console.warn('📋 Firestore mostrará un enlace para crear el índice automáticamente');
+                }
+
+                return {
+                    success: false,
+                    message: error.message || 'Error getting explore maps',
+                    items: [],
+                    total: 0,
+                    pages: 0,
+                };
+            }
+        },
+        getMyMaps: async (userId: string, options?: any): Promise<any> => {
+            try {
+                if (!userId) {
+                    return {
+                        success: false,
+                        message: 'User ID is required',
+                        items: [],
+                        total: 0,
+                        pages: 0,
+                    };
+                }
+
+                // Obtener instancia de Firestore
+                const db = getFirestore();
+                const mapsCollection = collection(db, 'maps');
+
+                // Construir constraints de la query
+                const constraints: QueryConstraint[] = [];
+
+                // Filtro por usuario (requerido) - usar referencia de Firestore
+                const userRef = doc(db, 'users', userId);
+                constraints.push(where('user', '==', userRef));
+
+                // Filtros opcionales
+                if (options?.filters?.quality && options.filters.quality !== 'all') {
+                    constraints.push(where('quality', '==', options.filters.quality));
+                }
+
+                if (options?.filters?.style && options.filters.style !== 'all') {
+                    constraints.push(where('design.style', '==', options.filters.style));
+                }
+
+                if (options?.filters?.composition && options.filters.composition !== 'all') {
+                    constraints.push(where('design.composition', '==', options.filters.composition));
+                }
+
+                // Ordenamiento
+                if (options?.sort === 'votes') {
+                    // Ordenar por votos (desc) y luego por fecha (desc)
+                    constraints.push(orderBy('votes', 'desc'));
+                    constraints.push(orderBy('created_at', 'desc'));
+                } else {
+                    // Por defecto ordenar por fecha (desc) - los más recientes primero
+                    constraints.push(orderBy('created_at', 'desc'));
+                }
+
+                // Paginación
+                const page = options?.pagination?.page || 1;
+                const pageSize = options?.pagination?.pageSize || 50;
+
+                // Para páginas > 1, necesitamos obtener el último documento de la página anterior
+                let lastDoc: any = null;
+                if (page > 1) {
+                    const skipCount = (page - 1) * pageSize;
+                    const skipQuery = query(mapsCollection, ...constraints, limit(skipCount));
+                    const skipSnapshot = await getDocs(skipQuery);
+                    if (skipSnapshot.docs.length > 0) {
+                        lastDoc = skipSnapshot.docs[skipSnapshot.docs.length - 1];
+                    }
+                }
+
+                // Construir query final con paginación
+                const finalConstraints = [...constraints];
+                if (lastDoc) {
+                    finalConstraints.push(startAfter(lastDoc));
+                }
+                finalConstraints.push(limit(pageSize));
+
+                const finalQuery = query(mapsCollection, ...finalConstraints);
+                const snapshot = await getDocs(finalQuery);
+
+                // Obtener total de documentos (para paginación)
+                const countQuery = query(mapsCollection, ...constraints);
+                const countSnapshot = await getCountFromServer(countQuery);
+                const total = countSnapshot.data().count;
+
+                // Convertir documentos a objetos
+                const items = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return {
+                        uid: doc.id,
+                        ...data,
+                    };
+                });
+
+                console.log(`✅ getMyMaps: Obtenidos ${items.length} mapas de ${total} totales (página ${page})`);
+
+                return {
+                    success: true,
+                    items,
+                    total,
+                    pages: Math.ceil(total / pageSize),
+                    page,
+                    pageSize,
+                };
+            } catch (error: any) {
+                console.error('❌ Error en getMyMaps:', error);
+
+                return {
+                    success: false,
+                    message: error.message || 'Error getting user maps',
+                    items: [],
+                    total: 0,
+                    pages: 0,
+                };
+            }
         },
         getByTicket: async (ticket: string): Promise<any> => {
             if (!ticket) return { success: false, message: 'Ticket is required' };

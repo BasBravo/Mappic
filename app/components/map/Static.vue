@@ -261,6 +261,25 @@ const handleImageLoad = () => {
     emit('ready');
 };
 
+// Computed property to determine if map is landscape
+const isLandscape = computed(() => {
+    return mapData.value?.format === 'landscape';
+});
+
+// Computed property to calculate dynamic aspect ratio based on map dimensions
+const aspectRatio = computed(() => {
+    if (!mapData.value?.width || !mapData.value?.height) {
+        // Default fallback to portrait
+        return '9 / 13';
+    }
+
+    const width = parseFloat(mapData.value.width);
+    const height = parseFloat(mapData.value.height);
+
+    // Return aspect ratio as CSS value
+    return `${width} / ${height}`;
+});
+
 // Lifecycle
 onMounted(() => {
     getMapData();
@@ -275,7 +294,7 @@ onMounted(() => {
         <div
             class="w-full relative overflow-hidden rounded-2xl transition-all p-1.5 md:p-3 border border-black/20 bg-background"
             :class="[$attrs.class || '', props.interactive ? 'hover:p-0 hover:shadow-2xl' : '']">
-            <div class="w-full aspect-[9/13] relative">
+            <div class="w-full relative" :style="{ aspectRatio: aspectRatio }">
                 <!-- Placeholder mientras carga -->
                 <div
                     class="absolute inset-0 bg-black/10 rounded-lg flex items-center justify-center animate-pulse transition-opacity duration-300"

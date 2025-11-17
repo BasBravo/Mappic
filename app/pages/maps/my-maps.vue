@@ -13,6 +13,7 @@ const authStore = useAuthStore();
 const mapStore = useMapStore();
 const { t, locale } = useI18n();
 const router = useRouter();
+const route = useRoute();
 
 // SEO
 useHead({
@@ -23,12 +24,18 @@ useHead({
 // Reactive data
 const data = reactive({
     maps: [],
-    filteredMaps: [],
     loading: true,
+    isInitialLoad: true,
     filters: {
         quality: 'all',
         style: 'all',
         composition: 'all',
+        sort: 'date', // 'date' o 'votes'
+    },
+    pagination: {
+        page: 1,
+        pageSize: 50,
+        total: 0,
     },
 });
 
@@ -69,11 +76,18 @@ const compositionOptions = [
     })),
 ];
 
+const sortOptions = [
+    { key: 'date', value: 'date', label: capitalize(t('Most recent')) },
+    { key: 'votes', value: 'votes', label: capitalize(t('Most voted')) },
+];
+
 // Computed properties
 const isUserAuthenticated = computed(() => authStore.isAuthenticated);
 const user = computed(() => authStore.user);
 const hasAnyMaps = computed(() => data.maps.length > 0);
-const hasFilteredMaps = computed(() => data.filteredMaps.length > 0);
+const totalPages = computed(() => {
+    return Math.ceil(data.pagination.total / data.pagination.pageSize);
+});
 
 // Methods
 async function getUserMaps() {
@@ -81,23 +95,28 @@ async function getUserMaps() {
 
     try {
         if (!isUserAuthenticated.value || !user.value?.uid) {
-            // For guest users, we could implement localStorage maps or redirect to login
             data.loading = false;
             return;
         }
 
-        const filters = [
-            { key: 'created_at', direction: 'desc' },
-            { key: 'user', operator: '==', value: `doc:users/${user.value.uid}` },
-        ];
-
-        console.log('Filters:', filters);
-
-        const result = await mapService.getMaps({ filters });
+        // Usar el nuevo método getMyMaps con paginación del lado del servidor
+        const result = await mapService.getMyMaps(user.value.uid, {
+            filters: {
+                quality: data.filters.quality,
+                style: data.filters.style,
+                composition: data.filters.composition,
+            },
+            sort: data.filters.sort,
+            pagination: {
+                page: data.pagination.page,
+                pageSize: data.pagination.pageSize,
+            },
+        });
 
         if (result.success) {
-            data.maps = result.items;
-            filterMaps(data.maps);
+            data.maps = result.items || [];
+            data.pagination.total = result.total || 0;
+
             // Start polling if there are in-progress maps
             managePolling();
         }
@@ -106,28 +125,6 @@ async function getUserMaps() {
     } finally {
         data.loading = false;
     }
-}
-
-function filterMaps(items) {
-    let filtered = [...items];
-
-    // Filter by quality
-    if (data.filters.quality !== 'all') {
-        filtered = filtered.filter(map => map.quality === data.filters.quality);
-    }
-
-    // Filter by style
-    if (data.filters.style !== 'all') {
-        filtered = filtered.filter(map => map.design?.style === data.filters.style);
-    }
-
-    // Filter by composition
-    if (data.filters.composition !== 'all') {
-        filtered = filtered.filter(map => map.design?.composition === data.filters.composition);
-    }
-
-    data.filteredMaps = filtered;
-    return filtered;
 }
 
 function handleMapSelect(uid) {
@@ -141,27 +138,18 @@ function openDeleteModal(map) {
 
 async function confirmDelete() {
     if (!deleteModal.mapToDelete) return;
-    console.log('deleteModal.mapToDelete:::', deleteModal.mapToDelete);
 
-    // try {
     const result = await mapService.delete(deleteModal.mapToDelete.uid);
 
     if (result.success) {
-        // Remove from maps array
-        const index = data.maps.findIndex(map => map.uid === deleteModal.mapToDelete.uid);
-        if (index > -1) {
-            data.maps.splice(index, 1);
-            filterMaps(data.maps);
-        }
         deleteModal.isOpen = false;
         deleteModal.mapToDelete = null;
+
+        // Recargar mapas desde el servidor
+        await getUserMaps();
     } else {
         alert(t('Error deleting map. Please try again.'));
     }
-    // } catch (error) {
-    //     console.error('Error deleting map:', error);
-    //     alert(t('Error deleting map. Please try again.'));
-    // }
 }
 
 function cancelDelete() {
@@ -300,11 +288,39 @@ function managePolling() {
 
 // Watchers
 watch(
-    () => data.filters,
+    () => [data.filters.quality, data.filters.style, data.filters.composition, data.filters.sort],
     () => {
-        filterMaps(data.maps);
-    },
-    { deep: true }
+        if (!data.isInitialLoad) {
+            data.pagination.page = 1;
+            getUserMaps();
+        }
+    }
+);
+
+// Sincronizar página con URL
+watch(
+    () => data.pagination.page,
+    newPage => {
+        if (!data.isInitialLoad) {
+            router.push({
+                query: {
+                    ...route.query,
+                    page: newPage > 1 ? newPage : undefined,
+                },
+            });
+        }
+    }
+);
+
+// Scroll al top cuando cambie la página en la URL
+watch(
+    () => route.query.page,
+    () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    }
 );
 
 // Watch for changes in maps to manage polling
@@ -318,7 +334,16 @@ watch(
 
 // Lifecycle
 onMounted(async () => {
+    // Leer página inicial de la URL
+    const pageFromUrl = parseInt(route.query.page) || 1;
+    data.pagination.page = pageFromUrl;
+
     await getUserMaps();
+
+    // Marcar que la carga inicial ha terminado
+    nextTick(() => {
+        data.isInitialLoad = false;
+    });
 });
 
 onUnmounted(() => {
@@ -383,7 +408,7 @@ onUnmounted(() => {
                     image-src="/opendoodles/unboxing.svg"
                     :title="$t('No Maps Yet')"
                     :description="$t('Start creating beautiful maps to see them here.')">
-                    <UButton size="xl" :to="'/maps/editor'">
+                    <UButton color="neutral" size="xl" block :to="'/maps/editor'">
                         {{ $t('Create your first map') }}
                     </UButton>
                 </CardComposition>
@@ -398,15 +423,15 @@ onUnmounted(() => {
                     </h1>
 
                     <!-- Filters Section -->
-                    <div class="flex justify-between items-center relative mt-4 md:mt-10 z-10 py-6 border-b border-black/10">
+                    <div class="flex justify-between items-end relative z-10 pb-6 border-b border-black/10 mt-4 md:mt-10">
                         <div class="flex flex-col lg:flex-row justify-between w-full gap-6">
-                            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 w-full">
                                 <div>
                                     <UFormField :label="$t('Quality')">
                                         <USelect
                                             v-model="data.filters.quality"
                                             color="neutral"
-                                            class="w-full lg:w-40"
+                                            class="w-full"
                                             :items="qualityOptions"
                                             value-key="key"
                                             text-key="label" />
@@ -417,7 +442,7 @@ onUnmounted(() => {
                                         <USelect
                                             v-model="data.filters.style"
                                             color="neutral"
-                                            class="w-full lg:w-40"
+                                            class="w-full"
                                             :items="styleOptions"
                                             value-key="key"
                                             text-key="label" />
@@ -428,23 +453,35 @@ onUnmounted(() => {
                                         <USelect
                                             v-model="data.filters.composition"
                                             color="neutral"
-                                            class="w-full lg:w-40"
+                                            class="w-full"
                                             :items="compositionOptions"
                                             value-key="key"
                                             text-key="label" />
                                     </UFormField>
                                 </div>
+                                <div>
+                                    <UFormField :label="$t('Sort by')">
+                                        <USelect
+                                            v-model="data.filters.sort"
+                                            color="neutral"
+                                            class="w-full"
+                                            :items="sortOptions"
+                                            value-key="key"
+                                            text-key="label" />
+                                    </UFormField>
+                                </div>
                             </div>
+                        </div>
 
-                            <div class="pt-6 hidden lg:flex min-w-40 justify-end">
-                                <div class="text-sm text-gray-600">{{ data.filteredMaps.length }} {{ $t('maps found') }}</div>
-                            </div>
+                        <!-- Results Count -->
+                        <div class="hidden lg:flex min-w-40 justify-end">
+                            <span class="text-sm">{{ data.pagination.total }} {{ $t('maps found') }}</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- No filtered results -->
-                <div v-if="!hasFilteredMaps" class="flex flex-col w-full items-center justify-center py-20">
+                <!-- No maps found -->
+                <div v-if="!hasAnyMaps" class="flex flex-col w-full items-center justify-center py-20">
                     <span class="text-lg">{{ $t('No maps found with the current filters.') }}</span>
                 </div>
 
@@ -452,13 +489,26 @@ onUnmounted(() => {
                 <div v-else>
                     <div class="w-full grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-20 mb-8 md:p-4">
                         <MapsItem
-                            v-for="map in data.filteredMaps"
+                            v-for="map in data.maps"
                             :key="map.uid"
                             :map="map"
                             :editable="true"
                             @delete="openDeleteModal"
                             @regenerate="regenerateMap"
                             @select="handleMapSelect" />
+                    </div>
+
+                    <!-- Pagination -->
+                    <div v-if="totalPages > 1" class="flex justify-center mt-8 p-10 pb-20">
+                        <UPagination
+                            v-model:page="data.pagination.page"
+                            :total="data.pagination.total"
+                            :items-per-page="data.pagination.pageSize"
+                            :sibling-count="1"
+                            show-edges
+                            color="neutral"
+                            active-color="primary"
+                            size="lg" />
                     </div>
                 </div>
             </div>

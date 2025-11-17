@@ -91,79 +91,52 @@ async function getExploreMaps() {
     data.loading = true;
 
     try {
-        // OPCIÓN 1: Usar endpoint de búsqueda (si está disponible)
-        // Descomentar cuando el endpoint /search esté implementado en el backend
-        /*
-        const searchQuery = data.filters.search.trim() || '*';
-
-        const result = await mapService.searchMaps({
-            q: searchQuery,
-            quality: data.filters.quality,
-            style: data.filters.style,
-            composition: data.filters.composition,
+        // Usar el nuevo método getExploreMaps con consulta directa a Firestore
+        const result = await mapService.getExploreMaps({
+            filters: {
+                quality: data.filters.quality,
+                style: data.filters.style,
+                composition: data.filters.composition,
+                search: data.filters.search,
+            },
             sort: data.filters.sort,
-            limit: data.pagination.pageSize,
+            pagination: {
+                page: data.pagination.page,
+                pageSize: data.pagination.pageSize,
+            },
         });
 
         if (result.success) {
             data.maps = result.items || [];
             data.pagination.total = result.total || 0;
-        }
-        */
 
-        // OPCIÓN 2: Usar método tradicional (TEMPORAL - hasta que /search esté disponible)
-        const result = await mapService.getMaps({
-            filters: [
-                { key: 'quality', operator: '!=', value: 's' },
-                { key: 'status', operator: '==', value: 'success' },
-                { key: 'is_purchased_copy', operator: '==', value: false },
-            ],
-            sort: { column: 'created_at', direction: 'desc' },
-        });
-
-        if (result.success) {
-            let maps = result.items || [];
-
-            // Aplicar filtros en cliente (temporal)
-            if (data.filters.quality !== 'all') {
-                maps = maps.filter(map => map.quality === data.filters.quality);
-            }
-            if (data.filters.style !== 'all') {
-                maps = maps.filter(map => map.design?.style === data.filters.style);
-            }
-            if (data.filters.composition !== 'all') {
-                maps = maps.filter(map => map.design?.composition === data.filters.composition);
-            }
-            if (data.filters.search.trim()) {
-                const searchLower = data.filters.search.toLowerCase();
-                maps = maps.filter(
-                    map =>
-                        map.design?.title?.toLowerCase().includes(searchLower) ||
-                        map.suggestion?.display_name?.toLowerCase().includes(searchLower) ||
-                        map.suggestion?.name?.toLowerCase().includes(searchLower)
+            // Debug: Mostrar primeros 5 mapas recibidos del servidor
+            console.log('📋 Primeros 5 mapas recibidos del servidor (ya ordenados):');
+            data.maps.slice(0, 5).forEach((m, index) => {
+                const date = m.created_at?.seconds ? new Date(m.created_at.seconds * 1000) : new Date(m.created_at);
+                console.log(
+                    `  ${index + 1}. UID: ${m.uid?.substring(0, 8)}... | Votes: ${
+                        m.votes || 0
+                    } | Created: ${date.toISOString()} | Quality: ${m.quality}`
                 );
-            }
-
-            // Ordenar
-            if (data.filters.sort === 'votes') {
-                maps.sort((a, b) => (b.votes || 0) - (a.votes || 0));
-            } else {
-                maps.sort((a, b) => {
-                    const dateA = a.created_at?.toDate?.() || new Date(a.created_at);
-                    const dateB = b.created_at?.toDate?.() || new Date(b.created_at);
-                    return dateB - dateA;
-                });
-            }
-
-            // Paginación en cliente
-            const start = (data.pagination.page - 1) * data.pagination.pageSize;
-            const end = start + data.pagination.pageSize;
-
-            data.maps = maps.slice(start, end);
-            data.pagination.total = maps.length;
+            });
         }
     } catch (error) {
-        console.error('Error getting explore maps:', error);
+        console.error('❌ Error getting explore maps:', error);
+
+        // Si el error es por falta de índice, mostrar mensaje útil
+        if (error.message && error.message.includes('index')) {
+            console.warn('⚠️ ========================================');
+            console.warn('⚠️ SE REQUIERE CREAR UN ÍNDICE EN FIRESTORE');
+            console.warn('⚠️ ========================================');
+            console.warn('📋 Busca en la consola el mensaje:');
+            console.warn('   "Para crear el índice accede a: https://console.firebase.google.com/..."');
+            console.warn('');
+            console.warn('👉 HAZ CLIC EN ESE ENLACE para crear el índice automáticamente');
+            console.warn('⏱️  Espera 2-5 minutos a que se cree el índice');
+            console.warn('🔄 Luego recarga la página');
+            console.warn('⚠️ ========================================');
+        }
     } finally {
         data.loading = false;
     }
@@ -280,7 +253,7 @@ onMounted(async () => {
                     <!-- Filters Section -->
                     <div class="flex justify-between items-end relative z-10 pb-6 border-b border-black/10">
                         <div class="flex flex-col lg:flex-row justify-between w-full gap-6">
-                            <div class="grid grid-cols-2 md:grid-cols-6 gap-4 w-full">
+                            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 w-full">
                                 <div>
                                     <UFormField :label="$t('Quality')">
                                         <USelect
