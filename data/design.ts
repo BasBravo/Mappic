@@ -13,13 +13,13 @@ export const styles = [
         generateId: 'cmi2b1kor006401sl3yva9vly',
         src: `/styles/deep-red.jpg`,
     },
-    // {
-    //     key: 'picasso',
-    //     value: 'Picasso',
-    //     viewId: 'cm3m2341d00ol01sd879cbb7m',
-    //     generateId: 'cm3m2341d00ol01sd879cbb7m',
-    //     src: `/styles/picasso.jpg`,
-    // },
+    {
+        key: 'picasso',
+        value: 'Picasso',
+        viewId: 'cmi2p19ob00ox01qucau40npw',
+        generateId: 'cmi2p19ob00ox01qucau40npw',
+        src: `/styles/picasso.jpg`,
+    },
     {
         key: 'retro',
         value: 'Retro',
@@ -27,13 +27,13 @@ export const styles = [
         generateId: 'cmi2c87hx006501sl9nskcvxx',
         src: `/styles/retro.jpg`,
     },
-    // {
-    //     key: 'blueprint',
-    //     value: 'Blueprint',
-    //     viewId: 'clw15yt8e02jf01qu3jtffnl5',
-    //     generateId: 'clw15yt8e02jf01qu3jtffnl5',
-    //     src: `/styles/blueprint.jpg`,
-    // },
+    {
+        key: 'blueprint',
+        value: 'Blueprint',
+        viewId: 'cmi2pzk6u007h01qx9mz90zes',
+        generateId: 'cmi2pzk6u007h01qx9mz90zes',
+        src: `/styles/blueprint.jpg`,
+    },
     {
         key: 'dark',
         value: 'Dark',
