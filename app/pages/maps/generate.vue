@@ -270,7 +270,7 @@ function createRequestBody(result, design, bounds) {
         height: adjusted.height,
         email: data.email,
         lang: locale.value,
-        format: 'portrait',
+        format: mapFormat.value,
         user: data.user,
         quality: selectedDimension.key,
         zoom: ZOOM_LEVEL,
@@ -350,7 +350,7 @@ async function generateMap() {
             width: adjusted.width,
             height: adjusted.height,
             quality: selectedDimension.key,
-            format: 'portrait', //calculateFormat(),
+            format: mapFormat.value,
             user: data.user ? 'users/' + data.user : null,
             credits_used: requiredCredits.value,
         };
@@ -436,6 +436,10 @@ const hasEnoughCredits = computed(() => {
 
 const adjustedDimensions = computed(() => {
     return calculateAdjustedDimensions(selectedDimension.value);
+});
+
+const mapFormat = computed(() => {
+    return mapStore.mapLandscape ? 'landscape' : 'portrait';
 });
 
 const dimensionInfo = computed(() => {
@@ -634,10 +638,18 @@ onMounted(async () => {
 
         <div class="flex flex-col lg:flex-row w-full md:h-full gap-20 p-20 justify-center">
             <!-- Vista previa del mapa -->
-            <div class="h-[400px] md:h-full w-full md:max-w-[450px] flex items-center justify-center relative overflow-hidden">
+            <div
+                class="min-h-[400px] md:h-full w-full flex items-center justify-center relative overflow-hidden"
+                :class="mapStore.mapLandscape ? 'md:max-w-[600px]' : 'md:max-w-[450px]'">
                 <div class="w-full h-full flex items-center justify-center">
                     <div class="map-preview-scale">
-                        <MapBase ref="mapBaseRef" :min-height="1000" :min-width="700" :animation="false" :editable="false" />
+                        <MapBase
+                            ref="mapBaseRef"
+                            :min-height="mapStore.mapLandscape ? 700 : 1000"
+                            :min-width="mapStore.mapLandscape ? 1000 : 700"
+                            :animation="false"
+                            :editable="false"
+                            :details="false" />
                     </div>
                 </div>
             </div>

@@ -23,6 +23,10 @@ const props = defineProps({
         type: Number,
         default: 1000,
     },
+    details: {
+        type: Boolean,
+        default: true,
+    },
 });
 
 // Store
@@ -135,6 +139,7 @@ watchEffect(() => {
         design.aspect = newAspect;
     }
     design.landscape = mapStore.mapLandscape || false;
+    console.log('MapBase - design.landscape:', design.landscape, 'mapStore.mapLandscape:', mapStore.mapLandscape);
 });
 
 // Methods
@@ -356,6 +361,14 @@ const calculateFrameSize = () => {
         const minWidth = props.minWidth;
         const minHeight = props.minHeight;
 
+        console.log('calculateFrameSize (non-editable):', {
+            landscape: design.landscape,
+            aspect: design.aspect,
+            sizes,
+            minWidth,
+            minHeight,
+        });
+
         if (design.landscape) {
             const finalWidth = Math.max(sizes.height, minWidth);
             const finalHeight = Math.max(sizes.width, minHeight);
@@ -366,6 +379,7 @@ const calculateFrameSize = () => {
             frameSizes.value = `min-width: ${minWidth}px; min-height: ${minHeight}px; width: ${finalWidth.toFixed(
                 0
             )}px; height: ${finalHeight.toFixed(0)}px;`;
+            console.log('Applied LANDSCAPE dimensions:', { finalWidth, finalHeight });
         } else {
             const finalWidth = Math.max(sizes.width, minWidth);
             const finalHeight = Math.max(sizes.height, minHeight);
@@ -376,6 +390,7 @@ const calculateFrameSize = () => {
             frameSizes.value = `min-width: ${minWidth}px; min-height: ${minHeight}px; width: ${finalWidth.toFixed(
                 0
             )}px; height: ${finalHeight.toFixed(0)}px;`;
+            console.log('Applied PORTRAIT dimensions:', { finalWidth, finalHeight });
         }
         return;
     }
@@ -656,7 +671,8 @@ defineExpose({
         class="mappic-render min-h-[calc(100dvh-4rem)] w-full relative flex justify-center items-center gap-4 pb-20"
         :class="[`theme_base theme_${mapStyle.key}`]">
         <div class="flex flex-col gap-3">
-            <div class="gap-2 flex md:justify-center text-xs text-black/40 w-80 truncate md:w-full">
+            <!-- Details -->
+            <div v-if="details" class="gap-2 flex md:justify-center text-xs text-black/40 w-80 truncate md:w-full">
                 <span class="uppercase">{{ $t(mapStore.selectedStyle) }}</span>
                 <span>|</span>
                 <span class="uppercase">{{ $t(mapStore.selectedComposition) }}</span>
