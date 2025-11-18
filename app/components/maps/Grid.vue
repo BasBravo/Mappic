@@ -10,7 +10,7 @@ const data = reactive({
 });
 
 const TOTAL_COLUMNS = 8;
-const mapsFetchBuffer = 300; // Fetch more to ensure we have enough after filtering
+const mapsFetchBuffer = 100; // Fetch more to ensure we have enough after filtering
 let MAPS_PER_COLUMN = 10; // Will be adjusted based on available items
 
 // Animation constants
@@ -29,45 +29,32 @@ function shuffle(array) {
 
 // Get maps from service
 async function getMaps() {
-    // Check if maps are cached in localStorage for one week
-    if (localStorage.getItem('landing_maps') && localStorage.getItem('landing_maps_date')) {
-        const lastDate = new Date(localStorage.getItem('landing_maps_date'));
+    // Check if maps are cached in localStorage for 2 hours
+    if (localStorage.getItem('landing_maps_cache')) {
+        const cacheData = JSON.parse(localStorage.getItem('landing_maps_cache'));
+        const lastDate = new Date(cacheData.timestamp);
         const now = new Date();
         const diff = now.getTime() - lastDate.getTime();
-        const oneWeek = 1000 * 60 * 60 * 24 * 7;
+        const twoHours = 1000 * 60 * 60 * 2;
 
-        if (diff < oneWeek) {
-            const cachedMaps = JSON.parse(localStorage.getItem('landing_maps'));
-            // Check if cache has valid data with correct structure (TOTAL_COLUMNS columns with MAPS_PER_COLUMN items each)
-            const hasValidData =
-                cachedMaps &&
-                Array.isArray(cachedMaps) &&
-                cachedMaps.length === TOTAL_COLUMNS &&
-                cachedMaps.every(col => Array.isArray(col) && col.length === MAPS_PER_COLUMN);
-
-            if (hasValidData) {
-                data.maps = cachedMaps;
-                return;
-            } else {
-                localStorage.removeItem('landing_maps');
-                localStorage.removeItem('landing_maps_date');
-            }
+        if (diff < twoHours && cacheData.maps && Array.isArray(cacheData.maps) && cacheData.maps.length === TOTAL_COLUMNS) {
+            console.log('[getMaps] Using cached maps (2 hour cache)');
+            data.maps = cacheData.maps;
+            MAPS_PER_COLUMN = cacheData.mapsPerColumn;
+            return;
+        } else {
+            localStorage.removeItem('landing_maps_cache');
         }
     }
 
-    const filters = [
-        { key: 'file_map', operator: '!=', value: null },
-        { key: 'quality', operator: '==', value: 'high' },
-        { key: 'created_at', direction: 'desc' },
-    ];
-    const pagination = {
-        page: 0,
-        rowsPerPage: mapsFetchBuffer,
-        sortBy: 'created_at',
-        sortType: 'desc',
-    };
+    console.log('[getMaps] Fetching maps from searchMaps endpoint');
 
-    const result = await mapService.getMaps({ pagination, filters });
+    const result = await mapService.searchMaps({
+        sort: 'date',
+        limit: mapsFetchBuffer,
+    });
+
+    console.log('[getMaps] Endpoint returned:', result.items?.length, 'maps');
 
     if (result.success) {
         // Parse items to get only UIDs and filter out null/undefined
@@ -100,9 +87,14 @@ async function getMaps() {
 
         data.maps = columns;
 
-        // Save to localStorage for one week
-        localStorage.setItem('landing_maps', JSON.stringify(data.maps));
-        localStorage.setItem('landing_maps_date', new Date().toISOString());
+        // Save to localStorage for 2 hours with metadata
+        const cacheData = {
+            maps: columns,
+            mapsPerColumn: MAPS_PER_COLUMN,
+            timestamp: new Date().toISOString(),
+        };
+        localStorage.setItem('landing_maps_cache', JSON.stringify(cacheData));
+        console.log('[getMaps] Maps cached for 2 hours', { totalMaps: parseItems.length, mapsPerColumn: MAPS_PER_COLUMN });
     } else {
         console.error('[getMaps] Service failed:', result.message);
     }
@@ -112,6 +104,12 @@ async function getMaps() {
 const handleMapSelect = uid => {
     // Navigate to map detail page
     navigateTo(`/map/${uid}`);
+};
+
+// Debug: Clear cache function (exposed to window for manual clearing)
+const clearGridCache = () => {
+    localStorage.removeItem('landing_maps_cache');
+    console.log('[getMaps] Cache cleared. Refresh page to fetch new maps.');
 };
 
 // Animation system

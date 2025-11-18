@@ -99,18 +99,15 @@ async function getUserMaps() {
             return;
         }
 
-        // Usar el nuevo método getMyMaps con paginación del lado del servidor
-        const result = await mapService.getMyMaps(user.value.uid, {
-            filters: {
-                quality: data.filters.quality,
-                style: data.filters.style,
-                composition: data.filters.composition,
-            },
+        // Usar searchMaps con el mismo endpoint que explore, pero filtrando por usuario
+        const result = await mapService.searchMaps({
+            userId: user.value.uid,
+            quality: data.filters.quality !== 'all' ? data.filters.quality : undefined,
+            style: data.filters.style !== 'all' ? data.filters.style : undefined,
+            composition: data.filters.composition !== 'all' ? data.filters.composition : undefined,
             sort: data.filters.sort,
-            pagination: {
-                page: data.pagination.page,
-                pageSize: data.pagination.pageSize,
-            },
+            page: data.pagination.page,
+            limit: data.pagination.pageSize,
         });
 
         if (result.success) {
@@ -423,7 +420,7 @@ onUnmounted(() => {
                     </h1>
 
                     <!-- Filters Section -->
-                    <div class="flex justify-between items-end relative z-10 pb-6 border-b border-black/10 mt-4 md:mt-10">
+                    <div class="flex justify-between items-end relative z-10 pb-6 border-b border-black/10 mt-10">
                         <div class="flex flex-col lg:flex-row justify-between w-full gap-6">
                             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 w-full">
                                 <div>

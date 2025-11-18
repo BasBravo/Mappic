@@ -2,7 +2,6 @@
 // IMPORTS //////////////////////
 
 import { createMapService } from '~~/shared/services/map';
-import { getPurchasableMaps } from '~~/shared/services/mapPurchase';
 import { styles, compositions } from '~~/data/design';
 import { useAuthStore } from '~~/stores/authStore';
 import { capitalize } from '~~/app/utils';
@@ -91,55 +90,53 @@ async function getExploreMaps() {
     data.loading = true;
 
     try {
-        // Usar el nuevo método getExploreMaps con consulta directa a Firestore
-        const result = await mapService.getExploreMaps({
-            filters: {
-                quality: data.filters.quality,
-                style: data.filters.style,
-                composition: data.filters.composition,
-                search: data.filters.search,
-            },
+        // Siempre usar searchMaps (con o sin query)
+        const hasSearch = data.filters.search && data.filters.search.trim() !== '';
+
+        console.log('🔍 Usando searchMaps', hasSearch ? `con query: "${data.filters.search}"` : '(exploración general)');
+
+        const result = await mapService.searchMaps({
+            q: hasSearch ? data.filters.search : undefined,
+            quality: data.filters.quality !== 'all' ? data.filters.quality : undefined,
+            style: data.filters.style !== 'all' ? data.filters.style : undefined,
+            composition: data.filters.composition !== 'all' ? data.filters.composition : undefined,
             sort: data.filters.sort,
-            pagination: {
-                page: data.pagination.page,
-                pageSize: data.pagination.pageSize,
-            },
+            page: data.pagination.page,
+            limit: data.pagination.pageSize,
         });
 
         if (result.success) {
             data.maps = result.items || [];
             data.pagination.total = result.total || 0;
 
-            // Debug: Mostrar primeros 5 mapas recibidos del servidor
-            console.log('📋 Primeros 5 mapas recibidos del servidor (ya ordenados):');
-            data.maps.slice(0, 5).forEach((m, index) => {
-                const date = m.created_at?.seconds ? new Date(m.created_at.seconds * 1000) : new Date(m.created_at);
-                console.log(
-                    `  ${index + 1}. UID: ${m.uid?.substring(0, 8)}... | Votes: ${
-                        m.votes || 0
-                    } | Created: ${date.toISOString()} | Quality: ${m.quality}`
-                );
+            // Debug: Mostrar primeros 5 mapas
+            console.log('✅ Resultados:', {
+                total: data.pagination.total,
+                mostrados: data.maps.length,
+                pagina: data.pagination.page,
             });
+
+            data.maps.slice(0, 5).forEach((m, index) => {
+                console.log(`  ${index + 1}. Location: ${m.location?.name || 'N/A'} | Votes: ${m.votes || 0} | Quality: ${m.quality}`);
+            });
+        } else {
+            console.error('❌ Error en resultado:', result.message);
+            data.maps = [];
+            data.pagination.total = 0;
         }
     } catch (error) {
         console.error('❌ Error getting explore maps:', error);
-
-        // Si el error es por falta de índice, mostrar mensaje útil
-        if (error.message && error.message.includes('index')) {
-            console.warn('⚠️ ========================================');
-            console.warn('⚠️ SE REQUIERE CREAR UN ÍNDICE EN FIRESTORE');
-            console.warn('⚠️ ========================================');
-            console.warn('📋 Busca en la consola el mensaje:');
-            console.warn('   "Para crear el índice accede a: https://console.firebase.google.com/..."');
-            console.warn('');
-            console.warn('👉 HAZ CLIC EN ESE ENLACE para crear el índice automáticamente');
-            console.warn('⏱️  Espera 2-5 minutos a que se cree el índice');
-            console.warn('🔄 Luego recarga la página');
-            console.warn('⚠️ ========================================');
-        }
+        data.maps = [];
+        data.pagination.total = 0;
     } finally {
         data.loading = false;
     }
+}
+
+function handleSearch() {
+    // Resetear página a 1 cuando se hace búsqueda
+    data.pagination.page = 1;
+    getExploreMaps();
 }
 
 function handleMapSelect(uid) {
@@ -163,6 +160,18 @@ watch(
     () => [data.filters.quality, data.filters.style, data.filters.composition, data.filters.sort],
     () => {
         if (!data.isInitialLoad) {
+            data.pagination.page = 1;
+            getExploreMaps();
+        }
+    }
+);
+
+// Watch para búsqueda: si se borra el texto, recargar automáticamente
+watch(
+    () => data.filters.search,
+    (newValue, oldValue) => {
+        // Solo recargar si se borró el texto (de algo a vacío)
+        if (!data.isInitialLoad && oldValue && !newValue) {
             data.pagination.page = 1;
             getExploreMaps();
         }
@@ -231,7 +240,8 @@ onMounted(async () => {
                                 color="neutral"
                                 size="xl"
                                 :icon="'i-tabler-search'"
-                                class="w-full" />
+                                class="w-full"
+                                @keyup.enter="handleSearch" />
                         </UFormField>
                         <div class="pt-6">
                             <UButton
@@ -240,13 +250,8 @@ onMounted(async () => {
                                 size="xl"
                                 icon="i-tabler-search"
                                 class="w-full hidden md:flex"
-                                @click="getExploreMaps()" />
-                            <UButton
-                                color="neutral"
-                                size="lg"
-                                icon="i-tabler-arrow-right"
-                                class="w-full md:hidden"
-                                @click="getExploreMaps()" />
+                                @click="handleSearch" />
+                            <UButton color="neutral" size="lg" icon="i-tabler-arrow-right" class="w-full md:hidden" @click="handleSearch" />
                         </div>
                     </div>
 
