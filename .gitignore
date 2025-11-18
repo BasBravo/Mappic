@@ -1,6 +1,7 @@
 # Nuxt dev/build outputs
 .output
 .windsurf
+.firebase
 .data
 .nuxt
 .nitro
